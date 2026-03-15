@@ -3,848 +3,650 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Générateur Planning BAC UP</title>
+<title>Planning BAC UP — Générateur automatique</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#1a4fa0;--blue-lt:#dce8f7;--blue-dk:#0d3270;
+  --green:#0f7a55;--green-lt:#d3f0e4;
+  --amber:#8a5200;--amber-lt:#faeeda;
+  --red:#c00;--gray:#f0efea;--border:#d0d0cc;
+  --text:#1a1a18;--muted:#6a6a66;--bg:#e8e7e2;--white:#fff;
+  --shadow:0 2px 12px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04);
+}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:18px;}
+.app{max-width:1360px;margin:0 auto;}
 
-:root {
-  --blue: #1a4fa0;
-  --blue-light: #dce8f7;
-  --blue-dark: #0d3270;
-  --green: #0f7a55;
-  --green-light: #d3f0e4;
-  --amber: #9a5c00;
-  --amber-light: #faeeda;
-  --red: #c00;
-  --gray: #f2f2f0;
-  --gray-mid: #c8c8c4;
-  --gray-dark: #5a5a56;
-  --border: #d0d0cc;
-  --text: #1a1a18;
-  --text-muted: #6a6a66;
-  --bg: #f0efea;
-  --white: #fff;
-  --shadow: 0 2px 8px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.04);
-}
+/* ── HEADER ── */
+.app-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;padding:0 2px;}
+.app-logo{display:flex;align-items:center;gap:10px;}
+.app-tri{width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:24px solid var(--blue);}
+.app-title{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;letter-spacing:1px;color:var(--text);}
+.app-title span{color:var(--blue);}
+.app-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+.app-ver{background:var(--blue);color:#fff;font-size:10px;font-family:'IBM Plex Mono',monospace;padding:3px 9px;border-radius:3px;letter-spacing:1px;margin-top:2px;}
 
-body {
-  font-family: 'IBM Plex Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  padding: 20px;
-}
+/* ── CONFIG PANEL ── */
+.cfg{background:var(--white);border-radius:10px;box-shadow:var(--shadow);padding:18px 22px;margin-bottom:14px;}
+.cfg-ttl{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.cfg-ttl::after{content:'';flex:1;height:1px;background:var(--border);}
+.cfg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px;}
+.fld label{display:block;font-size:9.5px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.fld select,.fld input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'IBM Plex Sans',sans-serif;color:var(--text);background:var(--white);transition:border-color .15s,box-shadow .15s;}
+.fld select:focus,.fld input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,79,160,.1);}
+.fld .note{font-size:9px;color:var(--muted);margin-top:4px;line-height:1.4;}
+.fld select[id="sel-agent"]{font-weight:600;color:var(--blue);}
+.fld input[readonly]{background:var(--gray);color:var(--muted);cursor:not-allowed;}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:7px;border:none;cursor:pointer;font-size:13px;font-weight:600;font-family:'IBM Plex Sans',sans-serif;transition:opacity .15s,transform .1s;}
+.btn:hover{opacity:.84;}.btn:active{transform:scale(.97);}
+.btn-go{background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(26,79,160,.28);}
+.btn-print{background:#1a1a18;color:#fff;}
+.btn-rst{background:var(--gray);color:var(--text);border:1px solid var(--border);}
+.btn-div{width:1px;height:28px;background:var(--border);margin:0 2px;}
 
-/* ─── APP SHELL ─── */
-.app {
-  max-width: 1320px;
-  margin: 0 auto;
-}
+/* ── OUTPUT CARD ── */
+.out-card{background:var(--white);border-radius:10px;box-shadow:var(--shadow);padding:22px;}
+.ph{text-align:center;padding:70px 20px;color:var(--muted);}
+.ph-ico{font-size:36px;margin-bottom:12px;}
+.ph h3{font-size:16px;font-weight:500;margin-bottom:5px;}
+.ph p{font-size:13px;}
 
-.app-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  padding: 0 2px;
-}
-.app-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--blue);
-}
-.app-subtitle { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-.version-badge {
-  background: var(--blue);
-  color: #fff;
-  font-size: 10px;
-  font-family: 'IBM Plex Mono', monospace;
-  padding: 3px 8px;
-  border-radius: 3px;
-  letter-spacing: 1px;
-}
+/* ── BAC UP DOCUMENT ── */
+.bup-doc{}
+.bup-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.bup-logo-wrap{display:flex;align-items:center;gap:10px;}
+.doc-tri{width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:20px solid var(--blue);}
+.doc-wm{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:600;letter-spacing:3px;color:var(--text);}
+.doc-wm span{color:var(--blue);}
+.doc-ref{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);font-weight:600;}
+.doc-addr{font-size:11.5px;line-height:1.75;color:#444;margin-bottom:5px;}
+.doc-addr strong{color:var(--text);font-weight:600;}
+.doc-plbl{font-size:11px;font-weight:700;color:var(--text);}
+.doc-psub{font-size:10.5px;color:var(--muted);margin-bottom:5px;}
+.doc-attn{font-size:10.5px;color:var(--amber);font-style:italic;margin-bottom:12px;}
 
-/* ─── CONFIG CARD ─── */
-.config-card {
-  background: var(--white);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  padding: 22px 24px;
-  margin-bottom: 18px;
-}
-.config-section-title {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.config-section-title::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
-.config-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-  gap: 12px;
-  margin-bottom: 18px;
-}
-.field label {
-  display: block;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 5px;
-}
-.field input, .field select {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 13px;
-  font-family: 'IBM Plex Sans', sans-serif;
-  color: var(--text);
-  background: var(--white);
-  transition: border-color .15s, box-shadow .15s;
-}
-.field input:focus, .field select:focus {
-  outline: none;
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(26,79,160,.12);
-}
-.field input[type=number] { font-family: 'IBM Plex Mono', monospace; }
+/* ── LEGEND (screen only) ── */
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px;align-items:center;}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);}
+.leg-sq{width:11px;height:11px;border-radius:2px;border:1px solid rgba(0,0,0,.12);flex-shrink:0;}
+.leg-drag{font-size:10px;color:var(--muted);font-style:italic;margin-left:auto;background:var(--gray);padding:4px 8px;border-radius:4px;}
 
-.btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 18px;
-  border-radius: 7px;
-  border: none;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  font-family: 'IBM Plex Sans', sans-serif;
-  transition: transform .1s, box-shadow .1s, opacity .15s;
-}
-.btn:hover { opacity: .88; }
-.btn:active { transform: scale(.97); }
-.btn-primary { background: var(--blue); color: #fff; box-shadow: 0 2px 6px rgba(26,79,160,.3); }
-.btn-print { background: var(--text); color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
-.btn-reset { background: var(--gray); color: var(--text); border: 1px solid var(--border); }
-
-/* ─── PLANNING CARD ─── */
-.planning-card {
-  background: var(--white);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  padding: 24px;
-  overflow-x: auto;
-}
-.placeholder {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--text-muted);
-}
-.placeholder-icon { font-size: 40px; margin-bottom: 12px; }
-.placeholder h3 { font-size: 16px; font-weight: 500; margin-bottom: 6px; }
-.placeholder p { font-size: 13px; }
-
-/* ─── BAC UP DOC ─── */
-.bup-doc { max-width: 100%; }
-.bup-top-bar { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-.bup-logo-wrap { display: flex; align-items: center; gap: 10px; }
-.bup-triangle {
-  width: 0; height: 0;
-  border-left: 13px solid transparent;
-  border-right: 13px solid transparent;
-  border-bottom: 22px solid var(--blue);
-}
-.bup-wordmark { font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 600; letter-spacing: 3px; color: var(--text); }
-.bup-wordmark span { color: var(--blue); }
-.bup-ref { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-muted); font-weight: 600; }
-.bup-agent-info { font-size: 11.5px; line-height: 1.75; color: #444; margin-bottom: 6px; }
-.bup-agent-info strong { color: var(--text); font-weight: 600; }
-.bup-plan-label { font-size: 11px; font-weight: 700; color: var(--text); }
-.bup-plan-sub { font-size: 10.5px; color: var(--text-muted); margin-bottom: 6px; }
-.bup-attn { font-size: 10.5px; color: var(--amber); font-style: italic; margin-bottom: 14px; }
-
-/* ─── LEGEND (screen only) ─── */
-.legend {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-  align-items: center;
-}
-.leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
-.leg-sq { width: 12px; height: 12px; border-radius: 2px; border: 1px solid rgba(0,0,0,.12); flex-shrink: 0; }
-.leg-tip { font-size: 10px; color: var(--text-muted); font-style: italic; margin-left: auto; }
-
-/* ─── TABLE ─── */
-.plan-wrap { overflow-x: auto; }
-table.pt { border-collapse: collapse; min-width: 860px; width: 100%; font-size: 9.5px; }
-table.pt th, table.pt td { border: 0.5px solid #bbb; text-align: center; padding: 0; }
-
-.pt .c-month {
-  background: #e4e4e0;
-  font-weight: 700;
-  font-size: 12px;
-  padding: 6px 8px;
-  text-align: center;
-  min-width: 72px;
-  width: 72px;
-  line-height: 1.45;
-}
-.pt .c-lbl {
-  background: #e4e4e0;
-  font-size: 8.5px;
-  font-weight: 600;
-  color: #444;
-  text-align: left;
-  padding: 2px 5px;
-  min-width: 82px;
-  width: 82px;
-  white-space: nowrap;
-  vertical-align: middle;
-  line-height: 1.4;
-}
-.pt .c-dletter {
-  background: #e4e4e0;
-  font-size: 8.5px;
-  font-weight: 700;
-  color: #555;
-  padding: 2px 0;
-  min-width: 20px;
-  width: 20px;
-}
-.pt .c-dletter.we { color: var(--red); }
-.pt .c-dnum {
-  background: #e4e4e0;
-  font-size: 9.5px;
-  font-weight: 700;
-  color: var(--text);
-  padding: 2px 0;
-}
-.pt .c-dnum.we { color: var(--red); }
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto;}
+table.pt{border-collapse:collapse;min-width:840px;width:100%;font-size:9.5px;}
+table.pt th,table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
+.cm{background:#e0e0da;font-weight:700;font-size:12px;padding:5px 7px;text-align:center;min-width:72px;width:72px;line-height:1.5;}
+.cl{background:#e0e0da;font-size:8.5px;font-weight:600;color:#444;text-align:left;padding:2px 5px;min-width:82px;width:82px;white-space:nowrap;vertical-align:middle;line-height:1.4;}
+.cdl{background:#e0e0da;font-size:8.5px;font-weight:700;color:#555;padding:2px 0;min-width:19px;width:19px;}
+.cdl.we{color:var(--red);}
+.cdn{background:#e0e0da;font-size:9.5px;font-weight:700;color:var(--text);padding:2px 0;}
+.cdn.we{color:var(--red);}
 
 /* Work cells */
-.pt .c-cell {
-  cursor: pointer;
-  transition: filter .12s;
-  min-width: 20px;
-}
-.pt .c-cell:hover { filter: brightness(.88); }
-.ci {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 30px;
-  padding: 1px;
-  line-height: 1.2;
-}
-.ci .badge { font-size: 7.5px; font-weight: 700; }
-.ci .hrs { font-size: 6.5px; }
+.cc{position:relative;transition:filter .12s;}
+.cc[draggable="true"]{cursor:grab;}
+.cc[draggable="true"]:active{cursor:grabbing;}
+.cc.drop-hl{outline:2px dashed var(--blue);outline-offset:-2px;filter:brightness(.92);}
+.cc.drag-ghost{opacity:.35;}
+.ci{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:30px;padding:1px;line-height:1.2;user-select:none;}
+.ci .badge{font-size:7.5px;font-weight:700;}
+.ci .hrs{font-size:6.5px;}
 
-.s-A { background: var(--blue-light); }
-.s-A .badge { color: #1a4fa0; }
-.s-A .hrs { color: #1a4fa0; }
+.sA{background:var(--blue-lt);}
+.sA .badge{color:#1a4fa0;}.sA .hrs{color:#1a4fa0;}
+.sB{background:var(--green-lt);}
+.sB .badge{color:var(--green);}.sB .hrs{color:var(--green);}
+.sX{background:var(--amber-lt);}
+.sX .badge{color:var(--amber);}.sX .hrs{color:var(--amber);}
+.sR{background:#fff;}
+.sRB{background:#eaeae4;}
+.sRB .ci span{font-size:6px;color:#aaa;}
 
-.s-B { background: var(--green-light); }
-.s-B .badge { color: var(--green); }
-.s-B .hrs { color: var(--green); }
+.ctot{background:#e0e0da;font-size:8.5px;font-weight:700;color:var(--text);padding:2px 0;}
+.ctotl{background:#e0e0da;text-align:left!important;padding:2px 5px!important;font-size:8.5px;color:#555;line-height:1.4;}
 
-.s-X { background: var(--amber-light); }
-.s-X .badge { color: var(--amber); }
-.s-X .hrs { color: var(--amber); }
+/* ── DOC FOOTER ── */
+.doc-ft{margin-top:9px;font-size:9px;color:#888;border-top:.5px solid #ccc;padding-top:6px;line-height:1.6;}
 
-.s-rest { background: #fff; }
-.s-rest-block { background: #edede8; }
-.s-rest-block .ci span { font-size: 6.5px; color: #999; }
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);}
+.sbox{background:var(--gray);border-radius:7px;padding:9px 12px;}
+.slbl{font-size:9.5px;color:var(--muted);margin-bottom:3px;font-weight:500;}
+.sval{font-size:17px;font-weight:600;font-family:'IBM Plex Mono',monospace;}
+.ssub{font-size:10px;color:var(--muted);font-weight:400;}
 
-.pt .c-total {
-  background: #e4e4e0;
-  font-size: 8.5px;
-  font-weight: 700;
-  color: var(--text);
-  padding: 2px 0;
-}
-.pt .c-total-lbl {
-  background: #e4e4e0;
-  text-align: left !important;
-  padding: 2px 5px !important;
-  font-size: 8.5px;
-  color: #555;
-  line-height: 1.4;
-}
+/* ── VALIDATION ── */
+.val{display:flex;flex-direction:column;gap:5px;margin-top:10px;}
+.vi{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;padding:6px 12px;border-radius:6px;}
+.vok{background:var(--green-lt);color:var(--green);}
+.vwn{background:var(--amber-lt);color:var(--amber);}
+.ver{background:#fce8e8;color:#a32d2d;}
+.vd{font-size:12px;flex-shrink:0;margin-top:1px;}
 
-/* ─── BUP FOOTER ─── */
-.bup-footer { margin-top: 10px; font-size: 9px; color: #888; border-top: 0.5px solid #ccc; padding-top: 7px; line-height: 1.6; }
-
-/* ─── STATS BAR (screen) ─── */
-.stats-bar {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 10px;
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-}
-.stat-box { background: var(--gray); border-radius: 8px; padding: 10px 14px; }
-.stat-lbl { font-size: 10px; color: var(--text-muted); margin-bottom: 3px; font-weight: 500; }
-.stat-val { font-size: 18px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; }
-.stat-sub { font-size: 10px; color: var(--text-muted); font-weight: 400; }
-
-/* ─── VALIDATION ─── */
-.val-row { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
-.val-item { display: flex; align-items: center; gap: 8px; font-size: 11.5px; padding: 7px 12px; border-radius: 6px; }
-.val-ok { background: var(--green-light); color: var(--green); }
-.val-warn { background: var(--amber-light); color: var(--amber); }
-.val-err { background: #fce8e8; color: #a32d2d; }
-.val-dot { font-size: 13px; flex-shrink: 0; }
-
-/* ─── PRINT ─── */
-@media print {
-  body { background: white; padding: 0; font-family: Arial, sans-serif; }
-  .no-print { display: none !important; }
-  .planning-card { box-shadow: none; padding: 8px; border-radius: 0; border: none; }
-  .pt .c-cell { cursor: default; }
-  .pt .c-cell:hover { filter: none; }
-  .bup-footer { border-color: #999; }
-  table.pt th, table.pt td { border-color: #999; }
-  .s-A { background: #c8d8ef !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .s-B { background: #bde8d4 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .s-X { background: #f0ddb0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .s-rest-block { background: #e0e0dc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .c-lbl, .c-month, .c-dletter, .c-dnum, .c-total, .c-total-lbl { background: #e0e0dc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+/* ── PRINT ── */
+@media print{
+  body{background:#fff;padding:0;}
+  .no-print{display:none!important;}
+  .out-card{box-shadow:none;padding:6px;border-radius:0;}
+  .cc{cursor:default;}
+  table.pt th,table.pt td{border-color:#999;}
+  .sA{background:#ccd8ee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sB{background:#bce8d3!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sX{background:#f0ddb0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sRB{background:#ddddd8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .cm,.cl,.cdl,.cdn,.ctot,.ctotl{background:#ddddd8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
 }
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- HEADER (no-print) -->
-  <div class="app-header no-print">
-    <div>
-      <div class="app-title">Planning BAC UP — Générateur automatique</div>
-      <div class="app-subtitle">Poste SSIAP 1 · Vacation J01 07h00–19h00 (12h)</div>
+  <!-- ═══ APP HEADER ═══ -->
+  <div class="app-hdr no-print">
+    <div class="app-logo">
+      <div class="app-tri"></div>
+      <div>
+        <div class="app-title">BAC <span>UP</span> — Planning Générateur automatique</div>
+        <div class="app-sub">SSIAP 1 &nbsp;·&nbsp; Vacation J01 &nbsp;·&nbsp; 07h00 – 19h00 (12h)</div>
+      </div>
     </div>
-    <div class="version-badge">v1.0</div>
+    <div class="app-ver">v3.0</div>
   </div>
 
-  <!-- CONFIG (no-print) -->
-  <div class="config-card no-print">
-    <div class="config-section-title">Paramètres</div>
-    <div class="config-grid">
-      <div class="field">
+  <!-- ═══ CONFIG ═══ -->
+  <div class="cfg no-print">
+    <div class="cfg-ttl">Paramètres</div>
+    <div class="cfg-grid">
+
+      <div class="fld">
         <label>Mois</label>
         <select id="sel-month">
-          <option value="1">Janvier</option>
-          <option value="2">Février</option>
-          <option value="3">Mars</option>
-          <option value="4">Avril</option>
-          <option value="5">Mai</option>
-          <option value="6">Juin</option>
-          <option value="7">Juillet</option>
-          <option value="8">Août</option>
-          <option value="9">Septembre</option>
-          <option value="10">Octobre</option>
-          <option value="11">Novembre</option>
-          <option value="12">Décembre</option>
+          <option value="1">Janvier</option><option value="2">Février</option>
+          <option value="3">Mars</option><option value="4">Avril</option>
+          <option value="5">Mai</option><option value="6">Juin</option>
+          <option value="7">Juillet</option><option value="8">Août</option>
+          <option value="9">Septembre</option><option value="10">Octobre</option>
+          <option value="11">Novembre</option><option value="12">Décembre</option>
         </select>
       </div>
-      <div class="field">
+
+      <div class="fld">
         <label>Année</label>
-        <input type="number" id="sel-year" value="2026" min="2024" max="2035">
+        <select id="sel-year">
+          <option value="2026">2026</option>
+          <option value="2027">2027</option>
+          <option value="2028">2028</option>
+          <option value="2029">2029</option>
+          <option value="2030">2030</option>
+        </select>
       </div>
-      <div class="field">
-        <label>Agent A (vous)</label>
-        <input type="text" id="name-a" value="LAHOUAOUI Mostapha">
+
+      <div class="fld">
+        <label>Agent</label>
+        <select id="sel-agent">
+          <option value="ALL">TOUS — Complet</option>
+          <option value="A">Mostapha LAHOUAOUI</option>
+          <option value="B">Roger DE SOUZA</option>
+          <option value="X">Agent EXTRA</option>
+        </select>
+        <div class="note">Filtre le planning affiché</div>
       </div>
-      <div class="field">
-        <label>Agent B (collègue)</label>
-        <input type="text" id="name-b" value="COLLÈGUE">
-      </div>
-      <div class="field">
-        <label>Agent extra (3e)</label>
-        <input type="text" id="name-x" value="AGENT EXTRA">
-      </div>
-      <div class="field">
+
+      <div class="fld">
         <label>Nom du site</label>
-        <input type="text" id="site-name" value="RENAISSANCE PARIS NOBEL TOUR EIFFEL">
+        <input type="text" id="site-name" value="RENAISSANCE PARIS NOBEL TOUR EIFFEL" readonly>
+        <div class="note">Valeur fixe du site</div>
       </div>
-      <div class="field">
-        <label>Début bloc repos A (jour)</label>
-        <input type="number" id="rest-start" value="11" min="7" max="18">
-      </div>
-      <div class="field">
+
+      <div class="fld">
         <label>Réf. document</label>
         <input type="text" id="ref-num" value="1504">
       </div>
+
+      <div class="fld">
+        <label>Congé Mostapha (semaine)</label>
+        <select id="rest-week">
+          <option value="2">Semaine 2 du mois</option>
+          <option value="3" selected>Semaine 3 du mois</option>
+          <option value="4">Semaine 4 du mois</option>
+        </select>
+        <div class="note">Semaine sans vacation pour Mostapha</div>
+      </div>
+
     </div>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="generate()">▶ Générer le planning</button>
-      <button class="btn btn-print" onclick="window.print()">🖨 Imprimer / Exporter PDF</button>
-      <button class="btn btn-reset" onclick="resetEdits()">↺ Réinitialiser</button>
+      <button class="btn btn-go" onclick="generate()">▶ Générer le planning</button>
+      <div class="btn-div"></div>
+      <button class="btn btn-print" onclick="window.print()">🖨 Imprimer / PDF</button>
+      <button class="btn btn-rst" onclick="resetPlan()">↺ Réinitialiser</button>
     </div>
   </div>
 
-  <!-- PLANNING OUTPUT -->
-  <div class="planning-card" id="planning-output">
-    <div class="placeholder">
-      <div class="placeholder-icon">📋</div>
+  <!-- ═══ OUTPUT ═══ -->
+  <div class="out-card" id="out">
+    <div class="ph">
+      <div class="ph-ico">📋</div>
       <h3>Aucun planning généré</h3>
-      <p>Sélectionnez un mois et cliquez sur <strong>Générer le planning</strong>.</p>
+      <p>Configurez les paramètres puis cliquez sur <strong>Générer le planning</strong>.</p>
     </div>
   </div>
 
-</div>
+</div><!-- /app -->
 
 <script>
-// ═══════════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════════
-const APP = {
-  schedule: null,
-  year: null,
-  month: null,
-  restStart: null,
-  restEnd: null,
-  daysInMonth: null
-};
-
-const MONTHS_FR = ['','Janvier','Février','Mars','Avril','Mai','Juin',
+/* ═══════════════════════════════════════════════════════
+   CONSTANTS
+═══════════════════════════════════════════════════════ */
+const MONTHS=['','Janvier','Février','Mars','Avril','Mai','Juin',
   'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-const DAY_LETTERS = ['D','L','M','M','J','V','S'];
-const STATES_CYCLE = ['A','B','X',''];
+const DL=['D','L','M','M','J','V','S'];
 
-// ═══════════════════════════════════════════════════════════
-// ALGORITHM
-// ═══════════════════════════════════════════════════════════
-function getDaysInMonth(y, m) { return new Date(y, m, 0).getDate(); }
-function getDow(y, m, d)      { return new Date(y, m - 1, d).getDay(); }
-function isWE(y, m, d)        { const w = getDow(y,m,d); return w===0||w===6; }
+/* ═══════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════ */
+const APP={sched:null,year:null,month:null,restWeek:null,wm:null};
+let DRAG=null; // {day, rowCode}
 
-function generateASchedule(dim, restStart) {
-  // Rest block length adapts to month length: 5→28d, 6→29d, 7→30d, 8→31d
-  const restLen = Math.max(5, Math.min(8, dim - 23));
-  const restEnd = Math.min(restStart + restLen - 1, dim);
-  const work = [];
+/* ═══════════════════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════════════════ */
+const dim=(y,m)=>new Date(y,m,0).getDate();
+const dow=(y,m,d)=>new Date(y,m-1,d).getDay(); // 0=Sun
+const isWE=(y,m,d)=>{const w=dow(y,m,d);return w===0||w===6;};
+const pad=n=>String(n).padStart(2,'0');
+const v=id=>document.getElementById(id).value.trim();
 
-  // Phase 1 — pairs before rest block (2 work + 2 rest gap)
-  let d = 1;
-  while (d < restStart && work.length < 13) {
-    if (d + 1 < restStart) {
-      work.push(d, d + 1);
-      d += 4; // 2 worked + 2 rest
-    } else {
-      d++; // skip isolated day before rest
-    }
+function buildWeekMap(y,m){
+  const D=dim(y,m);
+  const fd=dow(y,m,1);
+  const fdOff=fd===0?6:fd-1; // days before Monday of week containing day 1
+  const wm={};
+  for(let d=1;d<=D;d++){
+    const wn=Math.ceil((d+fdOff)/7);
+    if(!wm[wn])wm[wn]=[];
+    wm[wn].push(d);
   }
-
-  // Jump over rest block
-  d = restEnd + 1;
-
-  // Phase 2 — pairs after rest block
-  while (d <= dim && work.length < 13) {
-    if (d + 1 <= dim && work.length + 2 <= 13) {
-      work.push(d, d + 1);
-      d += 4;
-    } else {
-      // Last day of month → connects naturally to next month
-      work.push(d);
-      d++;
-    }
-  }
-
-  return { work, restStart, restEnd };
+  return wm;
 }
 
-function generateBSchedule(dim, aSet) {
-  const bWork = [];
-  const xWork = [];
+function getWkNum(y,m,d){
+  const fd=dow(y,m,1);
+  const fdOff=fd===0?6:fd-1;
+  return Math.ceil((d+fdOff)/7);
+}
 
-  // Collect consecutive runs of days NOT worked by A
-  const runs = [];
-  let runStart = null;
-  for (let d = 1; d <= dim + 1; d++) {
-    const avail = d <= dim && !aSet.has(d);
-    if (avail && runStart === null) { runStart = d; }
-    else if (!avail && runStart !== null) { runs.push([runStart, d - 1]); runStart = null; }
+/* ═══════════════════════════════════════════════════════
+   ALGORITHM
+═══════════════════════════════════════════════════════ */
+function buildSchedule(year,month,restWeek){
+  const D=dim(year,month);
+  const s=new Array(D+1).fill('');
+  const wm=buildWeekMap(year,month);
+  const restDays=new Set(wm[restWeek]||[]);
+
+  /* ── ROGER (B): groupe Mardi/Mercredi/Jeudi par semaine ── */
+  const rogByWk={};
+  for(let d=1;d<=D;d++){
+    const dw=dow(year,month,d);
+    if(dw===2||dw===3||dw===4){
+      const wn=getWkNum(year,month,d);
+      if(!rogByWk[wn])rogByWk[wn]=[];
+      rogByWk[wn].push(d);
+    }
+  }
+  // Sélection des groupes complets en priorité (évite les jours isolés)
+  const rogDays=[];
+  const wkNums=Object.keys(rogByWk).map(Number).sort((a,b)=>a-b);
+  for(const wn of wkNums){
+    const grp=rogByWk[wn];
+    if(rogDays.length+grp.length<=13){
+      rogDays.push(...grp);
+    }else{
+      const need=13-rogDays.length;
+      if(need>0){
+        // Prendre depuis le début du groupe (Mardi+Mercredi = pair)
+        rogDays.push(...grp.slice(0,need));
+      }
+      break;
+    }
+  }
+  for(const d of rogDays)s[d]='B';
+
+  /* ── MOSTAPHA (A): paires sur jours disponibles, hors congé ── */
+  // Jours disponibles (ni Roger, ni congé)
+  const avail=[];
+  for(let d=1;d<=D;d++){
+    if(s[d]===''&&!restDays.has(d))avail.push(d);
   }
 
-  for (const [s, e] of runs) {
-    const len = e - s + 1;
-
-    if (len === 1) {
-      xWork.push(s);
-
-    } else if (len === 2) {
-      if (bWork.length + 2 <= 13) { bWork.push(s, e); }
-      else { xWork.push(s, e); }
-
-    } else {
-      // len >= 3 : take pair from start, possibly X in middle, pair/triple from end
-      let pos = s;
-
-      if (bWork.length + 2 <= 13) {
-        bWork.push(pos, pos + 1);
-        pos += 2;
-      }
-
-      const rem = e - pos + 1;
-
-      if (rem <= 0) {
-        // nothing
-
-      } else if (rem === 1) {
-        xWork.push(pos);
-
-      } else if (rem === 2) {
-        if (bWork.length + 2 <= 13) { bWork.push(pos, pos + 1); }
-        else { xWork.push(pos, pos + 1); }
-
-      } else {
-        // rem >= 3 : decide how many B takes from end (3 if possible, else 2)
-        const fromEnd = bWork.length + 3 <= 13 ? 3 : (bWork.length + 2 <= 13 ? 2 : 0);
-        const xEnd = e - fromEnd;
-        for (let i = pos; i <= xEnd; i++) xWork.push(i);
-        for (let i = xEnd + 1; i <= e; i++) {
-          if (bWork.length < 13) bWork.push(i);
-          else xWork.push(i);
-        }
-      }
+  let aCount=0,i=0;
+  // Passe 1 : recherche de paires consécutives (avec gap de 1 jour entre paires)
+  while(i<avail.length&&aCount<13){
+    const d=avail[i];
+    if(i+1<avail.length&&avail[i+1]===d+1&&aCount+2<=13){
+      s[d]='A';s[d+1]='A';
+      aCount+=2;i+=2;
+      // Sauter le gap d'au moins 1 jour pour éviter 3 consécutifs
+      while(i<avail.length&&avail[i]<=d+2)i++;
+    }else{
+      i++;
+    }
+  }
+  // Passe 2 (fallback): jours seuls si manque encore
+  if(aCount<13){
+    for(let d=1;d<=D&&aCount<13;d++){
+      if(s[d]===''&&!restDays.has(d)){s[d]='A';aCount++;}
     }
   }
 
-  return { bWork, xWork };
+  /* ── EXTRA (X): tout le reste ── */
+  for(let d=1;d<=D;d++){if(s[d]===''||restDays.has(d)&&s[d]==='')s[d]=s[d]||'X';}
+  // Marquer les jours de congé Mostapha non assignés comme X
+  for(let d=1;d<=D;d++){if(s[d]==='')s[d]='X';}
+
+  return s;
 }
 
-// ═══════════════════════════════════════════════════════════
-// MAIN GENERATE
-// ═══════════════════════════════════════════════════════════
-function generate() {
-  const month = parseInt(document.getElementById('sel-month').value);
-  const year  = parseInt(document.getElementById('sel-year').value);
-  const restStart = Math.max(7, Math.min(18, parseInt(document.getElementById('rest-start').value) || 11));
-  const dim = getDaysInMonth(year, month);
+/* ═══════════════════════════════════════════════════════
+   GENERATE
+═══════════════════════════════════════════════════════ */
+function generate(){
+  const month=parseInt(v('sel-month'));
+  const year=parseInt(v('sel-year'));
+  const restWeek=parseInt(v('rest-week'));
+  APP.sched=buildSchedule(year,month,restWeek);
+  APP.year=year;APP.month=month;APP.restWeek=restWeek;
+  APP.wm=buildWeekMap(year,month);
+  render();
+}
 
-  const { work: aWork, restEnd } = generateASchedule(dim, restStart);
-  const aSet = new Set(aWork);
-  const { bWork, xWork } = generateBSchedule(dim, aSet);
+function resetPlan(){if(APP.year)generate();}
 
-  const schedule = new Array(dim + 1).fill('');
-  for (const d of aWork) schedule[d] = 'A';
-  for (const d of bWork) schedule[d] = 'B';
-  for (const d of xWork) schedule[d] = 'X';
+/* ═══════════════════════════════════════════════════════
+   DRAG & DROP HANDLERS
+═══════════════════════════════════════════════════════ */
+function onDragStart(e,day,rowCode){
+  DRAG={day,rowCode};
+  e.dataTransfer.effectAllowed='move';
+  // Légère transparence sur la source
+  requestAnimationFrame(()=>{
+    const el=document.querySelector(`[data-day="${day}"][data-row="${rowCode}"]`);
+    if(el)el.classList.add('drag-ghost');
+  });
+}
 
-  APP.schedule   = schedule;
-  APP.year       = year;
-  APP.month      = month;
-  APP.restStart  = restStart;
-  APP.restEnd    = restEnd;
-  APP.daysInMonth = dim;
+function onDragEnd(e){
+  document.querySelectorAll('.drag-ghost').forEach(el=>el.classList.remove('drag-ghost'));
+  document.querySelectorAll('.drop-hl').forEach(el=>el.classList.remove('drop-hl'));
+  DRAG=null;
+}
+
+function onDragOver(e,day,rowCode){
+  if(!DRAG)return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect='move';
+  const el=document.querySelector(`[data-day="${day}"][data-row="${rowCode}"]`);
+  if(el)el.classList.add('drop-hl');
+}
+
+function onDragLeave(e,day,rowCode){
+  const el=document.querySelector(`[data-day="${day}"][data-row="${rowCode}"]`);
+  if(el)el.classList.remove('drop-hl');
+}
+
+function onDrop(e,targetDay,targetRowCode){
+  e.preventDefault();
+  document.querySelectorAll('.drop-hl').forEach(el=>el.classList.remove('drop-hl'));
+  document.querySelectorAll('.drag-ghost').forEach(el=>el.classList.remove('drag-ghost'));
+  if(!DRAG)return;
+
+  const{day:srcDay,rowCode:srcRow}=DRAG;
+  DRAG=null;
+
+  if(srcDay===targetDay&&srcRow===targetRowCode)return; // même cellule
+
+  const srcVal=APP.sched[srcDay];
+
+  if(srcRow===targetRowCode){
+    /* ── DÉPLACEMENT HORIZONTAL : même ligne → la cellule garde sa couleur ──
+       On échange les valeurs entre srcDay et targetDay (le travail se déplace
+       mais reste affecté au même agent = couleur inchangée) */
+    const tgtVal=APP.sched[targetDay];
+    APP.sched[srcDay]=tgtVal;   // la source prend la valeur de la cible
+    APP.sched[targetDay]=srcVal; // la cible prend la valeur de la source
+  }else{
+    /* ── DÉPLACEMENT VERTICAL : ligne différente → la cellule prend la couleur
+       de la ligne de destination ──
+       La source est vidée, la cible prend le code de la ligne destination */
+    APP.sched[srcDay]=''; // vider la source
+    APP.sched[targetDay]=targetRowCode; // cible = couleur de la ligne de destination
+    // Les jours vides seront affichés comme non couverts
+  }
 
   render();
 }
 
-function resetEdits() {
-  if (APP.year) generate();
-}
+/* ═══════════════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════════════ */
+function render(){
+  const{sched:s,year,month,restWeek,wm}=APP;
+  const D=dim(year,month);
+  const agent=v('sel-agent'); // 'ALL','A','B','X'
+  const siteName=v('site-name')||'RENAISSANCE PARIS NOBEL TOUR EIFFEL';
+  const refNum=v('ref-num')||'1504';
+  const restDays=new Set(wm[restWeek]||[]);
 
-// ═══════════════════════════════════════════════════════════
-// CELL TOGGLE
-// ═══════════════════════════════════════════════════════════
-function toggleCell(d) {
-  if (!APP.schedule) return;
-  const cur = APP.schedule[d];
-  const idx = STATES_CYCLE.indexOf(cur);
-  APP.schedule[d] = STATES_CYCLE[(idx + 1) % STATES_CYCLE.length];
-  render();
-}
+  // Noms
+  const names={A:'LAHOUAOUI Mostapha',B:'DE SOUZA Roger',X:'AGENT EXTRA'};
+  const short={A:'LAHOUAOUI',B:'DE SOUZA',X:'EXTRA'};
+  const colors={A:'sA',B:'sB',X:'sX'};
+  const textColors={A:'#1a4fa0',B:'#0f7a55',X:'#8a5200'};
 
-// ═══════════════════════════════════════════════════════════
-// RENDER
-// ═══════════════════════════════════════════════════════════
-function render() {
-  const { schedule, year, month, restStart, restEnd, daysInMonth: dim } = APP;
+  // Titre document
+  const docName=agent==='A'?names.A:agent==='B'?names.B:agent==='X'?names.X:names.A;
 
-  const nameA    = v('name-a') || 'Agent A';
-  const nameB    = v('name-b') || 'Agent B';
-  const nameX    = v('name-x') || 'Agent Extra';
-  const siteName = v('site-name') || 'SITE';
-  const refNum   = v('ref-num') || '';
-  const monthName = MONTHS_FR[month];
+  // Timestamp
+  const now=new Date();
+  const ed=`${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()} à ${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
-  // Rest block days not assigned to A (should be all of them)
-  const aRestDays = new Set();
-  for (let d = restStart; d <= restEnd; d++) {
-    if (schedule[d] !== 'A') aRestDays.add(d);
-  }
+  // Lignes à afficher
+  const rows=[];
+  if(agent==='ALL'||agent==='A')rows.push({code:'A',lbl:`${siteName}<br><span style="color:${textColors.A};font-weight:700;">${short.A} M.</span>`});
+  if(agent==='ALL'||agent==='B')rows.push({code:'B',lbl:`${siteName}<br><span style="color:${textColors.B};font-weight:700;">${short.B} R.</span>`});
+  if(agent==='ALL'||agent==='X')rows.push({code:'X',lbl:`${siteName}<br><span style="color:${textColors.X};font-weight:700;">EXTRA</span>`});
 
-  // Counts
-  let cA=0, cB=0, cX=0;
-  for (let d=1;d<=dim;d++){
-    if(schedule[d]==='A') cA++;
-    if(schedule[d]==='B') cB++;
-    if(schedule[d]==='X') cX++;
-  }
-  const restLen = restEnd - restStart + 1;
+  // Compteurs
+  const cnt={A:0,B:0,X:0};
+  s.slice(1).forEach(v=>{if(v&&cnt[v]!==undefined)cnt[v]++;});
 
-  // Edition timestamp
-  const now = new Date();
-  const ed = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()} à ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  let h=`<div class="bup-doc">`;
 
-  // Short first name labels
-  const lA = nameA.split(' ')[0];
-  const lB = nameB.split(' ')[0];
-  const lX = nameX.split(' ')[0];
-
-  let html = `<div class="bup-doc">`;
-
-  // ── Document header ──
-  html += `
-  <div class="bup-top-bar">
+  /* ── En-tête document ── */
+  h+=`<div class="bup-top">
     <div class="bup-logo-wrap">
-      <div class="bup-triangle"></div>
-      <div class="bup-wordmark">BAC <span>UP</span></div>
+      <div class="doc-tri"></div>
+      <div class="doc-wm">BAC <span>UP</span></div>
     </div>
-    <div class="bup-ref">${refNum}</div>
+    <div class="doc-ref">${refNum}</div>
   </div>
-  <div class="bup-agent-info">
-    <strong>${nameA}</strong><br>
-    21 RUE CLEMENT &mdash; 94110 ARCUEIL
-  </div>
-  <div class="bup-plan-label">Planning ${nameA} par SITES</div>
-  <div class="bup-plan-sub">Édition du ${ed}</div>
-  <div class="bup-attn">ATTENTION : ce planning est susceptible d'être modifié</div>`;
+  <div class="doc-addr"><strong>${docName}</strong><br>21 RUE CLEMENT &mdash; 94110 ARCUEIL</div>
+  <div class="doc-plbl">Planning ${docName} par SITES</div>
+  <div class="doc-psub">Édition du ${ed}</div>
+  <div class="doc-attn">ATTENTION : ce planning est susceptible d'être modifié</div>`;
 
-  // ── Legend (screen) ──
-  html += `
-  <div class="legend no-print">
-    <div class="leg"><div class="leg-sq" style="background:#dce8f7;"></div>${nameA}</div>
-    <div class="leg"><div class="leg-sq" style="background:#d3f0e4;"></div>${nameB}</div>
-    <div class="leg"><div class="leg-sq" style="background:#faeeda;"></div>${nameX}</div>
-    <div class="leg"><div class="leg-sq" style="background:#edede8;"></div>Bloc repos (A)</div>
-    <span class="leg-tip no-print">💡 Cliquez sur une cellule pour modifier l'affectation</span>
-  </div>`;
+  /* ── Légende (écran) ── */
+  h+=`<div class="legend no-print">`;
+  if(agent==='ALL'||agent==='A')h+=`<div class="leg"><div class="leg-sq" style="background:#dce8f7;"></div>${names.A}</div>`;
+  if(agent==='ALL'||agent==='B')h+=`<div class="leg"><div class="leg-sq" style="background:#d3f0e4;"></div>${names.B} (Mar/Mer/Jeu)</div>`;
+  if(agent==='ALL'||agent==='X')h+=`<div class="leg"><div class="leg-sq" style="background:#faeeda;"></div>Agent Extra</div>`;
+  if(agent==='A')h+=`<div class="leg"><div class="leg-sq" style="background:#eaeae4;border-color:#bbb;"></div>Congé Mostapha (sem. ${restWeek})</div>`;
+  h+=`<span class="leg-drag no-print">↔ glisser horizontalement = garde la couleur &nbsp;|&nbsp; ↕ glisser verticalement = prend la couleur de la ligne</span>`;
+  h+=`</div>`;
 
-  // ── Table ──
-  html += `<div class="plan-wrap"><table class="pt"><tbody>`;
+  /* ── Tableau ── */
+  h+=`<div class="tbl-wrap"><table class="pt"><tbody>`;
 
-  // Row 1 : month + day letters
-  html += `<tr><td class="c-month" rowspan="2">${monthName}<br>${year}</td>`;
-  for (let d=1;d<=dim;d++) {
-    const dow = getDow(year, month, d);
-    html += `<td class="c-dletter${isWE(year,month,d)?' we':''}">${DAY_LETTERS[dow]}</td>`;
-  }
-  html += `</tr>`;
+  // Ligne 1 : mois + lettres des jours
+  h+=`<tr><td class="cm" rowspan="2">${MONTHS[month]}<br>${year}</td>`;
+  for(let d=1;d<=D;d++)h+=`<td class="cdl${isWE(year,month,d)?' we':''}">${DL[dow(year,month,d)]}</td>`;
+  h+=`</tr>`;
 
-  // Row 2 : day numbers
-  html += `<tr>`;
-  for (let d=1;d<=dim;d++) {
-    html += `<td class="c-dnum${isWE(year,month,d)?' we':''}">${String(d).padStart(2,'0')}</td>`;
-  }
-  html += `</tr>`;
+  // Ligne 2 : numéros des jours
+  h+=`<tr>`;
+  for(let d=1;d<=D;d++)h+=`<td class="cdn${isWE(year,month,d)?' we':''}">${pad(d)}</td>`;
+  h+=`</tr>`;
 
-  // Agent rows
-  function agentRow(code, labelHtml) {
-    let row = `<tr><td class="c-lbl">${labelHtml}</td>`;
-    for (let d=1;d<=dim;d++) {
-      const st = schedule[d];
-      let cls, inner;
-      if (st === code) {
-        cls = `c-cell s-${code}`;
-        inner = `<div class="ci"><span class="badge">J01</span><span class="hrs">07:00</span><span class="hrs">19:00</span></div>`;
-      } else if (code === 'A' && aRestDays.has(d)) {
-        cls = 'c-cell s-rest-block';
-        inner = `<div class="ci"><span>REPOS</span></div>`;
-      } else {
-        cls = 'c-cell s-rest';
-        inner = `<div class="ci"></div>`;
+  // Lignes agents
+  for(const{code,lbl}of rows){
+    h+=`<tr><td class="cl">${lbl}</td>`;
+    for(let d=1;d<=D;d++){
+      const val=s[d]||'';
+      let cls,inner,draggable='false';
+
+      if(val===code){
+        // Jour travaillé par cet agent
+        cls=`cc ${colors[code]}`;
+        draggable='true';
+        inner=`<div class="ci"><span class="badge">J01</span><span class="hrs">07:00</span><span class="hrs">19:00</span></div>`;
+      }else if(code==='A'&&restDays.has(d)&&val!=='A'){
+        // Bloc congé Mostapha
+        cls='cc sRB';
+        inner=`<div class="ci"><span>REPOS</span></div>`;
+      }else{
+        // Repos / non affecté
+        cls='cc sR';
+        inner=`<div class="ci"></div>`;
       }
-      row += `<td class="${cls}" onclick="toggleCell(${d})"></td>`;
-      // We need to set innerHTML properly - rewrite as direct approach
+
+      h+=`<td class="${cls}"
+        draggable="${draggable}"
+        data-day="${d}"
+        data-row="${code}"
+        ondragstart="onDragStart(event,${d},'${code}')"
+        ondragend="onDragEnd(event)"
+        ondragover="onDragOver(event,${d},'${code}')"
+        ondragleave="onDragLeave(event,${d},'${code}')"
+        ondrop="onDrop(event,${d},'${code}')">${inner}</td>`;
     }
-    row += `</tr>`;
-    return row;
+    h+=`</tr>`;
   }
 
-  // Build rows manually to properly set cell content
-  function buildAgentRow(code, labelHtml) {
-    const cells = [];
-    for (let d=1;d<=dim;d++) {
-      const st = schedule[d];
-      let cls, inner;
-      if (st === code) {
-        cls = `c-cell s-${code}`;
-        inner = `<div class="ci"><span class="badge">J01</span><span class="hrs">07:00</span><span class="hrs">19:00</span></div>`;
-      } else if (code === 'A' && aRestDays.has(d)) {
-        cls = 'c-cell s-rest-block';
-        inner = `<div class="ci"><span>REPOS</span></div>`;
-      } else {
-        cls = 'c-cell s-rest';
-        inner = `<div class="ci"></div>`;
-      }
-      cells.push(`<td class="${cls}" onclick="toggleCell(${d})">${inner}</td>`);
-    }
-    return `<tr><td class="c-lbl">${labelHtml}</td>${cells.join('')}</tr>`;
+  // Ligne totaux
+  h+=`<tr><td class="ctotl">Total quotidien<br>attribué :</td>`;
+  for(let d=1;d<=D;d++){
+    const inView=rows.some(({code})=>s[d]===code);
+    h+=`<td class="ctot">${inView?12:''}</td>`;
   }
+  h+=`</tr></tbody></table></div>`;
 
-  html += buildAgentRow('A', `${siteName}<br><span style="color:#1a4fa0;font-weight:700;">${lA}</span>`);
-  html += buildAgentRow('B', `${siteName}<br><span style="color:#0f7a55;font-weight:700;">${lB}</span>`);
-  html += buildAgentRow('X', `${siteName}<br><span style="color:#9a5c00;font-weight:700;">${lX}</span>`);
-
-  // Total row
-  html += `<tr><td class="c-total-lbl">Total quotidien<br>attribué :</td>`;
-  for (let d=1;d<=dim;d++) {
-    const n = schedule[d] !== '' ? 12 : '';
-    html += `<td class="c-total">${n}</td>`;
-  }
-  html += `</tr></tbody></table></div>`;
-
-  // ── Footer ──
-  html += `<div class="bup-footer">
+  /* ── Pied de page document ── */
+  h+=`<div class="doc-ft">
     Site : ${siteName} &mdash; 55-57 Avenue Raymond POINCARÉ &mdash; 75116 PARIS &mdash; Tél : 01 44 05 66 66<br>
     J01 : AGENT DE SÉCURITÉ JOUR (SSIAP 1) de 07h00 à 19h00
   </div>`;
 
-  // ── Stats (screen) ──
-  html += `<div class="stats-bar no-print">
-    <div class="stat-box">
-      <div class="stat-lbl">${lA} — vacations</div>
-      <div class="stat-val" style="color:var(--blue)">${cA} <span class="stat-sub">jours</span></div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-lbl">${lB} — vacations</div>
-      <div class="stat-val" style="color:var(--green)">${cB} <span class="stat-sub">jours</span></div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-lbl">${lX} — jours</div>
-      <div class="stat-val" style="color:var(--amber)">${cX} <span class="stat-sub">jours</span></div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-lbl">Non couverts</div>
-      <div class="stat-val" style="color:var(--gray-dark)">${dim-cA-cB-cX} <span class="stat-sub">/ ${dim}</span></div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-lbl">Bloc repos (A)</div>
-      <div class="stat-val" style="color:var(--gray-dark)">${restLen}<span class="stat-sub">j</span> <span class="stat-sub">${restStart}→${restEnd}</span></div>
-    </div>
+  /* ── Statistiques (écran) ── */
+  h+=`<div class="stats no-print">
+    <div class="sbox"><div class="slbl">${short.A}</div><div class="sval" style="color:var(--blue)">${cnt.A}<span class="ssub"> jours</span></div></div>
+    <div class="sbox"><div class="slbl">${short.B} (Mar/Mer/Jeu)</div><div class="sval" style="color:var(--green)">${cnt.B}<span class="ssub"> jours</span></div></div>
+    <div class="sbox"><div class="slbl">Extra</div><div class="sval" style="color:var(--amber)">${cnt.X}<span class="ssub"> jours</span></div></div>
+    <div class="sbox"><div class="slbl">Non couverts</div><div class="sval" style="color:#aaa">${s.slice(1).filter(x=>!x).length}<span class="ssub"> / ${D}</span></div></div>
+    <div class="sbox"><div class="slbl">Congé Mostapha</div><div class="sval" style="color:#888">${(wm[restWeek]||[]).length}<span class="ssub"> j (S${restWeek})</span></div></div>
   </div>`;
 
-  // ── Validation (screen) ──
-  html += renderValidation();
+  /* ── Validation (écran) ── */
+  h+=renderValidation(s,D,year,month,wm,restWeek);
 
-  html += `</div>`;
-  document.getElementById('planning-output').innerHTML = html;
+  h+=`</div>`;
+  document.getElementById('out').innerHTML=h;
 }
 
-// ═══════════════════════════════════════════════════════════
-// VALIDATION
-// ═══════════════════════════════════════════════════════════
-function renderValidation() {
-  const { schedule, year, month, daysInMonth: dim } = APP;
-  const nameA = v('name-a') || 'A';
-  const nameB = v('name-b') || 'B';
+/* ═══════════════════════════════════════════════════════
+   VALIDATION
+═══════════════════════════════════════════════════════ */
+function renderValidation(s,D,year,month,wm,restWeek){
+  const errs=[],warns=[],oks=[];
 
-  const errors = [], warnings = [], oks = [];
-
-  // Check max consecutive
-  function chkConsec(code, max, name) {
-    let streak = 0, maxS = 0;
-    for (let d=1;d<=dim;d++) {
-      if (schedule[d]===code){ streak++; maxS=Math.max(maxS,streak); }
-      else streak=0;
-    }
-    if (maxS > max) errors.push(`${name} : ${maxS} jours consécutifs (max autorisé : ${max})`);
-    else oks.push(`${name} : max consécutif OK (${maxS}/${max})`);
+  // Jours consécutifs max
+  function chkConsec(code,maxC,name){
+    let streak=0,maxS=0;
+    for(let d=1;d<=D;d++){if(s[d]===code){streak++;maxS=Math.max(maxS,streak);}else streak=0;}
+    if(maxS>maxC)errs.push(`${name} : ${maxS} jours consécutifs (max autorisé : ${maxC})`);
+    else oks.push(`${name} : consécutifs OK — max détecté : ${maxS}j`);
   }
-  chkConsec('A', 2, nameA.split(' ')[0]);
-  chkConsec('B', 3, nameB.split(' ')[0]);
+  chkConsec('A',2,'Mostapha');
+  chkConsec('B',3,'Roger');
 
-  // Check isolated days (day before AND after are not same agent)
-  function chkIsolated(code, name) {
-    let found = false;
-    for (let d=1;d<=dim;d++) {
-      if (schedule[d] !== code) continue;
-      const prev = d > 1 ? schedule[d-1]===code : false;
-      const next = d < dim ? schedule[d+1]===code : true; // last day OK (continues next month)
-      if (!prev && !next) { warnings.push(`${name} : jour ${d} isolé`); found=true; }
+  // Jours isolés
+  function chkIsolated(code,name){
+    const iso=[];
+    for(let d=1;d<=D;d++){
+      if(s[d]!==code)continue;
+      const prev=d>1?s[d-1]===code:false;
+      const next=d<D?s[d+1]===code:(code==='A'); // dernier jour = raccordement mois suivant
+      if(!prev&&!next)iso.push(d);
     }
-    if (!found) oks.push(`${name} : aucun jour isolé ✓`);
+    if(iso.length>0)warns.push(`${name} : ${iso.length} jour(s) isolé(s) — jours : ${iso.join(', ')} (corrigez par glisser-déposer)`);
+    else oks.push(`${name} : aucun jour isolé ✓`);
   }
-  chkIsolated('A', nameA.split(' ')[0]);
-  chkIsolated('B', nameB.split(' ')[0]);
+  chkIsolated('A','Mostapha');
+  chkIsolated('B','Roger');
 
-  // Check weekly max 4
-  function chkWeekly(code, name) {
-    const wc = {};
-    for (let d=1;d<=dim;d++) {
-      if (schedule[d]!==code) continue;
-      const k = getMondayKey(year, month, d);
-      wc[k] = (wc[k]||0) + 1;
+  // Max 4j/semaine
+  function chkWeekly(code,name){
+    let bad=false;
+    for(const[wn,days]of Object.entries(wm)){
+      const c=days.filter(d=>s[d]===code).length;
+      if(c>4){errs.push(`${name} : semaine ${wn} = ${c} jours (max 4)`);bad=true;}
     }
-    let bad = false;
-    for (const [wk, cnt] of Object.entries(wc)) {
-      if (cnt > 4) { errors.push(`${name} : ${cnt} jours semaine du ${wk} (max 4)`); bad=true; }
-    }
-    if (!bad) oks.push(`${name} : max 4j/semaine OK ✓`);
+    if(!bad)oks.push(`${name} : max 4j/semaine OK ✓`);
   }
-  chkWeekly('A', nameA.split(' ')[0]);
-  chkWeekly('B', nameB.split(' ')[0]);
+  chkWeekly('A','Mostapha');
+  chkWeekly('B','Roger');
 
-  // Count check
-  let cA=0,cB=0;
-  for(let d=1;d<=dim;d++){if(schedule[d]==='A')cA++;if(schedule[d]==='B')cB++;}
-  if(cA<12) warnings.push(`${nameA.split(' ')[0]} : seulement ${cA} jours ce mois (attendu 13)`);
-  if(cB<12) warnings.push(`${nameB.split(' ')[0]} : seulement ${cB} jours ce mois (attendu 13)`);
+  // Roger Mardi/Mercredi/Jeudi
+  let rogPref=0,rogTotal=0;
+  for(let d=1;d<=D;d++){
+    if(s[d]!=='B')continue;
+    rogTotal++;
+    const dw=dow(year,month,d);
+    if(dw===2||dw===3||dw===4)rogPref++;
+  }
+  const pct=rogTotal>0?Math.round(rogPref/rogTotal*100):0;
+  if(pct>=85)oks.push(`Roger : ${rogPref}/${rogTotal} jours sur Mar/Mer/Jeu (${pct}%) ✓`);
+  else if(pct>=60)warns.push(`Roger : ${rogPref}/${rogTotal} jours sur Mar/Mer/Jeu (${pct}%) — contrainte partiellement respectée`);
+  else warns.push(`Roger : seulement ${rogPref}/${rogTotal} jours sur Mar/Mer/Jeu (${pct}%) — vérifier le planning`);
 
-  let html = `<div class="val-row no-print">`;
-  for (const e of errors)   html += `<div class="val-item val-err"><span class="val-dot">✗</span>${e}</div>`;
-  for (const w of warnings) html += `<div class="val-item val-warn"><span class="val-dot">⚠</span>${w}</div>`;
-  if (errors.length===0 && warnings.length===0)
-    html += `<div class="val-item val-ok"><span class="val-dot">✓</span>Toutes les contraintes sont respectées — planning optimal</div>`;
-  html += `</div>`;
-  return html;
+  // Comptage cibles
+  const cA=s.slice(1).filter(x=>x==='A').length;
+  const cB=s.slice(1).filter(x=>x==='B').length;
+  if(cA<12)warns.push(`Mostapha : ${cA} jours ce mois (cible : 13)`);
+  if(cB<12)warns.push(`Roger : ${cB} jours ce mois (cible : 13)`);
+
+  let h=`<div class="val no-print">`;
+  for(const e of errs)h+=`<div class="vi ver"><span class="vd">✗</span>${e}</div>`;
+  for(const w of warns)h+=`<div class="vi vwn"><span class="vd">⚠</span>${w}</div>`;
+  if(errs.length===0&&warns.length===0)
+    h+=`<div class="vi vok"><span class="vd">✓</span>Toutes les contraintes sont respectées — planning optimal</div>`;
+  for(const o of oks)h+=`<div class="vi vok"><span class="vd">✓</span>${o}</div>`;
+  h+=`</div>`;
+  return h;
 }
 
-function getMondayKey(y, m, d) {
-  const date = new Date(y, m-1, d);
-  const dow = date.getDay(); // 0=Sun
-  const diff = dow===0 ? -6 : 1-dow;
-  const mon = new Date(date);
-  mon.setDate(date.getDate()+diff);
-  return `${String(mon.getDate()).padStart(2,'0')}/${String(mon.getMonth()+1).padStart(2,'0')}`;
-}
-
-function v(id) { return document.getElementById(id).value.trim(); }
-
-// ═══════════════════════════════════════════════════════════
-// INIT — auto-generate with default month = current month
-// ═══════════════════════════════════════════════════════════
-window.addEventListener('load', () => {
-  const now = new Date();
-  // Set month to next month by default
-  let m = now.getMonth() + 2; // +1 for next, +1 for 1-indexed
-  let y = now.getFullYear();
-  if (m > 12) { m = 1; y++; }
-  document.getElementById('sel-month').value = m;
-  document.getElementById('sel-year').value  = y;
+/* ═══════════════════════════════════════════════════════
+   INIT — génère le mois prochain par défaut
+═══════════════════════════════════════════════════════ */
+window.addEventListener('load',()=>{
+  const now=new Date();
+  let m=now.getMonth()+2;let y=now.getFullYear();
+  if(m>12){m=1;y++;}
+  // Trouver l'option année correcte
+  const ySel=document.getElementById('sel-year');
+  [...ySel.options].forEach(o=>{if(parseInt(o.value)===y)o.selected=true;});
+  document.getElementById('sel-month').value=m;
   generate();
 });
 </script>
