@@ -67,8 +67,8 @@ table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
 .ci{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:30px;padding:1px;line-height:1.2;user-select:none;}
 .ci .bge{font-size:7.5px;font-weight:700;}
 .ci .hrs{font-size:6.5px;}
-.sRog{background:var(--grn);}.sRog .bge{color:#0f7a55;}.sRog .hrs{color:#0f7a55;}
-.sMos{background:var(--blu);}.sMos .bge{color:#1a4fa0;}.sMos .hrs{color:#1a4fa0;}
+.sRog{background:var(--blu);}.sRog .bge{color:#1a4fa0;}.sRog .hrs{color:#1a4fa0;}
+.sMos{background:var(--grn);}.sMos .bge{color:#0f7a55;}.sMos .hrs{color:#0f7a55;}
 .sExt{background:var(--amb);}.sExt .bge{color:#8a5200;}.sExt .hrs{color:#8a5200;}
 .sEmpty{background:#fff;}
 .tctot{background:#e0e0da;font-size:8.5px;font-weight:700;color:var(--txt);padding:2px 0;}
@@ -87,7 +87,7 @@ table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
 .vwn{background:var(--amb);color:var(--amber);}
 .ver{background:#fce8e8;color:#a32d2d;}
 .vd{font-size:12px;flex-shrink:0;margin-top:1px;}
-@media print{body{background:#fff;padding:0;}.no-print{display:none!important;}.outc{box-shadow:none;padding:6px;border-radius:0;}table.pt td{border-color:#999;}.sRog{background:#bce8d3!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.sMos{background:#ccd8ee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.sExt{background:#f0ddb0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.tcm,.tcl,.tcdl,.tcdn,.tctot,.tctotl{background:#ddddd8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style>
+@media print{body{background:#fff;padding:0;}.no-print{display:none!important;}.outc{box-shadow:none;padding:6px;border-radius:0;}table.pt td{border-color:#999;}.sRog{background:#ccd8ee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.sMos{background:#bce8d3!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.sExt{background:#f0ddb0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.tcm,.tcl,.tcdl,.tcdn,.tctot,.tctotl{background:#ddddd8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style>
 </head>
 <body>
 <div class="app">
@@ -453,17 +453,17 @@ function render(){
   var ref=gv("p-ref")||"1504";
   var NAMES={"Roger":"DE SOUZA Roger","Mostapha":"LAHOUAOUI Mostapha","EXTRA":"AGENT EXTRA"};
   var SHORT={"Roger":"DE SOUZA","Mostapha":"LAHOUAOUI","EXTRA":"EXTRA"};
-  var TCOL={"Roger":"#0f7a55","Mostapha":"#1a4fa0","EXTRA":"#8a5200"};
+  var TCOL={"Roger":"#1a4fa0","Mostapha":"#0f7a55","EXTRA":"#8a5200"};
   var CLS={"Roger":"sRog","Mostapha":"sMos","EXTRA":"sExt"};
   var docAgent=(agent==="ALL")?"Mostapha":agent;
   var now=new Date();
   var ed=pad(now.getDate())+"/"+pad(now.getMonth()+1)+"/"+now.getFullYear()
     +" \u00e0 "+pad(now.getHours())+":"+pad(now.getMinutes());
   var rows=[];
-  if(agent==="ALL"||agent==="Roger")
-    rows.push({c:"Roger",l:site+"<br><span style=\"color:"+TCOL.Roger+";font-weight:700;\">"+SHORT.Roger+"</span>"});
   if(agent==="ALL"||agent==="Mostapha")
     rows.push({c:"Mostapha",l:site+"<br><span style=\"color:"+TCOL.Mostapha+";font-weight:700;\">"+SHORT.Mostapha+"</span>"});
+  if(agent==="ALL"||agent==="Roger")
+    rows.push({c:"Roger",l:site+"<br><span style=\"color:"+TCOL.Roger+";font-weight:700;\">"+SHORT.Roger+"</span>"});
   if(agent==="ALL"||agent==="EXTRA")
     rows.push({c:"EXTRA",l:site+"<br><span style=\"color:"+TCOL.EXTRA+";font-weight:700;\">EXTRA</span>"});
   var cR=0,cM=0,cX=0;
