@@ -2,652 +2,656 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Planning BAC UP — Générateur automatique</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --blue:#1a4fa0;--blue-lt:#dce8f7;--blue-dk:#0d3270;
-  --green:#0f7a55;--green-lt:#d3f0e4;
-  --amber:#8a5200;--amber-lt:#faeeda;
-  --red:#c00;--gray:#f0efea;--border:#d0d0cc;
-  --text:#1a1a18;--muted:#6a6a66;--bg:#e8e7e2;--white:#fff;
-  --shadow:0 2px 12px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04);
-}
-body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:18px;}
+:root{--blue:#1a4fa0;--blu:#dce8f7;--green:#0f7a55;--grn:#d3f0e4;--amber:#8a5200;--amb:#faeeda;--red:#c00;--gray:#f0efea;--bdr:#d0d0cc;--txt:#1a1a18;--mut:#6a6a66;--bg:#e8e7e2;--wht:#fff;--shd:0 2px 12px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04);}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;padding:18px;}
 .app{max-width:1360px;margin:0 auto;}
-
-/* ── HEADER ── */
-.app-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;padding:0 2px;}
-.app-logo{display:flex;align-items:center;gap:10px;}
-.app-tri{width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:24px solid var(--blue);}
-.app-title{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;letter-spacing:1px;color:var(--text);}
-.app-title span{color:var(--blue);}
-.app-sub{font-size:11px;color:var(--muted);margin-top:3px;}
-.app-ver{background:var(--blue);color:#fff;font-size:10px;font-family:'IBM Plex Mono',monospace;padding:3px 9px;border-radius:3px;letter-spacing:1px;margin-top:2px;}
-
-/* ── CONFIG PANEL ── */
-.cfg{background:var(--white);border-radius:10px;box-shadow:var(--shadow);padding:18px 22px;margin-bottom:14px;}
-.cfg-ttl{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.cfg-ttl::after{content:'';flex:1;height:1px;background:var(--border);}
-.cfg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px;}
-.fld label{display:block;font-size:9.5px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
-.fld select,.fld input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'IBM Plex Sans',sans-serif;color:var(--text);background:var(--white);transition:border-color .15s,box-shadow .15s;}
+.hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.hlogo{display:flex;align-items:center;gap:10px;}
+.htri{width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:24px solid var(--blue);}
+.htit{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;letter-spacing:1px;color:var(--txt);}
+.htit span{color:var(--blue);}
+.hsub{font-size:11px;color:var(--mut);margin-top:3px;}
+.hver{background:var(--blue);color:#fff;font-size:10px;font-family:'IBM Plex Mono',monospace;padding:3px 9px;border-radius:3px;letter-spacing:1px;}
+.cfg{background:var(--wht);border-radius:10px;box-shadow:var(--shd);padding:18px 22px;margin-bottom:14px;}
+.cttl{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--mut);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.cttl::after{content:'';flex:1;height:1px;background:var(--bdr);}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:10px;margin-bottom:16px;}
+.fld label{display:block;font-size:9.5px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--mut);margin-bottom:5px;}
+.fld select,.fld input{width:100%;padding:8px 10px;border:1px solid var(--bdr);border-radius:6px;font-size:13px;font-family:'IBM Plex Sans',sans-serif;color:var(--txt);background:var(--wht);transition:border-color .15s,box-shadow .15s;}
 .fld select:focus,.fld input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,79,160,.1);}
-.fld .note{font-size:9px;color:var(--muted);margin-top:4px;line-height:1.4;}
-.fld select[id="sel-agent"]{font-weight:600;color:var(--blue);}
-.fld input[readonly]{background:var(--gray);color:var(--muted);cursor:not-allowed;}
-.btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.fld .nte{font-size:9px;color:var(--mut);margin-top:4px;line-height:1.4;}
+.fld input[readonly]{background:var(--gray);color:var(--mut);cursor:not-allowed;}
+.rprev{font-size:11px;color:var(--blue);margin-top:5px;font-weight:500;min-height:16px;}
+.brow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:7px;border:none;cursor:pointer;font-size:13px;font-weight:600;font-family:'IBM Plex Sans',sans-serif;transition:opacity .15s,transform .1s;}
 .btn:hover{opacity:.84;}.btn:active{transform:scale(.97);}
-.btn-go{background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(26,79,160,.28);}
-.btn-print{background:#1a1a18;color:#fff;}
-.btn-rst{background:var(--gray);color:var(--text);border:1px solid var(--border);}
-.btn-div{width:1px;height:28px;background:var(--border);margin:0 2px;}
-
-/* ── OUTPUT CARD ── */
-.out-card{background:var(--white);border-radius:10px;box-shadow:var(--shadow);padding:22px;}
-.ph{text-align:center;padding:70px 20px;color:var(--muted);}
-.ph-ico{font-size:36px;margin-bottom:12px;}
+.bgo{background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(26,79,160,.28);}
+.bpr{background:#1a1a18;color:#fff;}
+.brs{background:var(--gray);color:var(--txt);border:1px solid var(--bdr);}
+.bdv{width:1px;height:28px;background:var(--bdr);margin:0 2px;}
+.outc{background:var(--wht);border-radius:10px;box-shadow:var(--shd);padding:22px;}
+.ph{text-align:center;padding:70px 20px;color:var(--mut);}
+.ph-i{font-size:36px;margin-bottom:12px;}
 .ph h3{font-size:16px;font-weight:500;margin-bottom:5px;}
 .ph p{font-size:13px;}
-
-/* ── BAC UP DOCUMENT ── */
-.bup-doc{}
-.bup-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
-.bup-logo-wrap{display:flex;align-items:center;gap:10px;}
-.doc-tri{width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:20px solid var(--blue);}
-.doc-wm{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:600;letter-spacing:3px;color:var(--text);}
-.doc-wm span{color:var(--blue);}
-.doc-ref{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);font-weight:600;}
-.doc-addr{font-size:11.5px;line-height:1.75;color:#444;margin-bottom:5px;}
-.doc-addr strong{color:var(--text);font-weight:600;}
-.doc-plbl{font-size:11px;font-weight:700;color:var(--text);}
-.doc-psub{font-size:10.5px;color:var(--muted);margin-bottom:5px;}
-.doc-attn{font-size:10.5px;color:var(--amber);font-style:italic;margin-bottom:12px;}
-
-/* ── LEGEND (screen only) ── */
-.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px;align-items:center;}
-.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);}
-.leg-sq{width:11px;height:11px;border-radius:2px;border:1px solid rgba(0,0,0,.12);flex-shrink:0;}
-.leg-drag{font-size:10px;color:var(--muted);font-style:italic;margin-left:auto;background:var(--gray);padding:4px 8px;border-radius:4px;}
-
-/* ── TABLE ── */
-.tbl-wrap{overflow-x:auto;}
+/* DOC */
+.dtop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.dlogo{display:flex;align-items:center;gap:10px;}
+.dtri{width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:20px solid var(--blue);}
+.dwm{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:600;letter-spacing:3px;color:var(--txt);}
+.dwm span{color:var(--blue);}
+.dref{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--mut);font-weight:600;}
+.dadr{font-size:11.5px;line-height:1.75;color:#444;margin-bottom:5px;}
+.dadr strong{color:var(--txt);font-weight:600;}
+.dplb{font-size:11px;font-weight:700;color:var(--txt);}
+.dpsb{font-size:10.5px;color:var(--mut);margin-bottom:5px;}
+.datn{font-size:10.5px;color:var(--amber);font-style:italic;margin-bottom:12px;}
+.leg{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;align-items:center;}
+.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--mut);}
+.lsq{width:11px;height:11px;border-radius:2px;border:1px solid rgba(0,0,0,.12);flex-shrink:0;}
+.ldtip{font-size:10px;color:var(--mut);font-style:italic;margin-left:auto;background:var(--gray);padding:4px 8px;border-radius:4px;}
+/* TABLE */
+.twrap{overflow-x:auto;}
 table.pt{border-collapse:collapse;min-width:840px;width:100%;font-size:9.5px;}
-table.pt th,table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
-.cm{background:#e0e0da;font-weight:700;font-size:12px;padding:5px 7px;text-align:center;min-width:72px;width:72px;line-height:1.5;}
-.cl{background:#e0e0da;font-size:8.5px;font-weight:600;color:#444;text-align:left;padding:2px 5px;min-width:82px;width:82px;white-space:nowrap;vertical-align:middle;line-height:1.4;}
-.cdl{background:#e0e0da;font-size:8.5px;font-weight:700;color:#555;padding:2px 0;min-width:19px;width:19px;}
-.cdl.we{color:var(--red);}
-.cdn{background:#e0e0da;font-size:9.5px;font-weight:700;color:var(--text);padding:2px 0;}
-.cdn.we{color:var(--red);}
-
-/* Work cells */
+table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
+.tcm{background:#e0e0da;font-weight:700;font-size:12px;padding:5px 7px;min-width:72px;width:72px;line-height:1.5;}
+.tcl{background:#e0e0da;font-size:8.5px;font-weight:600;color:#444;text-align:left;padding:2px 5px;min-width:82px;width:82px;white-space:nowrap;vertical-align:middle;line-height:1.4;}
+.tcdl{background:#e0e0da;font-size:8.5px;font-weight:700;color:#555;padding:2px 0;min-width:19px;width:19px;}
+.tcdl.we{color:var(--red);}
+.tcdn{background:#e0e0da;font-size:9.5px;font-weight:700;color:var(--txt);padding:2px 0;}
+.tcdn.we{color:var(--red);}
 .cc{position:relative;transition:filter .12s;}
-.cc[draggable="true"]{cursor:grab;}
-.cc[draggable="true"]:active{cursor:grabbing;}
-.cc.drop-hl{outline:2px dashed var(--blue);outline-offset:-2px;filter:brightness(.92);}
-.cc.drag-ghost{opacity:.35;}
+.cc[draggable=true]{cursor:grab;}
+.cc.dhl{outline:2px dashed var(--blue);outline-offset:-2px;filter:brightness(.9);}
+.cc.dgh{opacity:.35;}
 .ci{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:30px;padding:1px;line-height:1.2;user-select:none;}
-.ci .badge{font-size:7.5px;font-weight:700;}
+.ci .bge{font-size:7.5px;font-weight:700;}
 .ci .hrs{font-size:6.5px;}
-
-.sA{background:var(--blue-lt);}
-.sA .badge{color:#1a4fa0;}.sA .hrs{color:#1a4fa0;}
-.sB{background:var(--green-lt);}
-.sB .badge{color:var(--green);}.sB .hrs{color:var(--green);}
-.sX{background:var(--amber-lt);}
-.sX .badge{color:var(--amber);}.sX .hrs{color:var(--amber);}
+.sA{background:var(--blu);}.sA .bge{color:#1a4fa0;}.sA .hrs{color:#1a4fa0;}
+.sB{background:var(--grn);}.sB .bge{color:var(--green);}.sB .hrs{color:var(--green);}
+.sX{background:var(--amb);}.sX .bge{color:var(--amber);}.sX .hrs{color:var(--amber);}
 .sR{background:#fff;}
-.sRB{background:#eaeae4;}
-.sRB .ci span{font-size:6px;color:#aaa;}
-
-.ctot{background:#e0e0da;font-size:8.5px;font-weight:700;color:var(--text);padding:2px 0;}
-.ctotl{background:#e0e0da;text-align:left!important;padding:2px 5px!important;font-size:8.5px;color:#555;line-height:1.4;}
-
-/* ── DOC FOOTER ── */
-.doc-ft{margin-top:9px;font-size:9px;color:#888;border-top:.5px solid #ccc;padding-top:6px;line-height:1.6;}
-
-/* ── STATS ── */
-.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);}
-.sbox{background:var(--gray);border-radius:7px;padding:9px 12px;}
-.slbl{font-size:9.5px;color:var(--muted);margin-bottom:3px;font-weight:500;}
-.sval{font-size:17px;font-weight:600;font-family:'IBM Plex Mono',monospace;}
-.ssub{font-size:10px;color:var(--muted);font-weight:400;}
-
-/* ── VALIDATION ── */
+.sCG{background:#eaeae4;}.sCG .ci span{font-size:6px;color:#aaa;}
+.tctot{background:#e0e0da;font-size:8.5px;font-weight:700;color:var(--txt);padding:2px 0;}
+.tctotl{background:#e0e0da;text-align:left!important;padding:2px 5px!important;font-size:8.5px;color:#555;line-height:1.4;}
+.dft{margin-top:9px;font-size:9px;color:#888;border-top:.5px solid #ccc;padding-top:6px;line-height:1.6;}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--bdr);}
+.sb{background:var(--gray);border-radius:7px;padding:9px 12px;}
+.slb{font-size:9.5px;color:var(--mut);margin-bottom:3px;font-weight:500;}
+.sv{font-size:17px;font-weight:600;font-family:'IBM Plex Mono',monospace;}
+.ss{font-size:10px;color:var(--mut);font-weight:400;}
+/* WE MEMORY */
+.wemem{background:var(--blu);border:1px solid rgba(26,79,160,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:#0d3270;margin-top:10px;}
+.wemem strong{font-weight:600;}
+/* VALIDATION */
 .val{display:flex;flex-direction:column;gap:5px;margin-top:10px;}
 .vi{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;padding:6px 12px;border-radius:6px;}
-.vok{background:var(--green-lt);color:var(--green);}
-.vwn{background:var(--amber-lt);color:var(--amber);}
+.vok{background:var(--grn);color:var(--green);}
+.vwn{background:var(--amb);color:var(--amber);}
 .ver{background:#fce8e8;color:#a32d2d;}
 .vd{font-size:12px;flex-shrink:0;margin-top:1px;}
-
-/* ── PRINT ── */
+/* PRINT */
 @media print{
   body{background:#fff;padding:0;}
   .no-print{display:none!important;}
-  .out-card{box-shadow:none;padding:6px;border-radius:0;}
+  .outc{box-shadow:none;padding:6px;border-radius:0;}
   .cc{cursor:default;}
-  table.pt th,table.pt td{border-color:#999;}
+  table.pt td{border-color:#999;}
   .sA{background:#ccd8ee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .sB{background:#bce8d3!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .sX{background:#f0ddb0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .sRB{background:#ddddd8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .cm,.cl,.cdl,.cdn,.ctot,.ctotl{background:#ddddd8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sCG{background:#ddddd8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .tcm,.tcl,.tcdl,.tcdn,.tctot,.tctotl{background:#ddddd8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
 }
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- ═══ APP HEADER ═══ -->
-  <div class="app-hdr no-print">
-    <div class="app-logo">
-      <div class="app-tri"></div>
-      <div>
-        <div class="app-title">BAC <span>UP</span> — Planning Générateur automatique</div>
-        <div class="app-sub">SSIAP 1 &nbsp;·&nbsp; Vacation J01 &nbsp;·&nbsp; 07h00 – 19h00 (12h)</div>
-      </div>
-    </div>
-    <div class="app-ver">v3.0</div>
-  </div>
-
-  <!-- ═══ CONFIG ═══ -->
-  <div class="cfg no-print">
-    <div class="cfg-ttl">Paramètres</div>
-    <div class="cfg-grid">
-
-      <div class="fld">
-        <label>Mois</label>
-        <select id="sel-month">
-          <option value="1">Janvier</option><option value="2">Février</option>
-          <option value="3">Mars</option><option value="4">Avril</option>
-          <option value="5">Mai</option><option value="6">Juin</option>
-          <option value="7">Juillet</option><option value="8">Août</option>
-          <option value="9">Septembre</option><option value="10">Octobre</option>
-          <option value="11">Novembre</option><option value="12">Décembre</option>
-        </select>
-      </div>
-
-      <div class="fld">
-        <label>Année</label>
-        <select id="sel-year">
-          <option value="2026">2026</option>
-          <option value="2027">2027</option>
-          <option value="2028">2028</option>
-          <option value="2029">2029</option>
-          <option value="2030">2030</option>
-        </select>
-      </div>
-
-      <div class="fld">
-        <label>Agent</label>
-        <select id="sel-agent">
-          <option value="ALL">TOUS — Complet</option>
-          <option value="A">Mostapha LAHOUAOUI</option>
-          <option value="B">Roger DE SOUZA</option>
-          <option value="X">Agent EXTRA</option>
-        </select>
-        <div class="note">Filtre le planning affiché</div>
-      </div>
-
-      <div class="fld">
-        <label>Nom du site</label>
-        <input type="text" id="site-name" value="RENAISSANCE PARIS NOBEL TOUR EIFFEL" readonly>
-        <div class="note">Valeur fixe du site</div>
-      </div>
-
-      <div class="fld">
-        <label>Réf. document</label>
-        <input type="text" id="ref-num" value="1504">
-      </div>
-
-      <div class="fld">
-        <label>Congé Mostapha (semaine)</label>
-        <select id="rest-week">
-          <option value="2">Semaine 2 du mois</option>
-          <option value="3" selected>Semaine 3 du mois</option>
-          <option value="4">Semaine 4 du mois</option>
-        </select>
-        <div class="note">Semaine sans vacation pour Mostapha</div>
-      </div>
-
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-go" onclick="generate()">▶ Générer le planning</button>
-      <div class="btn-div"></div>
-      <button class="btn btn-print" onclick="window.print()">🖨 Imprimer / PDF</button>
-      <button class="btn btn-rst" onclick="resetPlan()">↺ Réinitialiser</button>
+<!-- HEADER -->
+<div class="hdr no-print">
+  <div class="hlogo">
+    <div class="htri"></div>
+    <div>
+      <div class="htit">BAC <span>UP</span> — Planning Générateur automatique</div>
+      <div class="hsub">SSIAP 1 &nbsp;·&nbsp; Vacation J01 &nbsp;·&nbsp; 07h00 – 19h00 (12h)</div>
     </div>
   </div>
+  <div class="hver">v5.0</div>
+</div>
 
-  <!-- ═══ OUTPUT ═══ -->
-  <div class="out-card" id="out">
-    <div class="ph">
-      <div class="ph-ico">📋</div>
-      <h3>Aucun planning généré</h3>
-      <p>Configurez les paramètres puis cliquez sur <strong>Générer le planning</strong>.</p>
+<!-- CONFIG -->
+<div class="cfg no-print">
+  <div class="cttl">Paramètres</div>
+  <div class="cgrid">
+    <div class="fld">
+      <label>Mois</label>
+      <select id="p-month" onchange="populateDays()">
+        <option value="1">Janvier</option><option value="2">Février</option>
+        <option value="3">Mars</option><option value="4">Avril</option>
+        <option value="5">Mai</option><option value="6">Juin</option>
+        <option value="7">Juillet</option><option value="8">Août</option>
+        <option value="9">Septembre</option><option value="10">Octobre</option>
+        <option value="11">Novembre</option><option value="12">Décembre</option>
+      </select>
+    </div>
+    <div class="fld">
+      <label>Année</label>
+      <select id="p-year" onchange="populateDays()">
+        <option value="2026">2026</option><option value="2027">2027</option>
+        <option value="2028">2028</option><option value="2029">2029</option>
+        <option value="2030">2030</option>
+      </select>
+    </div>
+    <div class="fld">
+      <label>Agent affiché</label>
+      <select id="p-agent">
+        <option value="ALL">TOUS — Complet</option>
+        <option value="A">Mostapha LAHOUAOUI</option>
+        <option value="B">Roger DE SOUZA</option>
+        <option value="X">Agent EXTRA</option>
+      </select>
+    </div>
+    <div class="fld">
+      <label>Nom du site</label>
+      <input type="text" id="p-site" value="RENAISSANCE PARIS NOBEL TOUR EIFFEL" readonly>
+    </div>
+    <div class="fld">
+      <label>Réf. document</label>
+      <input type="text" id="p-ref" value="1504">
+    </div>
+    <div class="fld">
+      <label>Congé Mostapha — début (7 j.)</label>
+      <select id="p-rest" onchange="updatePreview()"></select>
+      <div class="rprev" id="p-prev"></div>
+    </div>
+    <div class="fld">
+      <label>Dernier WE mois précédent</label>
+      <select id="p-lastwo">
+        <option value="A">Mostapha LAHOUAOUI</option>
+        <option value="B">Roger DE SOUZA</option>
+      </select>
+      <div class="nte">Qui a travaillé le dernier Samedi-Dimanche ?</div>
     </div>
   </div>
+  <div class="brow">
+    <button class="btn bgo" onclick="generate()">▶ Générer le planning</button>
+    <div class="bdv"></div>
+    <button class="btn bpr" onclick="window.print()">🖨 Imprimer / PDF</button>
+    <button class="btn brs" onclick="resetPlan()">↺ Réinitialiser</button>
+  </div>
+</div>
 
-</div><!-- /app -->
+<!-- OUTPUT -->
+<div class="outc" id="out">
+  <div class="ph"><div class="ph-i">📋</div><h3>Aucun planning généré</h3><p>Configurez les paramètres puis cliquez sur <strong>Générer le planning</strong>.</p></div>
+</div>
+</div>
 
 <script>
-/* ═══════════════════════════════════════════════════════
-   CONSTANTS
-═══════════════════════════════════════════════════════ */
-const MONTHS=['','Janvier','Février','Mars','Avril','Mai','Juin',
-  'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const MN=['','Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const MS=['','Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'];
 const DL=['D','L','M','M','J','V','S'];
+const DLG=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+const APP={sc:null,y:null,m:null,rs:null,re:null,lastWEOut:null};
+let DRG=null;
 
-/* ═══════════════════════════════════════════════════════
-   STATE
-═══════════════════════════════════════════════════════ */
-const APP={sched:null,year:null,month:null,restWeek:null,wm:null};
-let DRAG=null; // {day, rowCode}
-
-/* ═══════════════════════════════════════════════════════
-   UTILS
-═══════════════════════════════════════════════════════ */
 const dim=(y,m)=>new Date(y,m,0).getDate();
-const dow=(y,m,d)=>new Date(y,m-1,d).getDay(); // 0=Sun
+const dow=(y,m,d)=>new Date(y,m-1,d).getDay();
 const isWE=(y,m,d)=>{const w=dow(y,m,d);return w===0||w===6;};
 const pad=n=>String(n).padStart(2,'0');
-const v=id=>document.getElementById(id).value.trim();
+const gv=id=>document.getElementById(id).value.trim();
 
-function buildWeekMap(y,m){
-  const D=dim(y,m);
-  const fd=dow(y,m,1);
-  const fdOff=fd===0?6:fd-1; // days before Monday of week containing day 1
-  const wm={};
-  for(let d=1;d<=D;d++){
-    const wn=Math.ceil((d+fdOff)/7);
-    if(!wm[wn])wm[wn]=[];
-    wm[wn].push(d);
-  }
+/* ── Week map ── */
+function getWM(y,m){
+  const D=dim(y,m),fd=dow(y,m,1),off=fd===0?6:fd-1,wm={};
+  for(let d=1;d<=D;d++){const wn=Math.ceil((d+off)/7);if(!wm[wn])wm[wn]=[];wm[wn].push(d);}
   return wm;
 }
 
-function getWkNum(y,m,d){
-  const fd=dow(y,m,1);
-  const fdOff=fd===0?6:fd-1;
-  return Math.ceil((d+fdOff)/7);
+/* ── Populate rest-day selector ── */
+function populateDays(){
+  const month=parseInt(gv('p-month')),year=parseInt(gv('p-year'));
+  const D=dim(year,month);
+  const sel=document.getElementById('p-rest');
+  const cur=parseInt(sel.value)||8;
+  sel.innerHTML='';
+  for(let d=1;d<=D-6;d++){
+    const e=d+6;
+    const o=document.createElement('option');
+    o.value=d;
+    const ds=DLG[dow(year,month,d)].substring(0,3);
+    const es=DLG[dow(year,month,e)].substring(0,3);
+    o.textContent=pad(d)+' ('+ds+') → '+pad(e)+' ('+es+')';
+    if(d===cur)o.selected=true;
+    sel.appendChild(o);
+  }
+  if(!sel.value){
+    for(let d=8;d<=D-6;d++){if(dow(year,month,d)===1){sel.value=d;break;}}
+  }
+  updatePreview();
 }
 
-/* ═══════════════════════════════════════════════════════
-   ALGORITHM
-═══════════════════════════════════════════════════════ */
-function buildSchedule(year,month,restWeek){
-  const D=dim(year,month);
-  const s=new Array(D+1).fill('');
-  const wm=buildWeekMap(year,month);
-  const restDays=new Set(wm[restWeek]||[]);
+function updatePreview(){
+  const month=parseInt(gv('p-month')),year=parseInt(gv('p-year'));
+  const rs=parseInt(document.getElementById('p-rest').value);
+  if(!rs){document.getElementById('p-prev').textContent='';return;}
+  const re=rs+6,D=dim(year,month);
+  if(re>D){document.getElementById('p-prev').textContent='⚠ Dépasse fin du mois';return;}
+  document.getElementById('p-prev').textContent=
+    '📅 '+DLG[dow(year,month,rs)]+' '+pad(rs)+' → '+DLG[dow(year,month,re)]+' '+pad(re);
+}
 
-  /* ── ROGER (B): groupe Mardi/Mercredi/Jeudi par semaine ── */
-  const rogByWk={};
+/* ══════════════════════════════════════════════
+   ALGORITHME PRINCIPAL v5
+══════════════════════════════════════════════ */
+function buildSchedule(year,month,restStart,lastWEWorker){
+  const D=dim(year,month);
+  const restEnd=Math.min(restStart+6,D);
+  const restSet=new Set();
+  for(let d=restStart;d<=restEnd;d++)restSet.add(d);
+
+  const s=new Array(D+1).fill('');
+
+  /* helpers consécutifs */
+  const cbef=(d,c)=>{let n=0,i=d-1;while(i>=1&&s[i]===c){n++;i--;}return n;};
+  const caft=(d,c)=>{let n=0,i=d+1;while(i<=D&&s[i]===c){n++;i++;}return n;};
+  const ctot=(d,c)=>cbef(d,c)+caft(d,c)+1;
+
+  /* ────────────────────────────────────────
+     ÉTAPE 1 — WEEKENDS : alternance A/B
+  ──────────────────────────────────────── */
+  const sats=[];
+  for(let d=1;d<=D;d++) if(dow(year,month,d)===6) sats.push(d);
+
+  // Si le mois commence un Dimanche → c'est la fin du WE précédent
+  if(dow(year,month,1)===0){
+    s[1]= restSet.has(1)
+      ? (lastWEWorker==='A'?'B':'A')   // Mostapha en congé → Roger
+      : lastWEWorker;
+  }
+
+  // Qui prend le 1er WE de ce mois ?
+  let nextWE=lastWEWorker==='A'?'B':'A';
+  let lastWEOut=lastWEWorker;
+
+  for(const sat of sats){
+    let who=nextWE;
+    // Si Mostapha est en congé ce WE → forcé Roger
+    const satRest=restSet.has(sat);
+    const sunRest=(sat+1<=D)&&restSet.has(sat+1);
+    if(who==='A'&&(satRest||sunRest)) who='B';
+
+    s[sat]=who;
+    if(sat+1<=D&&dow(year,month,sat+1)===0) s[sat+1]=who;
+
+    lastWEOut=who;
+    nextWE=nextWE==='A'?'B':'A';
+  }
+
+  /* ────────────────────────────────────────
+     ÉTAPE 2 — ROGER (B) : groupes Mar+Mer+Jeu
+     Objectif : 13-14 jours, pas isolés, max 3 consécutifs
+  ──────────────────────────────────────── */
+  const wm=getWM(year,month);
+
+  // Construire les groupes Mar/Mer/Jeu par semaine
+  const rogerGrps=[];
+  let grp=[];
   for(let d=1;d<=D;d++){
     const dw=dow(year,month,d);
-    if(dw===2||dw===3||dw===4){
-      const wn=getWkNum(year,month,d);
-      if(!rogByWk[wn])rogByWk[wn]=[];
-      rogByWk[wn].push(d);
+    if(dw===2||dw===3||dw===4){grp.push(d);if(dw===4||d===D){if(grp.length)rogerGrps.push([...grp]);grp=[];}}
+    else if(grp.length){rogerGrps.push([...grp]);grp=[];}
+  }
+
+  let bCnt=s.slice(1).filter(x=>x==='B').length;
+
+  for(const g of rogerGrps){
+    if(bCnt>=14) break;
+    // Garder uniquement les jours disponibles (pas déjà assigné)
+    const avail=g.filter(d=>s[d]==='');
+    if(!avail.length) continue;
+
+    // Calculer les slots restants cette semaine
+    const wn=Math.ceil((avail[0]+( (fd=dow(year,month,1))===0?6:fd-1 ))/7);
+    const bInWk=(wm[wn]||[]).filter(d=>s[d]==='B').length;
+    const slots=4-bInWk;
+    if(slots<=0) continue;
+
+    const take=Math.min(avail.length,slots,14-bCnt);
+
+    if(take>=2){
+      for(let i=0;i<take;i++){s[avail[i]]='B';bCnt++;}
+    }else if(take===1){
+      // N'ajouter que si adjacent à un B existant (évite isolation)
+      const d=avail[0];
+      if((d>1&&s[d-1]==='B')||(d<D&&s[d+1]==='B')){s[d]='B';bCnt++;}
     }
   }
-  // Sélection des groupes complets en priorité (évite les jours isolés)
-  const rogDays=[];
-  const wkNums=Object.keys(rogByWk).map(Number).sort((a,b)=>a-b);
-  for(const wn of wkNums){
-    const grp=rogByWk[wn];
-    if(rogDays.length+grp.length<=13){
-      rogDays.push(...grp);
-    }else{
-      const need=13-rogDays.length;
-      if(need>0){
-        // Prendre depuis le début du groupe (Mardi+Mercredi = pair)
-        rogDays.push(...grp.slice(0,need));
+
+  // Compléter si < 13 avec des jours adjacents à des blocs B existants
+  if(bCnt<13){
+    for(let d=1;d<=D&&bCnt<13;d++){
+      if(s[d]!=='') continue;
+      const lb=d>1&&s[d-1]==='B',rb=d<D&&s[d+1]==='B';
+      if((lb||rb)&&ctot(d,'B')<=3&&cbef(d,'B')+caft(d,'B')+1<=3){
+        s[d]='B';bCnt++;
       }
-      break;
-    }
-  }
-  for(const d of rogDays)s[d]='B';
-
-  /* ── MOSTAPHA (A): paires sur jours disponibles, hors congé ── */
-  // Jours disponibles (ni Roger, ni congé)
-  const avail=[];
-  for(let d=1;d<=D;d++){
-    if(s[d]===''&&!restDays.has(d))avail.push(d);
-  }
-
-  let aCount=0,i=0;
-  // Passe 1 : recherche de paires consécutives (avec gap de 1 jour entre paires)
-  while(i<avail.length&&aCount<13){
-    const d=avail[i];
-    if(i+1<avail.length&&avail[i+1]===d+1&&aCount+2<=13){
-      s[d]='A';s[d+1]='A';
-      aCount+=2;i+=2;
-      // Sauter le gap d'au moins 1 jour pour éviter 3 consécutifs
-      while(i<avail.length&&avail[i]<=d+2)i++;
-    }else{
-      i++;
-    }
-  }
-  // Passe 2 (fallback): jours seuls si manque encore
-  if(aCount<13){
-    for(let d=1;d<=D&&aCount<13;d++){
-      if(s[d]===''&&!restDays.has(d)){s[d]='A';aCount++;}
     }
   }
 
-  /* ── EXTRA (X): tout le reste ── */
-  for(let d=1;d<=D;d++){if(s[d]===''||restDays.has(d)&&s[d]==='')s[d]=s[d]||'X';}
-  // Marquer les jours de congé Mostapha non assignés comme X
-  for(let d=1;d<=D;d++){if(s[d]==='')s[d]='X';}
+  /* ────────────────────────────────────────
+     ÉTAPE 3 — MOSTAPHA (A) : paires strictes
+     Objectif : exactement 13 jours, max 2 consécutifs, pas isolés
+  ──────────────────────────────────────── */
+  const canA=d=>{
+    if(d<1||d>D||s[d]!==''||restSet.has(d)) return false;
+    if(cbef(d,'A')>=2||caft(d,'A')>=2) return false;
+    if(cbef(d,'A')+caft(d,'A')+1>=3) return false;
+    return true;
+  };
 
-  return s;
+  let aCnt=s.slice(1).filter(x=>x==='A').length;
+
+  // Paires (d, d+1) avec gap de 2 pour éviter les 3 consécutifs
+  let di=1;
+  while(di<=D&&aCnt<13){
+    if(canA(di)&&di+1<=D&&canA(di+1)&&cbef(di,'A')===0){
+      s[di]='A';s[di+1]='A';aCnt+=2;di+=4;
+    }else di++;
+  }
+  // Fallback : jours simples si toujours insuffisant
+  if(aCnt<13){
+    for(let d=1;d<=D&&aCnt<13;d++){if(canA(d)){s[d]='A';aCnt++;}}
+  }
+
+  /* ────────────────────────────────────────
+     ÉTAPE 4 — CORRECTIONS POST-HOC
+  ──────────────────────────────────────── */
+  // 4a. Pas de 4 jours consécutifs pour personne (y compris Extra plus tard)
+  const fixConsec=(code,maxC)=>{
+    let ch=true,sf=0;
+    while(ch&&sf++<30){
+      ch=false;
+      for(let d=1;d<=D;d++){
+        if(s[d]!==code) continue;
+        if(ctot(d,code)>maxC){
+          let e=d;while(e+1<=D&&s[e+1]===code)e++;
+          s[e]='';ch=true;break;
+        }
+      }
+    }
+  };
+  fixConsec('B',3);
+  fixConsec('A',2);
+
+  // 4b. Supprimer les jours isolés A et B (→ Extra)
+  const fixIso=(code)=>{
+    let ch=true,sf=0;
+    while(ch&&sf++<10){
+      ch=false;
+      for(let d=1;d<=D;d++){
+        if(s[d]!==code) continue;
+        const lb=d>1&&s[d-1]===code;
+        const rb=d<D&&s[d+1]===code;
+        if(!lb&&!rb){s[d]='';ch=true;}
+      }
+    }
+  };
+  fixIso('A');
+  fixIso('B');
+
+  // 4c. Reconstruire si des jours ont été retirés pour atteindre 13 A
+  aCnt=s.slice(1).filter(x=>x==='A').length;
+  if(aCnt<13){
+    di=1;
+    while(di<=D&&aCnt<13){
+      if(canA(di)&&di+1<=D&&canA(di+1)&&cbef(di,'A')===0){
+        s[di]='A';s[di+1]='A';aCnt+=2;di+=4;
+      }else di++;
+    }
+  }
+
+  /* ────────────────────────────────────────
+     ÉTAPE 5 — EXTRA : tout le reste
+  ──────────────────────────────────────── */
+  for(let d=1;d<=D;d++) if(s[d]==='') s[d]='X';
+
+  // 5a. Vérifier pas de 4 consécutifs pour Extra aussi
+  fixConsec('X',3);
+
+  return{sc:s,re:restEnd,lastWEOut};
 }
 
-/* ═══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════
    GENERATE
-═══════════════════════════════════════════════════════ */
+══════════════════════════════════════════════ */
 function generate(){
-  const month=parseInt(v('sel-month'));
-  const year=parseInt(v('sel-year'));
-  const restWeek=parseInt(v('rest-week'));
-  APP.sched=buildSchedule(year,month,restWeek);
-  APP.year=year;APP.month=month;APP.restWeek=restWeek;
-  APP.wm=buildWeekMap(year,month);
+  const month=parseInt(gv('p-month')),year=parseInt(gv('p-year'));
+  const restStart=parseInt(document.getElementById('p-rest').value);
+  const lastWE=gv('p-lastwo');
+  const res=buildSchedule(year,month,restStart,lastWE);
+  APP.sc=res.sc;APP.y=year;APP.m=month;
+  APP.rs=restStart;APP.re=res.re;APP.lastWEOut=res.lastWEOut;
+  render();
+}
+function resetPlan(){if(APP.y)generate();}
+
+/* ══════════════════════════════════════════════
+   DRAG & DROP
+══════════════════════════════════════════════ */
+function dStart(e,d,r){DRG={d,r};e.dataTransfer.effectAllowed='move';requestAnimationFrame(()=>{const el=document.querySelector('[data-d="'+d+'"][data-r="'+r+'"]');if(el)el.classList.add('dgh');});}
+function dEnd(){document.querySelectorAll('.dgh,.dhl').forEach(el=>el.classList.remove('dgh','dhl'));DRG=null;}
+function dOver(e,d,r){if(!DRG)return;e.preventDefault();const el=document.querySelector('[data-d="'+d+'"][data-r="'+r+'"]');if(el)el.classList.add('dhl');}
+function dLeave(e,d,r){const el=document.querySelector('[data-d="'+d+'"][data-r="'+r+'"]');if(el)el.classList.remove('dhl');}
+function dDrop(e,td,tr){
+  e.preventDefault();
+  document.querySelectorAll('.dgh,.dhl').forEach(el=>el.classList.remove('dgh','dhl'));
+  if(!DRG)return;
+  const{d:sd,r:sr}=DRG;DRG=null;
+  if(sd===td&&sr===tr)return;
+  if(sr===tr){const tmp=APP.sc[td];APP.sc[td]=APP.sc[sd];APP.sc[sd]=tmp;}
+  else{APP.sc[sd]='X';APP.sc[td]=tr;}
   render();
 }
 
-function resetPlan(){if(APP.year)generate();}
-
-/* ═══════════════════════════════════════════════════════
-   DRAG & DROP HANDLERS
-═══════════════════════════════════════════════════════ */
-function onDragStart(e,day,rowCode){
-  DRAG={day,rowCode};
-  e.dataTransfer.effectAllowed='move';
-  // Légère transparence sur la source
-  requestAnimationFrame(()=>{
-    const el=document.querySelector(`[data-day="${day}"][data-row="${rowCode}"]`);
-    if(el)el.classList.add('drag-ghost');
-  });
-}
-
-function onDragEnd(e){
-  document.querySelectorAll('.drag-ghost').forEach(el=>el.classList.remove('drag-ghost'));
-  document.querySelectorAll('.drop-hl').forEach(el=>el.classList.remove('drop-hl'));
-  DRAG=null;
-}
-
-function onDragOver(e,day,rowCode){
-  if(!DRAG)return;
-  e.preventDefault();
-  e.dataTransfer.dropEffect='move';
-  const el=document.querySelector(`[data-day="${day}"][data-row="${rowCode}"]`);
-  if(el)el.classList.add('drop-hl');
-}
-
-function onDragLeave(e,day,rowCode){
-  const el=document.querySelector(`[data-day="${day}"][data-row="${rowCode}"]`);
-  if(el)el.classList.remove('drop-hl');
-}
-
-function onDrop(e,targetDay,targetRowCode){
-  e.preventDefault();
-  document.querySelectorAll('.drop-hl').forEach(el=>el.classList.remove('drop-hl'));
-  document.querySelectorAll('.drag-ghost').forEach(el=>el.classList.remove('drag-ghost'));
-  if(!DRAG)return;
-
-  const{day:srcDay,rowCode:srcRow}=DRAG;
-  DRAG=null;
-
-  if(srcDay===targetDay&&srcRow===targetRowCode)return; // même cellule
-
-  const srcVal=APP.sched[srcDay];
-
-  if(srcRow===targetRowCode){
-    /* ── DÉPLACEMENT HORIZONTAL : même ligne → la cellule garde sa couleur ──
-       On échange les valeurs entre srcDay et targetDay (le travail se déplace
-       mais reste affecté au même agent = couleur inchangée) */
-    const tgtVal=APP.sched[targetDay];
-    APP.sched[srcDay]=tgtVal;   // la source prend la valeur de la cible
-    APP.sched[targetDay]=srcVal; // la cible prend la valeur de la source
-  }else{
-    /* ── DÉPLACEMENT VERTICAL : ligne différente → la cellule prend la couleur
-       de la ligne de destination ──
-       La source est vidée, la cible prend le code de la ligne destination */
-    APP.sched[srcDay]=''; // vider la source
-    APP.sched[targetDay]=targetRowCode; // cible = couleur de la ligne de destination
-    // Les jours vides seront affichés comme non couverts
-  }
-
-  render();
-}
-
-/* ═══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════
    RENDER
-═══════════════════════════════════════════════════════ */
+══════════════════════════════════════════════ */
 function render(){
-  const{sched:s,year,month,restWeek,wm}=APP;
+  const{sc:s,y:year,m:month,rs:restStart,re:restEnd,lastWEOut}=APP;
   const D=dim(year,month);
-  const agent=v('sel-agent'); // 'ALL','A','B','X'
-  const siteName=v('site-name')||'RENAISSANCE PARIS NOBEL TOUR EIFFEL';
-  const refNum=v('ref-num')||'1504';
-  const restDays=new Set(wm[restWeek]||[]);
-
-  // Noms
+  const agent=gv('p-agent');
+  const site=gv('p-site')||'RENAISSANCE PARIS NOBEL TOUR EIFFEL';
+  const ref=gv('p-ref')||'1504';
+  const rDays=new Set();for(let d=restStart;d<=restEnd;d++)rDays.add(d);
   const names={A:'LAHOUAOUI Mostapha',B:'DE SOUZA Roger',X:'AGENT EXTRA'};
   const short={A:'LAHOUAOUI',B:'DE SOUZA',X:'EXTRA'};
-  const colors={A:'sA',B:'sB',X:'sX'};
-  const textColors={A:'#1a4fa0',B:'#0f7a55',X:'#8a5200'};
-
-  // Titre document
-  const docName=agent==='A'?names.A:agent==='B'?names.B:agent==='X'?names.X:names.A;
-
-  // Timestamp
+  const tc={A:'#1a4fa0',B:'#0f7a55',X:'#8a5200'};
+  const cc={A:'sA',B:'sB',X:'sX'};
+  const docN=agent==='A'?names.A:agent==='B'?names.B:agent==='X'?names.X:names.A;
   const now=new Date();
-  const ed=`${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()} à ${pad(now.getHours())}:${pad(now.getMinutes())}`;
-
-  // Lignes à afficher
+  const ed=pad(now.getDate())+'/'+pad(now.getMonth()+1)+'/'+now.getFullYear()+' à '+pad(now.getHours())+':'+pad(now.getMinutes());
   const rows=[];
-  if(agent==='ALL'||agent==='A')rows.push({code:'A',lbl:`${siteName}<br><span style="color:${textColors.A};font-weight:700;">${short.A} M.</span>`});
-  if(agent==='ALL'||agent==='B')rows.push({code:'B',lbl:`${siteName}<br><span style="color:${textColors.B};font-weight:700;">${short.B} R.</span>`});
-  if(agent==='ALL'||agent==='X')rows.push({code:'X',lbl:`${siteName}<br><span style="color:${textColors.X};font-weight:700;">EXTRA</span>`});
-
-  // Compteurs
+  if(agent==='ALL'||agent==='A') rows.push({c:'A',l:site+'<br><span style="color:'+tc.A+';font-weight:700;">'+short.A+' M.</span>'});
+  if(agent==='ALL'||agent==='B') rows.push({c:'B',l:site+'<br><span style="color:'+tc.B+';font-weight:700;">'+short.B+' R.</span>'});
+  if(agent==='ALL'||agent==='X') rows.push({c:'X',l:site+'<br><span style="color:'+tc.X+';font-weight:700;">EXTRA</span>'});
   const cnt={A:0,B:0,X:0};
   s.slice(1).forEach(v=>{if(v&&cnt[v]!==undefined)cnt[v]++;});
 
-  let h=`<div class="bup-doc">`;
+  // Last weekend of this month
+  const lsats=[];for(let d=1;d<=D;d++)if(dow(year,month,d)===6)lsats.push(d);
+  const lsat=lsats.length?lsats[lsats.length-1]:null;
+  const lsun=lsat&&lsat+1<=D&&dow(year,month,lsat+1)===0?lsat+1:null;
+  const lastWEName=lastWEOut==='A'?names.A:names.B;
 
-  /* ── En-tête document ── */
-  h+=`<div class="bup-top">
-    <div class="bup-logo-wrap">
-      <div class="doc-tri"></div>
-      <div class="doc-wm">BAC <span>UP</span></div>
-    </div>
-    <div class="doc-ref">${refNum}</div>
-  </div>
-  <div class="doc-addr"><strong>${docName}</strong><br>21 RUE CLEMENT &mdash; 94110 ARCUEIL</div>
-  <div class="doc-plbl">Planning ${docName} par SITES</div>
-  <div class="doc-psub">Édition du ${ed}</div>
-  <div class="doc-attn">ATTENTION : ce planning est susceptible d'être modifié</div>`;
+  let h='<div>';
 
-  /* ── Légende (écran) ── */
-  h+=`<div class="legend no-print">`;
-  if(agent==='ALL'||agent==='A')h+=`<div class="leg"><div class="leg-sq" style="background:#dce8f7;"></div>${names.A}</div>`;
-  if(agent==='ALL'||agent==='B')h+=`<div class="leg"><div class="leg-sq" style="background:#d3f0e4;"></div>${names.B} (Mar/Mer/Jeu)</div>`;
-  if(agent==='ALL'||agent==='X')h+=`<div class="leg"><div class="leg-sq" style="background:#faeeda;"></div>Agent Extra</div>`;
-  if(agent==='A')h+=`<div class="leg"><div class="leg-sq" style="background:#eaeae4;border-color:#bbb;"></div>Congé Mostapha (sem. ${restWeek})</div>`;
-  h+=`<span class="leg-drag no-print">↔ glisser horizontalement = garde la couleur &nbsp;|&nbsp; ↕ glisser verticalement = prend la couleur de la ligne</span>`;
-  h+=`</div>`;
+  /* En-tête document */
+  h+='<div class="dtop"><div class="dlogo"><div class="dtri"></div><div class="dwm">BAC <span>UP</span></div></div><div class="dref">'+ref+'</div></div>';
+  h+='<div class="dadr"><strong>'+docN+'</strong><br>21 RUE CLEMENT &mdash; 94110 ARCUEIL</div>';
+  h+='<div class="dplb">Planning '+docN+' par SITES</div>';
+  h+='<div class="dpsb">Édition du '+ed+'</div>';
+  h+='<div class="datn">ATTENTION : ce planning est susceptible d\'être modifié</div>';
 
-  /* ── Tableau ── */
-  h+=`<div class="tbl-wrap"><table class="pt"><tbody>`;
+  /* Légende */
+  h+='<div class="leg no-print">';
+  if(agent==='ALL'||agent==='A') h+='<div class="li"><div class="lsq" style="background:#dce8f7;"></div>'+names.A+'</div>';
+  if(agent==='ALL'||agent==='B') h+='<div class="li"><div class="lsq" style="background:#d3f0e4;"></div>'+names.B+' (Mar·Mer·Jeu)</div>';
+  if(agent==='ALL'||agent==='X') h+='<div class="li"><div class="lsq" style="background:#faeeda;"></div>Agent Extra</div>';
+  if(agent==='ALL'||agent==='A') h+='<div class="li"><div class="lsq" style="background:#eaeae4;border-color:#bbb;"></div>Congé Mostapha</div>';
+  h+='<span class="ldtip no-print">↔ horizontal = garde couleur &nbsp;|&nbsp; ↕ vertical = prend couleur ligne</span>';
+  h+='</div>';
 
-  // Ligne 1 : mois + lettres des jours
-  h+=`<tr><td class="cm" rowspan="2">${MONTHS[month]}<br>${year}</td>`;
-  for(let d=1;d<=D;d++)h+=`<td class="cdl${isWE(year,month,d)?' we':''}">${DL[dow(year,month,d)]}</td>`;
-  h+=`</tr>`;
+  /* Tableau */
+  h+='<div class="twrap"><table class="pt"><tbody>';
+  h+='<tr><td class="tcm" rowspan="2">'+MN[month]+'<br>'+year+'</td>';
+  for(let d=1;d<=D;d++) h+='<td class="tcdl'+(isWE(year,month,d)?' we':'')+'">'+DL[dow(year,month,d)]+'</td>';
+  h+='</tr><tr>';
+  for(let d=1;d<=D;d++) h+='<td class="tcdn'+(isWE(year,month,d)?' we':'')+'">'+pad(d)+'</td>';
+  h+='</tr>';
 
-  // Ligne 2 : numéros des jours
-  h+=`<tr>`;
-  for(let d=1;d<=D;d++)h+=`<td class="cdn${isWE(year,month,d)?' we':''}">${pad(d)}</td>`;
-  h+=`</tr>`;
-
-  // Lignes agents
-  for(const{code,lbl}of rows){
-    h+=`<tr><td class="cl">${lbl}</td>`;
+  for(const{c:code,l:lbl}of rows){
+    h+='<tr><td class="tcl">'+lbl+'</td>';
     for(let d=1;d<=D;d++){
       const val=s[d]||'';
-      let cls,inner,draggable='false';
-
+      let cls,inn,drg='false';
       if(val===code){
-        // Jour travaillé par cet agent
-        cls=`cc ${colors[code]}`;
-        draggable='true';
-        inner=`<div class="ci"><span class="badge">J01</span><span class="hrs">07:00</span><span class="hrs">19:00</span></div>`;
-      }else if(code==='A'&&restDays.has(d)&&val!=='A'){
-        // Bloc congé Mostapha
-        cls='cc sRB';
-        inner=`<div class="ci"><span>REPOS</span></div>`;
+        cls='cc '+cc[code];drg='true';
+        inn='<div class="ci"><span class="bge">J01</span><span class="hrs">07:00</span><span class="hrs">19:00</span></div>';
+      }else if(code==='A'&&rDays.has(d)&&val!=='A'){
+        cls='cc sCG';inn='<div class="ci"><span>CONGÉ</span></div>';
       }else{
-        // Repos / non affecté
-        cls='cc sR';
-        inner=`<div class="ci"></div>`;
+        cls='cc sR';inn='<div class="ci"></div>';
       }
-
-      h+=`<td class="${cls}"
-        draggable="${draggable}"
-        data-day="${d}"
-        data-row="${code}"
-        ondragstart="onDragStart(event,${d},'${code}')"
-        ondragend="onDragEnd(event)"
-        ondragover="onDragOver(event,${d},'${code}')"
-        ondragleave="onDragLeave(event,${d},'${code}')"
-        ondrop="onDrop(event,${d},'${code}')">${inner}</td>`;
+      h+='<td class="'+cls+'" draggable="'+drg+'" data-d="'+d+'" data-r="'+code+'"'+
+        ' ondragstart="dStart(event,'+d+',\''+code+'\')"'+
+        ' ondragend="dEnd()"'+
+        ' ondragover="dOver(event,'+d+',\''+code+'\')"'+
+        ' ondragleave="dLeave(event,'+d+',\''+code+'\')"'+
+        ' ondrop="dDrop(event,'+d+',\''+code+'\')">'+inn+'</td>';
     }
-    h+=`</tr>`;
+    h+='</tr>';
   }
 
-  // Ligne totaux
-  h+=`<tr><td class="ctotl">Total quotidien<br>attribué :</td>`;
-  for(let d=1;d<=D;d++){
-    const inView=rows.some(({code})=>s[d]===code);
-    h+=`<td class="ctot">${inView?12:''}</td>`;
+  h+='<tr><td class="tctotl">Total quotidien<br>attribué :</td>';
+  for(let d=1;d<=D;d++){const iv=rows.some(r=>s[d]===r.c);h+='<td class="tctot">'+(iv?12:'')+'</td>';}
+  h+='</tr></tbody></table></div>';
+
+  /* Pied de page */
+  h+='<div class="dft">Site : '+site+' &mdash; 55-57 Avenue Raymond POINCARÉ &mdash; 75116 PARIS &mdash; Tél : 01 44 05 66 66<br>J01 : AGENT DE SÉCURITÉ JOUR (SSIAP 1) de 07h00 à 19h00</div>';
+
+  /* Stats */
+  const noncov=s.slice(1).filter(x=>!x).length;
+  h+='<div class="stats no-print">';
+  h+='<div class="sb"><div class="slb">'+short.A+'</div><div class="sv" style="color:#1a4fa0">'+cnt.A+'<span class="ss"> j.</span></div></div>';
+  h+='<div class="sb"><div class="slb">'+short.B+'</div><div class="sv" style="color:var(--green)">'+cnt.B+'<span class="ss"> j.</span></div></div>';
+  h+='<div class="sb"><div class="slb">Extra</div><div class="sv" style="color:var(--amber)">'+cnt.X+'<span class="ss"> j.</span></div></div>';
+  h+='<div class="sb"><div class="slb">Congé Mostapha</div><div class="sv" style="color:#888">7<span class="ss"> j. ('+pad(restStart)+'→'+pad(restEnd)+')</span></div></div>';
+  h+='</div>';
+
+  /* Mémoire WE mois prochain */
+  if(lsat){
+    const weTxt=lsun?pad(lsat)+'–'+pad(lsun)+' '+MN[month]:pad(lsat)+' '+MN[month];
+    h+='<div class="wemem no-print">📅 <strong>Mois prochain :</strong> noter que <strong>'+lastWEName+'</strong> a travaillé le dernier weekend ('+weTxt+'). Sélectionnez <em>'+lastWEName+'</em> dans "Dernier WE mois précédent" pour le mois suivant.</div>';
   }
-  h+=`</tr></tbody></table></div>`;
 
-  /* ── Pied de page document ── */
-  h+=`<div class="doc-ft">
-    Site : ${siteName} &mdash; 55-57 Avenue Raymond POINCARÉ &mdash; 75116 PARIS &mdash; Tél : 01 44 05 66 66<br>
-    J01 : AGENT DE SÉCURITÉ JOUR (SSIAP 1) de 07h00 à 19h00
-  </div>`;
-
-  /* ── Statistiques (écran) ── */
-  h+=`<div class="stats no-print">
-    <div class="sbox"><div class="slbl">${short.A}</div><div class="sval" style="color:var(--blue)">${cnt.A}<span class="ssub"> jours</span></div></div>
-    <div class="sbox"><div class="slbl">${short.B} (Mar/Mer/Jeu)</div><div class="sval" style="color:var(--green)">${cnt.B}<span class="ssub"> jours</span></div></div>
-    <div class="sbox"><div class="slbl">Extra</div><div class="sval" style="color:var(--amber)">${cnt.X}<span class="ssub"> jours</span></div></div>
-    <div class="sbox"><div class="slbl">Non couverts</div><div class="sval" style="color:#aaa">${s.slice(1).filter(x=>!x).length}<span class="ssub"> / ${D}</span></div></div>
-    <div class="sbox"><div class="slbl">Congé Mostapha</div><div class="sval" style="color:#888">${(wm[restWeek]||[]).length}<span class="ssub"> j (S${restWeek})</span></div></div>
-  </div>`;
-
-  /* ── Validation (écran) ── */
-  h+=renderValidation(s,D,year,month,wm,restWeek);
-
-  h+=`</div>`;
+  /* Validation */
+  h+=renderVal(s,D,year,month,restStart);
+  h+='</div>';
   document.getElementById('out').innerHTML=h;
 }
 
-/* ═══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════
    VALIDATION
-═══════════════════════════════════════════════════════ */
-function renderValidation(s,D,year,month,wm,restWeek){
+══════════════════════════════════════════════ */
+function renderVal(s,D,year,month,restStart){
   const errs=[],warns=[],oks=[];
+  const wm=getWM(year,month);
 
-  // Jours consécutifs max
-  function chkConsec(code,maxC,name){
-    let streak=0,maxS=0;
-    for(let d=1;d<=D;d++){if(s[d]===code){streak++;maxS=Math.max(maxS,streak);}else streak=0;}
-    if(maxS>maxC)errs.push(`${name} : ${maxS} jours consécutifs (max autorisé : ${maxC})`);
-    else oks.push(`${name} : consécutifs OK — max détecté : ${maxS}j`);
+  // Max consécutifs
+  function chkC(code,max,name){
+    let st=0,mx=0;
+    for(let d=1;d<=D;d++){if(s[d]===code){st++;mx=Math.max(mx,st);}else st=0;}
+    if(mx>max) errs.push(name+' : bloc de '+mx+' jours consécutifs (max '+max+')');
+    else oks.push(name+' : consécutifs OK (max '+mx+'/'+max+') ✓');
   }
-  chkConsec('A',2,'Mostapha');
-  chkConsec('B',3,'Roger');
+  chkC('A',2,'Mostapha');chkC('B',3,'Roger');chkC('X',3,'Extra');
 
   // Jours isolés
-  function chkIsolated(code,name){
+  function chkI(code,name){
     const iso=[];
     for(let d=1;d<=D;d++){
-      if(s[d]!==code)continue;
-      const prev=d>1?s[d-1]===code:false;
-      const next=d<D?s[d+1]===code:(code==='A'); // dernier jour = raccordement mois suivant
-      if(!prev&&!next)iso.push(d);
+      if(s[d]!==code) continue;
+      const lb=d>1&&s[d-1]===code,rb=d<D&&s[d+1]===code;
+      if(!lb&&!rb) iso.push(d);
     }
-    if(iso.length>0)warns.push(`${name} : ${iso.length} jour(s) isolé(s) — jours : ${iso.join(', ')} (corrigez par glisser-déposer)`);
-    else oks.push(`${name} : aucun jour isolé ✓`);
+    if(iso.length) warns.push(name+' : '+iso.length+' jour(s) isolé(s) — jours '+iso.join(', '));
+    else oks.push(name+' : aucun jour isolé ✓');
   }
-  chkIsolated('A','Mostapha');
-  chkIsolated('B','Roger');
+  chkI('A','Mostapha');chkI('B','Roger');
 
   // Max 4j/semaine
-  function chkWeekly(code,name){
-    let bad=false;
+  ['A','B'].forEach(code=>{
+    const name=code==='A'?'Mostapha':'Roger';let bad=false;
     for(const[wn,days]of Object.entries(wm)){
       const c=days.filter(d=>s[d]===code).length;
-      if(c>4){errs.push(`${name} : semaine ${wn} = ${c} jours (max 4)`);bad=true;}
+      if(c>4){errs.push(name+' : semaine '+wn+' = '+c+' jours (max 4)');bad=true;}
     }
-    if(!bad)oks.push(`${name} : max 4j/semaine OK ✓`);
-  }
-  chkWeekly('A','Mostapha');
-  chkWeekly('B','Roger');
+    if(!bad) oks.push(name+' : max 4j/semaine ✓');
+  });
 
-  // Roger Mardi/Mercredi/Jeudi
-  let rogPref=0,rogTotal=0;
-  for(let d=1;d<=D;d++){
-    if(s[d]!=='B')continue;
-    rogTotal++;
-    const dw=dow(year,month,d);
-    if(dw===2||dw===3||dw===4)rogPref++;
-  }
-  const pct=rogTotal>0?Math.round(rogPref/rogTotal*100):0;
-  if(pct>=85)oks.push(`Roger : ${rogPref}/${rogTotal} jours sur Mar/Mer/Jeu (${pct}%) ✓`);
-  else if(pct>=60)warns.push(`Roger : ${rogPref}/${rogTotal} jours sur Mar/Mer/Jeu (${pct}%) — contrainte partiellement respectée`);
-  else warns.push(`Roger : seulement ${rogPref}/${rogTotal} jours sur Mar/Mer/Jeu (${pct}%) — vérifier le planning`);
+  // Roger Mar/Mer/Jeu
+  let rp=0,rt=s.slice(1).filter(x=>x==='B').length;
+  for(let d=1;d<=D;d++){if(s[d]==='B'){const dw=dow(year,month,d);if(dw===2||dw===3||dw===4)rp++;}}
+  const pct=rt>0?Math.round(rp/rt*100):0;
+  if(pct>=80) oks.push('Roger : '+rp+'/'+rt+' jours Mar·Mer·Jeu ('+pct+'%) ✓');
+  else warns.push('Roger : '+rp+'/'+rt+' jours Mar·Mer·Jeu ('+pct+'%)');
 
-  // Comptage cibles
+  // Comptes
   const cA=s.slice(1).filter(x=>x==='A').length;
   const cB=s.slice(1).filter(x=>x==='B').length;
-  if(cA<12)warns.push(`Mostapha : ${cA} jours ce mois (cible : 13)`);
-  if(cB<12)warns.push(`Roger : ${cB} jours ce mois (cible : 13)`);
+  if(cA!==13) warns.push('Mostapha : '+cA+' jours (cible exacte : 13)');
+  else oks.push('Mostapha : 13 jours ✓');
+  if(cB<13||cB>14) warns.push('Roger : '+cB+' jours (cible 13-14)');
+  else oks.push('Roger : '+cB+' jours ✓');
 
-  let h=`<div class="val no-print">`;
-  for(const e of errs)h+=`<div class="vi ver"><span class="vd">✗</span>${e}</div>`;
-  for(const w of warns)h+=`<div class="vi vwn"><span class="vd">⚠</span>${w}</div>`;
-  if(errs.length===0&&warns.length===0)
-    h+=`<div class="vi vok"><span class="vd">✓</span>Toutes les contraintes sont respectées — planning optimal</div>`;
-  for(const o of oks)h+=`<div class="vi vok"><span class="vd">✓</span>${o}</div>`;
-  h+=`</div>`;
-  return h;
+  // Alternance WE
+  const sats=[];for(let d=1;d<=D;d++)if(dow(year,month,d)===6)sats.push(d);
+  let weOk=true;
+  for(let i=1;i<sats.length;i++){
+    const prev=s[sats[i-1]],cur=s[sats[i]];
+    if(prev==='X'||cur==='X') continue;
+    if(prev===cur){weOk=false;break;}
+  }
+  if(weOk) oks.push('Alternance weekends A/B ✓');
+  else warns.push('Alternance weekends : vérifier manuellement');
+
+  let h='<div class="val no-print">';
+  for(const e of errs) h+='<div class="vi ver"><span class="vd">✗</span>'+e+'</div>';
+  for(const w of warns) h+='<div class="vi vwn"><span class="vd">⚠</span>'+w+'</div>';
+  if(!errs.length&&!warns.length) h+='<div class="vi vok"><span class="vd">✓</span>Toutes les contraintes respectées — planning optimal</div>';
+  for(const o of oks) h+='<div class="vi vok"><span class="vd">✓</span>'+o+'</div>';
+  h+='</div>';return h;
 }
 
-/* ═══════════════════════════════════════════════════════
-   INIT — génère le mois prochain par défaut
-═══════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
 window.addEventListener('load',()=>{
   const now=new Date();
-  let m=now.getMonth()+2;let y=now.getFullYear();
+  let m=now.getMonth()+2,y=now.getFullYear();
   if(m>12){m=1;y++;}
-  // Trouver l'option année correcte
-  const ySel=document.getElementById('sel-year');
+  const ySel=document.getElementById('p-year');
   [...ySel.options].forEach(o=>{if(parseInt(o.value)===y)o.selected=true;});
-  document.getElementById('sel-month').value=m;
-  generate();
+  document.getElementById('p-month').value=m;
+  populateDays();generate();
 });
 </script>
 </body>
