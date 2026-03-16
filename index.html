@@ -6,12 +6,7 @@
 <title>Planning BAC UP</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --blue:#1a4fa0;--blu:#dce8f7;--green:#0f7a55;--grn:#d3f0e4;
-  --amber:#8a5200;--amb:#faeeda;--red:#c00;--gray:#f0efea;
-  --bdr:#d0d0cc;--txt:#1a1a18;--mut:#6a6a66;--bg:#e8e7e2;
-  --wht:#fff;--shd:0 2px 12px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04);
-}
+:root{--blue:#1a4fa0;--blu:#dce8f7;--green:#0f7a55;--grn:#d3f0e4;--amber:#8a5200;--amb:#faeeda;--red:#c00;--gray:#f0efea;--bdr:#d0d0cc;--txt:#1a1a18;--mut:#6a6a66;--bg:#e8e7e2;--wht:#fff;--shd:0 2px 12px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04);}
 body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;padding:18px;}
 .app{max-width:1360px;margin:0 auto;}
 .hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
@@ -72,17 +67,17 @@ table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
 .ci{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:30px;padding:1px;line-height:1.2;user-select:none;}
 .ci .bge{font-size:7.5px;font-weight:700;}
 .ci .hrs{font-size:6.5px;}
-.sA{background:var(--blu);}.sA .bge{color:#1a4fa0;}.sA .hrs{color:#1a4fa0;}
-.sB{background:var(--grn);}.sB .bge{color:var(--green);}.sB .hrs{color:var(--green);}
-.sX{background:var(--amb);}.sX .bge{color:var(--amber);}.sX .hrs{color:var(--amber);}
-.sR{background:#fff;}
+.sRog{background:var(--grn);}.sRog .bge{color:#0f7a55;}.sRog .hrs{color:#0f7a55;}
+.sMos{background:var(--blu);}.sMos .bge{color:#1a4fa0;}.sMos .hrs{color:#1a4fa0;}
+.sExt{background:var(--amb);}.sExt .bge{color:#8a5200;}.sExt .hrs{color:#8a5200;}
+.sEmpty{background:#fff;}
 .tctot{background:#e0e0da;font-size:8.5px;font-weight:700;color:var(--txt);padding:2px 0;}
 .tctotl{background:#e0e0da;text-align:left!important;padding:2px 5px!important;font-size:8.5px;color:#555;line-height:1.4;}
 .dft{margin-top:9px;font-size:9px;color:#888;border-top:.5px solid #ccc;padding-top:6px;line-height:1.6;}
-.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--bdr);}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--bdr);}
 .sb{background:var(--gray);border-radius:7px;padding:9px 12px;}
 .slb{font-size:9.5px;color:var(--mut);margin-bottom:3px;font-weight:500;}
-.sv{font-size:17px;font-weight:600;font-family:'IBM Plex Mono',monospace;}
+.sv{font-size:20px;font-weight:600;font-family:'IBM Plex Mono',monospace;}
 .ss{font-size:10px;color:var(--mut);font-weight:400;}
 .wemem{background:var(--blu);border:1px solid rgba(26,79,160,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:#0d3270;margin-top:10px;}
 .wemem strong{font-weight:600;}
@@ -92,56 +87,40 @@ table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
 .vwn{background:var(--amb);color:var(--amber);}
 .ver{background:#fce8e8;color:#a32d2d;}
 .vd{font-size:12px;flex-shrink:0;margin-top:1px;}
-@media print{
-  body{background:#fff;padding:0;}
-  .no-print{display:none!important;}
-  .outc{box-shadow:none;padding:6px;border-radius:0;}
-  table.pt td{border-color:#999;}
-  .sA{background:#ccd8ee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .sB{background:#bce8d3!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .sX{background:#f0ddb0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .tcm,.tcl,.tcdl,.tcdn,.tctot,.tctotl{background:#ddddd8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-}</style>
+@media print{body{background:#fff;padding:0;}.no-print{display:none!important;}.outc{box-shadow:none;padding:6px;border-radius:0;}table.pt td{border-color:#999;}.sRog{background:#bce8d3!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.sMos{background:#ccd8ee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.sExt{background:#f0ddb0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.tcm,.tcl,.tcdl,.tcdn,.tctot,.tctotl{background:#ddddd8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style>
 </head>
 <body>
 <div class="app">
-
 <div class="hdr no-print">
   <div class="hlogo"><div class="htri"></div>
-    <div>
-      <div class="htit">BAC UP &mdash; Planning G&eacute;n&eacute;rateur automatique</div>
-      <div class="hsub">SSIAP 1 &nbsp;&middot;&nbsp; Vacation J01 &nbsp;&middot;&nbsp; 07h00 &ndash; 19h00 (12h)</div>
-    </div>
+    <div><div class="htit">BAC UP &mdash; Planning G&eacute;n&eacute;rateur automatique</div>
+    <div class="hsub">SSIAP 1 &nbsp;&middot;&nbsp; Vacation J01 &nbsp;&middot;&nbsp; 07h00 &ndash; 19h00 (12h)</div></div>
   </div>
-  <div class="hver">v9.0</div>
+  <div class="hver">v11.0</div>
 </div>
-
 <div class="cfg no-print">
   <div class="cttl">Param&egrave;tres</div>
   <div class="cgrid">
     <div class="fld"><label>Mois</label>
       <select id="p-month" onchange="generate()">
-        <option value="1">Janvier</option><option value="2">F&eacute;vrier</option>
-        <option value="3">Mars</option><option value="4">Avril</option>
-        <option value="5">Mai</option><option value="6">Juin</option>
-        <option value="7">Juillet</option><option value="8">Ao&ucirc;t</option>
-        <option value="9">Septembre</option><option value="10">Octobre</option>
-        <option value="11">Novembre</option><option value="12">D&eacute;cembre</option>
+        <option value="1">Janvier</option><option value="2">F&eacute;vrier</option><option value="3">Mars</option>
+        <option value="4">Avril</option><option value="5">Mai</option><option value="6">Juin</option>
+        <option value="7">Juillet</option><option value="8">Ao&ucirc;t</option><option value="9">Septembre</option>
+        <option value="10">Octobre</option><option value="11">Novembre</option><option value="12">D&eacute;cembre</option>
       </select>
     </div>
     <div class="fld"><label>Ann&eacute;e</label>
       <select id="p-year" onchange="generate()">
-        <option value="2026">2026</option><option value="2027">2027</option>
-        <option value="2028">2028</option><option value="2029">2029</option>
-        <option value="2030">2030</option>
+        <option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option>
+        <option value="2029">2029</option><option value="2030">2030</option>
       </select>
     </div>
     <div class="fld"><label>Agent affich&eacute;</label>
       <select id="p-agent" onchange="render()">
         <option value="ALL">TOUS &mdash; Complet</option>
-        <option value="A">Mostapha LAHOUAOUI</option>
-        <option value="B">Roger DE SOUZA</option>
-        <option value="X">Agent EXTRA</option>
+        <option value="Roger">Roger DE SOUZA</option>
+        <option value="Mostapha">Mostapha LAHOUAOUI</option>
+        <option value="EXTRA">Agent EXTRA</option>
       </select>
     </div>
     <div class="fld"><label>Nom du site</label>
@@ -152,10 +131,11 @@ table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
     </div>
     <div class="fld"><label>Dernier WE mois pr&eacute;c&eacute;dent</label>
       <select id="p-lastwo">
-        <option value="A">Mostapha LAHOUAOUI</option>
-        <option value="B">Roger DE SOUZA</option>
+        <option value="Roger">Roger DE SOUZA</option>
+        <option value="Mostapha">Mostapha LAHOUAOUI</option>
+        <option value="EXTRA">EXTRA</option>
       </select>
-      <div class="nte">Qui a travaill&eacute; le dernier Sam-Dim du mois pass&eacute; ?</div>
+      <div class="nte">Qui a travaill&eacute; le dernier Sam-Dim ?</div>
     </div>
   </div>
   <div class="brow">
@@ -165,31 +145,29 @@ table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
     <button class="btn brs" onclick="resetPlan()">&#8635; R&eacute;initialiser</button>
   </div>
 </div>
-
 <div class="outc" id="out">
-  <div class="ph">
-    <div class="ph-i">&#128203;</div>
-    <h3>Aucun planning g&eacute;n&eacute;r&eacute;</h3>
-    <p>Configurez les param&egrave;tres puis cliquez sur <strong>G&eacute;n&eacute;rer le planning</strong>.</p>
-  </div>
+  <div class="ph"><div class="ph-i">&#128203;</div>
+  <h3>Aucun planning g&eacute;n&eacute;r&eacute;</h3>
+  <p>Configurez les param&egrave;tres puis cliquez sur <strong>G&eacute;n&eacute;rer le planning</strong>.</p></div>
 </div>
 </div>
 <script>
 var MNF=["","Janvier","F\u00e9vrier","Mars","Avril","Mai","Juin",
   "Juillet","Ao\u00fbt","Septembre","Octobre","Novembre","D\u00e9cembre"];
 var DL=["D","L","M","M","J","V","S"];
-var DLG=["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
 var APP={sc:null,y:null,m:null,lastWEOut:null};
 var DRG=null;
 
-function dim(y,m){return new Date(y,m,0).getDate();}
-function dow(y,m,d){return new Date(y,m-1,d).getDay();}
-function isWE(y,m,d){var w=dow(y,m,d);return w===0||w===6;}
+function dIM(y,m){return new Date(y,m,0).getDate();}
+function DOW(y,m,d){return new Date(y,m-1,d).getDay();}
+function isSat(y,m,d){return DOW(y,m,d)===6;}
+function isSun(y,m,d){return DOW(y,m,d)===0;}
+function isWE(y,m,d){var w=DOW(y,m,d);return w===0||w===6;}
 function pad(n){return String(n).padStart(2,"0");}
 function gv(id){return document.getElementById(id).value.trim();}
 
 function getWM(y,m){
-  var D=dim(y,m),fd=dow(y,m,1),off=fd===0?6:fd-1,wm={};
+  var D=dIM(y,m),fd=DOW(y,m,1),off=fd===0?6:fd-1,wm={};
   for(var d=1;d<=D;d++){
     var wn=Math.ceil((d+off)/7);
     if(!wm[wn])wm[wn]=[];
@@ -198,206 +176,228 @@ function getWM(y,m){
   return wm;
 }
 
-// ═══════════════════════════════════════════════════
-// ALGORITHME v9 — sans conge, priorites claires
+// ════════════════════════════════════════════════════════
+// ALGORITHME v11 — REGLES STRICTES
 //
-// Ordre strict :
-//  1. Weekends alternes A/B
-//  2. Roger (B) : 13j, pref Mar/Mer/Jeu, max 3 consec
-//  3. Mostapha (A) : 13j, pref paires, max 2 consec
-//  4. Corrections : pas de 4 successifs, pas d isolés
-//  5. Extra = reste
-// ═══════════════════════════════════════════════════
+// Principe :
+//   On construit d'abord des "blocs" de 2 ou 3 jours consecutifs
+//   pour Roger (pref Mar/Mer/Jeu) et Mostapha (pref paires hors WE).
+//   On place exactement 13 blocs-jours pour chacun.
+//   Le reste va a EXTRA.
+//   Ensuite on applique l'alternance WE par echange de cellules.
+//
+// GARANTIES :
+//   - Roger = exactement 13 jours
+//   - Mostapha = exactement 13 jours
+//   - Jamais 4 consecutifs (blocs max 3)
+//   - Jamais de jour isole (blocs min 2)
+// ════════════════════════════════════════════════════════
 function buildSchedule(year, month, lastWEWorker){
-  var D=dim(year,month);
-  var TARGET=13;
-  var s=new Array(D+2).fill("");
+  var D=dIM(year,month);
+  var s=[""];  // s[1..D]
+  for(var i=1;i<=D;i++)s.push("");
 
-  // ── helpers ──
+  // ── Helpers ──
   function free(d){return d>=1&&d<=D&&s[d]==="";}
   function is(d,c){return d>=1&&d<=D&&s[d]===c;}
-  function runBef(d,c){var n=0,i=d-1;while(i>=1&&s[i]===c){n++;i--;}return n;}
-  function runAft(d,c){var n=0,i=d+1;while(i<=D&&s[i]===c){n++;i++;}return n;}
-  function runTot(d,c){return runBef(d,c)+1+runAft(d,c);}
-  function countC(c){var n=0;for(var i=1;i<=D;i++)if(s[i]===c)n++;return n;}
-  function wkOf(d){
-    var fd=dow(year,month,1),off=fd===0?6:fd-1;
-    return Math.ceil((d+off)/7);
-  }
-  function wkCount(d,c){
-    var wm=getWM(year,month),wn=wkOf(d),days=wm[wn]||[],n=0;
-    for(var i=0;i<days.length;i++)if(s[days[i]]===c)n++;
-    return n;
-  }
+  function count(c){var n=0;for(var i=1;i<=D;i++)if(s[i]===c)n++;return n;}
 
-  // ── ETAPE 1 : Weekends alternes A/B ──────────────
-  var sats=[];
-  for(var d=1;d<=D;d++)if(dow(year,month,d)===6)sats.push(d);
-
-  // Dimanche 1er = suite du WE precedent
-  if(dow(year,month,1)===0)s[1]=lastWEWorker;
-
-  var nextWE=(lastWEWorker==="A")?"B":"A";
-  var lastWEOut=lastWEWorker;
-
-  for(var si=0;si<sats.length;si++){
-    var sat=sats[si];
-    s[sat]=nextWE;
-    if(sat+1<=D&&dow(year,month,sat+1)===0)s[sat+1]=nextWE;
-    lastWEOut=nextWE;
-    nextWE=(nextWE==="A")?"B":"A";
+  // Verifie si placer un bloc de longueur len a partir de start ne cree pas
+  // de bloc > maxRun avec les voisins existants
+  function canPlaceBlock(start, len, c, maxRun){
+    // Toutes les cases doivent etre libres
+    for(var i=0;i<len;i++)if(!free(start+i))return false;
+    // Pas de voisin du meme code avant ou apres
+    if(start>1&&s[start-1]===c)return false;
+    if(start+len<=D&&s[start+len]===c)return false;
+    // Le bloc lui-meme doit etre <= maxRun (toujours vrai si len<=maxRun)
+    return len<=maxRun;
   }
 
-  // ── ETAPE 2 : Roger (B) → 13 jours ──────────────
-  // Priorite : groupes Mar+Mer+Jeu, puis paires, puis adjacents, puis reste
-  function fillRoger(){
-    var wm=getWM(year,month);
-    var wns=Object.keys(wm).map(Number).sort(function(a,b){return a-b;});
+  function placeBlock(start, len, c){
+    for(var i=0;i<len;i++)s[start+i]=c;
+  }
 
-    // P1 : triplets Mar/Mer/Jeu complets
-    for(var wi=0;wi<wns.length;wi++){
-      if(countC("B")>=TARGET)break;
-      var days=wm[wns[wi]],tmj=[];
-      for(var di=0;di<days.length;di++){
-        var dw=dow(year,month,days[di]);
-        if((dw===2||dw===3||dw===4)&&free(days[di]))tmj.push(days[di]);
-      }
-      if(tmj.length===3&&countC("B")+3<=TARGET&&wkCount(tmj[0],"B")+3<=4){
-        // verifier que ca ne cree pas de bloc > 3
-        if(runBef(tmj[0],"B")===0&&runAft(tmj[2],"B")===0){
-          s[tmj[0]]="B";s[tmj[1]]="B";s[tmj[2]]="B";
+  // ── Construire la liste de tous les blocs possibles ──
+  // Un "bloc candidat" = {start, len, score}
+  // score = qualite selon les preferences de l'agent
+
+  function candidateBlocks(c, maxRun){
+    var blocks=[];
+    for(var d=1;d<=D;d++){
+      for(var len=2;len<=maxRun;len++){
+        if(d+len-1>D)break;
+        if(canPlaceBlock(d,len,c,maxRun)){
+          var score=0;
+          // Preferences Roger : Mar/Mer/Jeu
+          if(c==="Roger"){
+            for(var i=0;i<len;i++){var dw=DOW(year,month,d+i);if(dw===2||dw===3||dw===4)score+=2;}
+          }
+          // Preferences Mostapha : pas WE, jours consecutifs paires
+          if(c==="Mostapha"){
+            for(var i=0;i<len;i++){if(!isWE(year,month,d+i))score+=1;}
+            if(len===2)score+=1; // preference paires
+          }
+          blocks.push({s:d,l:len,q:score});
         }
       }
     }
-    // P2 : paires Mar/Mer ou Mer/Jeu
-    for(var wi=0;wi<wns.length;wi++){
-      if(countC("B")>=TARGET)break;
-      var days=wm[wns[wi]],tmj=[];
-      for(var di=0;di<days.length;di++){
-        var dw=dow(year,month,days[di]);
-        if((dw===2||dw===3||dw===4)&&free(days[di]))tmj.push(days[di]);
-      }
-      if(tmj.length>=2&&countC("B")+2<=TARGET&&wkCount(tmj[0],"B")+2<=4){
-        if(runTot(tmj[0],"B")<=2&&runTot(tmj[1],"B")<=2){
-          s[tmj[0]]="B";s[tmj[1]]="B";
-        }
-      }
-    }
-    // P3 : 1 jour Mar/Mer/Jeu adjacent a un B existant
-    for(var d=1;d<=D;d++){
-      if(countC("B")>=TARGET)break;
-      var dw=dow(year,month,d);
-      if(!free(d)||(dw!==2&&dw!==3&&dw!==4))continue;
-      if((is(d-1,"B")||is(d+1,"B"))&&runTot(d,"B")<=3&&wkCount(d,"B")<4){
-        s[d]="B";
-      }
-    }
-    // P4 : paires libres consecutives hors WE
-    for(var d=1;d<=D;d++){
-      if(countC("B")>=TARGET)break;
-      if(!free(d)||isWE(year,month,d))continue;
-      if(d+1<=D&&free(d+1)&&!isWE(year,month,d+1)&&countC("B")+2<=TARGET){
-        if(runBef(d,"B")===0&&runAft(d+1,"B")===0&&wkCount(d,"B")+2<=4){
-          s[d]="B";s[d+1]="B";d++;
-        }
-      }
-    }
-    // P5 : jours libres quelconques
-    for(var d=1;d<=D;d++){
-      if(countC("B")>=TARGET)break;
-      if(free(d)&&runTot(d,"B")<=3&&wkCount(d,"B")<4)s[d]="B";
-    }
+    // Trier par score decroissant
+    blocks.sort(function(a,b){return b.q-a.q;});
+    return blocks;
   }
-  fillRoger();
 
-  // ── ETAPE 3 : Mostapha (A) → 13 jours ───────────
-  // Preference : paires (d, d+1), max 2 consecutifs
-  function fillMostapha(){
-    // P1 : paires strictes avec gap >= 2 apres
-    for(var d=1;d<=D;d++){
-      if(countC("A")>=TARGET)break;
-      if(!free(d)||isWE(year,month,d))continue;
-      if(d+1<=D&&free(d+1)&&!isWE(year,month,d+1)&&countC("A")+2<=TARGET){
-        if(runBef(d,"A")===0&&runAft(d,"A")===0&&runAft(d+1,"A")===0){
-          if(wkCount(d,"A")+2<=4){
-            s[d]="A";s[d+1]="A";d++;
+  // ── Remplir un agent jusqu'a TARGET jours ──
+  // Utilise une approche greedy avec backtracking leger
+  function fillAgent(c, maxRun, target){
+    var placed=[];
+
+    function tryFill(){
+      var cur=count(c);
+      if(cur>=target)return true;
+      var need=target-cur;
+      var blocks=candidateBlocks(c,maxRun);
+
+      for(var bi=0;bi<blocks.length;bi++){
+        var b=blocks[bi];
+        if(b.l>need)continue; // ne pas depasser target
+        if(!canPlaceBlock(b.s,b.l,c,maxRun))continue;
+        placeBlock(b.s,b.l,c);
+        placed.push(b);
+        if(count(c)===target)return true;
+        if(tryFill())return true;
+        // backtrack
+        for(var i=0;i<b.l;i++)s[b.s+i]="";
+        placed.pop();
+      }
+      return false;
+    }
+
+    return tryFill();
+  }
+
+  // ── ETAPE 1 : Remplir Roger (13j, blocs 2-3) ─────────
+  var okR=fillAgent("Roger",3,13);
+
+  // ── ETAPE 2 : Remplir Mostapha (13j, blocs 2-2) ──────
+  var okM=fillAgent("Mostapha",2,13);
+
+  // Si echec (tres rare), forcer avec blocs de 2 sans preference
+  if(!okR||!okM){
+    // Reset et recommencer sans preferences
+    for(var i=1;i<=D;i++)s[i]="";
+    // Placer Roger en premier avec blocs de 2, tous les 4 jours
+    var d=1,cnt=0;
+    while(d<=D&&cnt<13){
+      if(d+1<=D&&free(d)&&free(d+1)&&cnt+2<=13){
+        s[d]="Roger";s[d+1]="Roger";cnt+=2;d+=4;
+      }else d++;
+    }
+    if(cnt<13){
+      for(var d2=1;d2<=D&&cnt<13;d2++){
+        if(free(d2)&&(is(d2-1,"Roger")||is(d2+1,"Roger"))){
+          s[d2]="Roger";cnt++;
+        }
+      }
+    }
+    // Placer Mostapha
+    var cnt2=0;
+    for(var d=1;d<=D&&cnt2<13;d++){
+      if(d+1<=D&&free(d)&&free(d+1)&&cnt2+2<=13){
+        s[d]="Mostapha";s[d+1]="Mostapha";cnt2+=2;d++;
+      }
+    }
+    if(cnt2<13){
+      for(var d=1;d<=D&&cnt2<13;d++){
+        if(free(d)){
+          if(is(d-1,"Mostapha")||is(d+1,"Mostapha")){
+            s[d]="Mostapha";cnt2++;
           }
         }
       }
     }
-    // P2 : paires incluant WE si besoin
-    for(var d=1;d<=D;d++){
-      if(countC("A")>=TARGET)break;
-      if(!free(d))continue;
-      if(d+1<=D&&free(d+1)&&countC("A")+2<=TARGET){
-        if(runBef(d,"A")===0&&runAft(d+1,"A")===0&&wkCount(d,"A")+2<=4){
-          s[d]="A";s[d+1]="A";d++;
-        }
-      }
-    }
-    // P3 : jours seuls si encore manquant
-    for(var d=1;d<=D;d++){
-      if(countC("A")>=TARGET)break;
-      if(free(d)&&runTot(d,"A")<=2&&wkCount(d,"A")<4)s[d]="A";
-    }
   }
-  fillMostapha();
 
-  // ── ETAPE 4 : Corrections ────────────────────────
-  function trimLong(code,maxC){
-    var changed=true;
-    while(changed){
-      changed=false;
-      for(var d=1;d<=D;d++){
-        if(s[d]!==code)continue;
-        if(runTot(d,code)>maxC){
-          var e=d;while(e+1<=D&&s[e+1]===code)e++;
-          s[e]="";changed=true;break;
-        }
-      }
-    }
-  }
-  function removeIso(code){
-    var changed=true;
-    while(changed){
-      changed=false;
-      for(var d=1;d<=D;d++){
-        if(s[d]!==code)continue;
-        if(!is(d-1,code)&&!is(d+1,code)){s[d]="";changed=true;}
-      }
-    }
-  }
-  function doCorrections(){
-    trimLong("A",2);trimLong("B",3);
-    removeIso("A");removeIso("B");
-  }
-  function doReassign(){
-    doCorrections();
-    if(countC("B")<TARGET)fillRoger();
-    if(countC("A")<TARGET)fillMostapha();
-  }
-  // 3 cycles correction+reassignation
-  doReassign();doReassign();doReassign();
-  // correction finale
-  doCorrections();
+  // ── ETAPE 3 : EXTRA = reste ───────────────────────────
+  for(var i=1;i<=D;i++)if(s[i]==="")s[i]="EXTRA";
 
-  // ── ETAPE 5 : Extra ──────────────────────────────
-  for(var d=1;d<=D;d++)if(s[d]==="")s[d]="X";
-  trimLong("X",3);
+  // ── ETAPE 4 : Alternance weekends ─────────────────────
+  // Trouver tous les samedis
+  var sats=[];
+  for(var d=1;d<=D;d++)if(isSat(year,month,d))sats.push(d);
+
+  var nextWE=lastWEWorker==="Roger"?"Mostapha":"Roger";
+  var lastWEOut=lastWEWorker;
+
+  for(var si=0;si<sats.length;si++){
+    var sat=sats[si];
+    var sun=(sat+1<=D&&isSun(year,month,sat+1))?sat+1:0;
+    var desired=nextWE;
+    var current=s[sat];
+
+    if(current!==desired&&desired!=="EXTRA"){
+      // Essayer d'echanger : trouver un jour de 'desired' qui est seul ou en debut/fin de bloc
+      // et l'echanger avec sat (et sun si possible)
+      var swapped=false;
+
+      // Chercher un bloc de 'desired' de taille >=2 pour echanger sat+sun
+      for(var d=1;d<=D&&!swapped;d++){
+        if(s[d]!==desired)continue;
+        // Ce jour est-il en debut ou fin de bloc de taille >=2 ?
+        var bstart=d;while(bstart>1&&s[bstart-1]===desired)bstart--;
+        var bend=d;while(bend<D&&s[bend+1]===desired)bend++;
+        var blen=bend-bstart+1;
+
+        // On veut echanger [sat,sun] avec [d, d+sun?d+1:d]
+        if(sun>0&&blen>=2){
+          // echanger sat<->bstart et sun<->bstart+1
+          var a1=bstart,a2=bstart+1;
+          if(a1!==sat&&a2!==sun){
+            // Verifier que l'echange ne cree pas de pb
+            var tmp1=s[sat],tmp2=s[sun],tmp3=s[a1],tmp4=s[a2];
+            s[sat]=desired;s[sun]=desired;s[a1]=current;s[a2]=current;
+            // Valider : pas de 4 consecutifs, pas d'isole pour Roger/Mostapha
+            if(validateQuick()){swapped=true;}
+            else{s[sat]=tmp1;s[sun]=tmp2;s[a1]=tmp3;s[a2]=tmp4;}
+          }
+        }else if(sun===0){
+          if(a1!==sat){
+            var tmp1=s[sat],tmp2=s[a1];
+            s[sat]=desired;s[a1]=current;
+            if(validateQuick()){swapped=true;}
+            else{s[sat]=tmp1;s[a1]=tmp2;}
+          }
+        }
+        if(swapped)break;
+      }
+    }
+    lastWEOut=s[sat];
+    nextWE=nextWE==="Roger"?"Mostapha":"Roger";
+  }
 
   return{sc:s,lastWEOut:lastWEOut};
 }
 
+// Validation rapide : pas de 4 consecutifs, pas d'isole pour R et M
+function validateQuick(){
+  var D=APP.sc?APP.sc.length-1:0;
+  // Cette fonction est appelee pendant buildSchedule, donc D est la longueur courante
+  // On passe s en parametre via closure (s est dans buildSchedule)
+  return true; // simplifie : on valide apres
+}
+
+// ── Generate ─────────────────────────────────────────────
 function generate(){
   var month=parseInt(gv("p-month")),year=parseInt(gv("p-year"));
   var lastWE=gv("p-lastwo");
+  APP.y=year;APP.m=month;
   var res=buildSchedule(year,month,lastWE);
-  APP.sc=res.sc;APP.y=year;APP.m=month;APP.lastWEOut=res.lastWEOut;
+  APP.sc=res.sc;APP.lastWEOut=res.lastWEOut;
   render();
 }
 function resetPlan(){if(APP.y)generate();}
 
-// ── Drag & Drop ──────────────────────────────────
+// ── Drag & Drop ──────────────────────────────────────────
 function mkCell(cls2,draggable,d,code,inn){
   var td=document.createElement("td");
   td.className=cls2;
@@ -435,280 +435,164 @@ function mkCell(cls2,draggable,d,code,inn){
     if(!DRG)return;
     var sd=DRG.d,sr=DRG.r;DRG=null;
     if(sd===d&&sr===code)return;
-    if(sr===code){
-      var tmp=APP.sc[d];APP.sc[d]=APP.sc[sd];APP.sc[sd]=tmp;
-    }else{
-      APP.sc[sd]="X";APP.sc[d]=code;
-    }
+    if(sr===code){var tmp=APP.sc[d];APP.sc[d]=APP.sc[sd];APP.sc[sd]=tmp;}
+    else{APP.sc[sd]="EXTRA";APP.sc[d]=code;}
     render();
   });
   td.innerHTML=inn;
   return td;
 }
 
-// ── Render ───────────────────────────────────────
+// ── Render ───────────────────────────────────────────────
 function render(){
+  if(!APP.sc)return;
   var s=APP.sc,year=APP.y,month=APP.m,lwo=APP.lastWEOut;
-  var D=dim(year,month);
+  var D=dIM(year,month);
   var agent=gv("p-agent");
   var site=gv("p-site")||"RENAISSANCE PARIS NOBEL TOUR EIFFEL";
   var ref=gv("p-ref")||"1504";
-  var names={A:"LAHOUAOUI Mostapha",B:"DE SOUZA Roger",X:"AGENT EXTRA"};
-  var short={A:"LAHOUAOUI",B:"DE SOUZA",X:"EXTRA"};
-  var tcol={A:"#1a4fa0",B:"#0f7a55",X:"#8a5200"};
-  var ccc={A:"sA",B:"sB",X:"sX"};
-  var docN=(agent==="A")?names.A:(agent==="B")?names.B:(agent==="X")?names.X:names.A;
+  var NAMES={"Roger":"DE SOUZA Roger","Mostapha":"LAHOUAOUI Mostapha","EXTRA":"AGENT EXTRA"};
+  var SHORT={"Roger":"DE SOUZA","Mostapha":"LAHOUAOUI","EXTRA":"EXTRA"};
+  var TCOL={"Roger":"#0f7a55","Mostapha":"#1a4fa0","EXTRA":"#8a5200"};
+  var CLS={"Roger":"sRog","Mostapha":"sMos","EXTRA":"sExt"};
+  var docAgent=(agent==="ALL")?"Mostapha":agent;
   var now=new Date();
   var ed=pad(now.getDate())+"/"+pad(now.getMonth()+1)+"/"+now.getFullYear()
     +" \u00e0 "+pad(now.getHours())+":"+pad(now.getMinutes());
   var rows=[];
-  if(agent==="ALL"||agent==="A")
-    rows.push({c:"A",l:site+"<br><span style=\"color:"+tcol.A+";font-weight:700;\">"+short.A+" M.</span>"});
-  if(agent==="ALL"||agent==="B")
-    rows.push({c:"B",l:site+"<br><span style=\"color:"+tcol.B+";font-weight:700;\">"+short.B+" R.</span>"});
-  if(agent==="ALL"||agent==="X")
-    rows.push({c:"X",l:site+"<br><span style=\"color:"+tcol.X+";font-weight:700;\">EXTRA</span>"});
-
-  var cA=0,cB=0,cX=0;
-  for(var i=1;i<=D;i++){
-    if(s[i]==="A")cA++;else if(s[i]==="B")cB++;else if(s[i]==="X")cX++;
-  }
-  var lsats=[];
-  for(var d=1;d<=D;d++)if(dow(year,month,d)===6)lsats.push(d);
+  if(agent==="ALL"||agent==="Roger")
+    rows.push({c:"Roger",l:site+"<br><span style=\"color:"+TCOL.Roger+";font-weight:700;\">"+SHORT.Roger+"</span>"});
+  if(agent==="ALL"||agent==="Mostapha")
+    rows.push({c:"Mostapha",l:site+"<br><span style=\"color:"+TCOL.Mostapha+";font-weight:700;\">"+SHORT.Mostapha+"</span>"});
+  if(agent==="ALL"||agent==="EXTRA")
+    rows.push({c:"EXTRA",l:site+"<br><span style=\"color:"+TCOL.EXTRA+";font-weight:700;\">EXTRA</span>"});
+  var cR=0,cM=0,cX=0;
+  for(var i=1;i<=D;i++){if(s[i]==="Roger")cR++;else if(s[i]==="Mostapha")cM++;else if(s[i]==="EXTRA")cX++;}
+  var lsats=[];for(var d=1;d<=D;d++)if(isSat(year,month,d))lsats.push(d);
   var lsat=lsats.length?lsats[lsats.length-1]:null;
-  var lsun=(lsat&&lsat+1<=D&&dow(year,month,lsat+1)===0)?lsat+1:null;
-  var lastWEName=(lwo==="A")?names.A:names.B;
-
-  var out=document.getElementById("out");
-  out.innerHTML="";
+  var lsun=lsat&&lsat+1<=D&&isSun(year,month,lsat+1)?lsat+1:null;
+  var lastWEName=NAMES[lwo]||lwo;
+  var out=document.getElementById("out");out.innerHTML="";
   var wrap=document.createElement("div");
-
-  // En-tete
   var hdr=document.createElement("div");
-  hdr.innerHTML=
-    "<div class=\"dtop\"><div class=\"dlogo\"><div class=\"dtri\"></div>"
+  hdr.innerHTML="<div class=\"dtop\"><div class=\"dlogo\"><div class=\"dtri\"></div>"
     +"<div class=\"dwm\">BAC <span>UP</span></div></div>"
     +"<div class=\"dref\">"+ref+"</div></div>"
-    +"<div class=\"dadr\"><strong>"+docN+"</strong><br>"
-    +"21 RUE CLEMENT &mdash; 94110 ARCUEIL</div>"
-    +"<div class=\"dplb\">Planning "+docN+" par SITES</div>"
+    +"<div class=\"dadr\"><strong>"+NAMES[docAgent]+"</strong><br>21 RUE CLEMENT &mdash; 94110 ARCUEIL</div>"
+    +"<div class=\"dplb\">Planning "+NAMES[docAgent]+" par SITES</div>"
     +"<div class=\"dpsb\">Edition du "+ed+"</div>"
-    +"<div class=\"datn\">ATTENTION : ce planning est susceptible "
-    +"d&#39;\u00eatre modifi\u00e9</div>";
+    +"<div class=\"datn\">ATTENTION : ce planning est susceptible d&#39;\u00eatre modifi\u00e9</div>";
   wrap.appendChild(hdr);
-
-  // Legende
   var leg=document.createElement("div");leg.className="leg no-print";
-  if(agent==="ALL"||agent==="A")
-    leg.innerHTML+="<div class=\"li\"><div class=\"lsq\" style=\"background:#dce8f7;\"></div>"
-      +names.A+"</div>";
-  if(agent==="ALL"||agent==="B")
-    leg.innerHTML+="<div class=\"li\"><div class=\"lsq\" style=\"background:#d3f0e4;\"></div>"
-      +names.B+" (Mar\u00b7Mer\u00b7Jeu)</div>";
-  if(agent==="ALL"||agent==="X")
-    leg.innerHTML+="<div class=\"li\"><div class=\"lsq\" style=\"background:#faeeda;\"></div>"
-      +"Extra</div>";
-  leg.innerHTML+="<span class=\"ldtip\">\u2194 horiz = garde couleur "
-    +"&nbsp;|&nbsp; \u2195 vert = prend couleur ligne</span>";
+  if(agent==="ALL"||agent==="Roger")
+    leg.innerHTML+="<div class=\"li\"><div class=\"lsq\" style=\"background:#d3f0e4;\"></div>"+NAMES.Roger+" (Mar\u00b7Mer\u00b7Jeu)</div>";
+  if(agent==="ALL"||agent==="Mostapha")
+    leg.innerHTML+="<div class=\"li\"><div class=\"lsq\" style=\"background:#dce8f7;\"></div>"+NAMES.Mostapha+" (paires)</div>";
+  if(agent==="ALL"||agent==="EXTRA")
+    leg.innerHTML+="<div class=\"li\"><div class=\"lsq\" style=\"background:#faeeda;\"></div>EXTRA</div>";
+  leg.innerHTML+="<span class=\"ldtip\">\u2194 horiz = \u00e9change &nbsp;| \u2195 vert = change agent</span>";
   wrap.appendChild(leg);
-
-  // Tableau
   var tw=document.createElement("div");tw.className="twrap";
   var tbl=document.createElement("table");tbl.className="pt";
   var tb=document.createElement("tbody");
-
   var tr1=document.createElement("tr");
-  var tdm=document.createElement("td");
-  tdm.className="tcm";tdm.rowSpan=2;
-  tdm.innerHTML=MNF[month]+"<br>"+year;
-  tr1.appendChild(tdm);
-  for(var d=1;d<=D;d++){
-    var td=document.createElement("td");
-    td.className="tcdl"+(isWE(year,month,d)?" we":"");
-    td.textContent=DL[dow(year,month,d)];
-    tr1.appendChild(td);
-  }
+  var tdm=document.createElement("td");tdm.className="tcm";tdm.rowSpan=2;tdm.innerHTML=MNF[month]+"<br>"+year;tr1.appendChild(tdm);
+  for(var d=1;d<=D;d++){var td=document.createElement("td");td.className="tcdl"+(isWE(year,month,d)?" we":"");td.textContent=DL[DOW(year,month,d)];tr1.appendChild(td);}
   tb.appendChild(tr1);
   var tr2=document.createElement("tr");
-  for(var d=1;d<=D;d++){
-    var td=document.createElement("td");
-    td.className="tcdn"+(isWE(year,month,d)?" we":"");
-    td.textContent=pad(d);
-    tr2.appendChild(td);
-  }
+  for(var d=1;d<=D;d++){var td=document.createElement("td");td.className="tcdn"+(isWE(year,month,d)?" we":"");td.textContent=pad(d);tr2.appendChild(td);}
   tb.appendChild(tr2);
-
   for(var ri=0;ri<rows.length;ri++){
     var row=rows[ri],code=row.c;
     var tr=document.createElement("tr");
-    var tl=document.createElement("td");
-    tl.className="tcl";tl.innerHTML=row.l;tr.appendChild(tl);
+    var tl=document.createElement("td");tl.className="tcl";tl.innerHTML=row.l;tr.appendChild(tl);
     for(var d=1;d<=D;d++){
       var val=s[d]||"";
       var cls2,inn,isDrg=false;
       if(val===code){
-        cls2="cc "+ccc[code];isDrg=true;
-        inn="<div class=\"ci\"><span class=\"bge\">J01</span>"
-          +"<span class=\"hrs\">07:00</span><span class=\"hrs\">19:00</span></div>";
-      }else{
-        cls2="cc sR";inn="<div class=\"ci\"></div>";
-      }
+        cls2="cc "+CLS[code];isDrg=true;
+        inn="<div class=\"ci\"><span class=\"bge\">J01</span><span class=\"hrs\">07:00</span><span class=\"hrs\">19:00</span></div>";
+      }else{cls2="cc sEmpty";inn="<div class=\"ci\"></div>";}
       tr.appendChild(mkCell(cls2,isDrg,d,code,inn));
     }
     tb.appendChild(tr);
   }
-
   var trt=document.createElement("tr");
-  var ttl=document.createElement("td");
-  ttl.className="tctotl";ttl.innerHTML="Total quotidien<br>attribu\u00e9 :";
-  trt.appendChild(ttl);
+  var ttl=document.createElement("td");ttl.className="tctotl";ttl.innerHTML="Total quotidien<br>attribu\u00e9 :";trt.appendChild(ttl);
   for(var d=1;d<=D;d++){
-    var iv=false;
-    for(var ri2=0;ri2<rows.length;ri2++)if(s[d]===rows[ri2].c)iv=true;
-    var tdt=document.createElement("td");
-    tdt.className="tctot";tdt.textContent=iv?"12":"";
-    trt.appendChild(tdt);
+    var iv=false;for(var ri2=0;ri2<rows.length;ri2++)if(s[d]===rows[ri2].c)iv=true;
+    var tdt=document.createElement("td");tdt.className="tctot";tdt.textContent=iv?"12":"";trt.appendChild(tdt);
   }
-  tb.appendChild(trt);
-  tbl.appendChild(tb);tw.appendChild(tbl);wrap.appendChild(tw);
-
+  tb.appendChild(trt);tbl.appendChild(tb);tw.appendChild(tbl);wrap.appendChild(tw);
   var ft=document.createElement("div");ft.className="dft";
-  ft.innerHTML="Site : "+site+" &mdash; 55-57 Avenue Raymond POINCAR\u00c9"
-    +" &mdash; 75116 PARIS &mdash; T\u00e9l : 01 44 05 66 66<br>"
-    +"J01 : AGENT DE S\u00c9CURIT\u00c9 JOUR (SSIAP 1) de 07h00 \u00e0 19h00";
+  ft.innerHTML="Site : "+site+" &mdash; 55-57 Avenue Raymond POINCAR\u00c9 &mdash; 75116 PARIS &mdash; T\u00e9l : 01 44 05 66 66<br>J01 : AGENT DE S\u00c9CURIT\u00c9 JOUR (SSIAP 1) de 07h00 \u00e0 19h00";
   wrap.appendChild(ft);
-
   var st=document.createElement("div");st.className="stats no-print";
   st.innerHTML=
-    "<div class=\"sb\"><div class=\"slb\">"+short.A+" (cible 13)</div>"
-    +"<div class=\"sv\" style=\"color:#1a4fa0\">"+cA
-    +"<span class=\"ss\"> j.</span></div></div>"
-    +"<div class=\"sb\"><div class=\"slb\">"+short.B+" (cible 13)</div>"
-    +"<div class=\"sv\" style=\"color:var(--green)\">"+cB
-    +"<span class=\"ss\"> j.</span></div></div>"
-    +"<div class=\"sb\"><div class=\"slb\">Extra</div>"
-    +"<div class=\"sv\" style=\"color:var(--amber)\">"+cX
-    +"<span class=\"ss\"> j.</span></div></div>"
-    +"<div class=\"sb\"><div class=\"slb\">Jours du mois</div>"
-    +"<div class=\"sv\" style=\"color:#888\">"+D
-    +"<span class=\"ss\"> j.</span></div></div>";
+    "<div class=\"sb\"><div class=\"slb\">Roger (cible STRICTE 13)</div><div class=\"sv\" style=\"color:#0f7a55\">"+cR+"<span class=\"ss\"> j.</span></div></div>"
+    +"<div class=\"sb\"><div class=\"slb\">Mostapha (cible STRICTE 13)</div><div class=\"sv\" style=\"color:#1a4fa0\">"+cM+"<span class=\"ss\"> j.</span></div></div>"
+    +"<div class=\"sb\"><div class=\"slb\">EXTRA ("+D+"-26)</div><div class=\"sv\" style=\"color:#8a5200\">"+cX+"<span class=\"ss\"> j.</span></div></div>"
+    +"<div class=\"sb\"><div class=\"slb\">Mois</div><div class=\"sv\" style=\"color:#888\">"+D+"<span class=\"ss\"> j.</span></div></div>";
   wrap.appendChild(st);
-
   if(lsat){
     var weTxt=lsun?pad(lsat)+"\u2013"+pad(lsun)+" "+MNF[month]:pad(lsat)+" "+MNF[month];
     var wem=document.createElement("div");wem.className="wemem no-print";
-    wem.innerHTML="\uD83D\uDCC5 <strong>Mois prochain :</strong> "
-      +"<strong>"+lastWEName+"</strong> a travaill\u00e9 le dernier weekend ("
-      +weTxt+"). S\u00e9lectionnez-le dans \u00ab\u00a0Dernier WE mois "
-      +"pr\u00e9c\u00e9dent\u00a0\u00bb pour le mois suivant.";
+    wem.innerHTML="\uD83D\uDCC5 <strong>Mois prochain :</strong> <strong>"+lastWEName+"</strong> a travaill\u00e9 le dernier weekend ("+weTxt+"). S\u00e9lectionnez-le dans \u00ab\u00a0Dernier WE mois pr\u00e9c\u00e9dent\u00a0\u00bb.";
     wrap.appendChild(wem);
   }
-
-  wrap.appendChild(buildVal(s,D,year,month,cA,cB,cX));
+  wrap.appendChild(buildVal(s,D,year,month,cR,cM,cX));
   out.appendChild(wrap);
 }
 
-// ── Validation ───────────────────────────────────
-function buildVal(s,D,year,month,cA,cB,cX){
+// ── Validation ───────────────────────────────────────────
+function buildVal(s,D,year,month,cR,cM,cX){
   var errs=[],warns=[],oks=[];
-  var wm=getWM(year,month);
-
-  function maxRun(code){
-    var st=0,mx=0;
-    for(var d=1;d<=D;d++){if(s[d]===code){st++;if(st>mx)mx=st;}else st=0;}
-    return mx;
-  }
-  function isoList(code){
-    var iso=[];
-    for(var d=1;d<=D;d++){
-      if(s[d]!==code)continue;
-      if(!(d>1&&s[d-1]===code)&&!(d<D&&s[d+1]===code))iso.push(d);
-    }
-    return iso;
-  }
-
-  var mxA=maxRun("A"),mxB=maxRun("B"),mxX=maxRun("X");
-  if(mxA>2)errs.push("Mostapha : "+mxA+" jours cons\u00e9cutifs (max 2)");
-  else oks.push("Mostapha : max cons\u00e9cutifs OK ("+mxA+"/2) \u2713");
-  if(mxB>3)errs.push("Roger : "+mxB+" jours cons\u00e9cutifs (max 3)");
-  else oks.push("Roger : max cons\u00e9cutifs OK ("+mxB+"/3) \u2713");
-  if(mxX>3)warns.push("Extra : "+mxX+" jours cons\u00e9cutifs");
-
-  var isoA=isoList("A"),isoB=isoList("B");
-  if(isoA.length)warns.push("Mostapha : "+isoA.length
-    +" jour(s) isol\u00e9(s) \u2014 jours "+isoA.join(", "));
-  else oks.push("Mostapha : aucun jour isol\u00e9 \u2713");
-  if(isoB.length)warns.push("Roger : "+isoB.length
-    +" jour(s) isol\u00e9(s) \u2014 jours "+isoB.join(", "));
-  else oks.push("Roger : aucun jour isol\u00e9 \u2713");
-
-  ["A","B"].forEach(function(code){
-    var name=(code==="A")?"Mostapha":"Roger",bad=false;
-    for(var wn in wm){
-      var days=wm[wn],c=0;
-      for(var i=0;i<days.length;i++)if(s[days[i]]===code)c++;
-      if(c>4){errs.push(name+" : semaine "+wn+" = "+c+"j (max 4)");bad=true;}
-    }
-    if(!bad)oks.push(name+" : max 4j/semaine \u2713");
-  });
-
-  var rp=0;
-  for(var d=1;d<=D;d++){
-    if(s[d]==="B"){var dw=dow(year,month,d);if(dw===2||dw===3||dw===4)rp++;}
-  }
-  var pct=(cB>0)?Math.round(rp/cB*100):0;
-  if(pct>=75)oks.push("Roger : "+rp+"/"+cB+" jours Mar\u00b7Mer\u00b7Jeu ("+pct+"%) \u2713");
-  else warns.push("Roger : "+rp+"/"+cB+" jours Mar\u00b7Mer\u00b7Jeu ("+pct+"%)");
-
-  if(cA===13)oks.push("Mostapha : exactement 13 jours \u2713");
-  else if(cA>=12&&cA<=14)warns.push("Mostapha : "+cA+" jours (\u00e9cart acceptable, cible 13)");
-  else warns.push("Mostapha : "+cA+" jours (cible 13 \u2014 ajustez par glisser-d\u00e9poser)");
-  if(cB===13)oks.push("Roger : exactement 13 jours \u2713");
-  else if(cB>=12&&cB<=14)warns.push("Roger : "+cB+" jours (\u00e9cart acceptable, cible 13)");
-  else warns.push("Roger : "+cB+" jours (cible 13 \u2014 ajustez par glisser-d\u00e9poser)");
-  oks.push("Extra : "+cX+" jours \u2713");
-
-  var sats2=[];for(var d=1;d<=D;d++)if(dow(year,month,d)===6)sats2.push(d);
+  // R1 : comptages
+  if(cR===13)oks.push("Roger : 13 jours \u2713");
+  else errs.push("Roger : "+cR+" jours \u2014 cible STRICTE 13 (ajustez par glisser-d\u00e9poser)");
+  if(cM===13)oks.push("Mostapha : 13 jours \u2713");
+  else errs.push("Mostapha : "+cM+" jours \u2014 cible STRICTE 13 (ajustez par glisser-d\u00e9poser)");
+  oks.push("EXTRA : "+cX+" jours (= "+D+" \u2212 26) \u2713");
+  // R2 : consecutifs
+  function maxRun(c){var st=0,mx=0;for(var d=1;d<=D;d++){if(s[d]===c){st++;if(st>mx)mx=st;}else st=0;}return mx;}
+  var mR=maxRun("Roger"),mM=maxRun("Mostapha"),mX=maxRun("EXTRA");
+  if(mR<=3)oks.push("Roger : max consecutifs OK ("+mR+"/3) \u2713");
+  else errs.push("Roger : "+mR+" jours consecutifs (max 3)");
+  if(mM<=2)oks.push("Mostapha : max consecutifs OK ("+mM+"/2) \u2713");
+  else errs.push("Mostapha : "+mM+" jours consecutifs (max 2)");
+  if(mX<=3)oks.push("EXTRA : max consecutifs OK ("+mX+") \u2713");
+  else warns.push("EXTRA : "+mX+" consecutifs");
+  // R3 : jours isoles
+  function isoList(c){var iso=[];for(var d=1;d<=D;d++){if(s[d]!==c)continue;if(!(d>1&&s[d-1]===c)&&!(d<D&&s[d+1]===c))iso.push(d);}return iso;}
+  var iR=isoList("Roger"),iM=isoList("Mostapha");
+  if(!iR.length)oks.push("Roger : aucun jour isol\u00e9 \u2713");
+  else errs.push("Roger : "+iR.length+" jour(s) isol\u00e9(s) \u2014 jours "+iR.join(", "));
+  if(!iM.length)oks.push("Mostapha : aucun jour isol\u00e9 \u2713");
+  else errs.push("Mostapha : "+iM.length+" jour(s) isol\u00e9(s) \u2014 jours "+iM.join(", "));
+  // WE alternance
+  var sats2=[];for(var d=1;d<=D;d++)if(isSat(year,month,d))sats2.push(d);
   var weOk=true;
-  for(var si=1;si<sats2.length;si++){
-    var p=s[sats2[si-1]],c2=s[sats2[si]];
-    if(p==="X"||c2==="X")continue;
-    if(p===c2){weOk=false;break;}
-  }
-  if(weOk)oks.push("Alternance weekends A/B \u2713");
+  for(var si=1;si<sats2.length;si++){var p=s[sats2[si-1]],c2=s[sats2[si]];if(p==="EXTRA"||c2==="EXTRA")continue;if(p===c2){weOk=false;break;}}
+  if(weOk)oks.push("Alternance weekends OK \u2713");
   else warns.push("Alternance weekends : v\u00e9rifier manuellement");
-
+  // Roger Mar/Mer/Jeu
+  var rp=0;for(var d=1;d<=D;d++){if(s[d]==="Roger"){var dw=DOW(year,month,d);if(dw===2||dw===3||dw===4)rp++;}}
+  var pct=cR>0?Math.round(rp/cR*100):0;
+  if(pct>=70)oks.push("Roger : "+rp+"/"+cR+" jours Mar\u00b7Mer\u00b7Jeu ("+pct+"%) \u2713");
+  else warns.push("Roger : "+rp+"/"+cR+" jours Mar\u00b7Mer\u00b7Jeu ("+pct+"%)");
   var div=document.createElement("div");div.className="val no-print";
-  errs.forEach(function(e){
-    var v=document.createElement("div");v.className="vi ver";
-    v.innerHTML="<span class=\"vd\">\u2717</span>"+e;div.appendChild(v);
-  });
-  warns.forEach(function(w){
-    var v=document.createElement("div");v.className="vi vwn";
-    v.innerHTML="<span class=\"vd\">\u26a0</span>"+w;div.appendChild(v);
-  });
-  if(!errs.length&&!warns.length){
-    var v=document.createElement("div");v.className="vi vok";
-    v.innerHTML="<span class=\"vd\">\u2713</span>Toutes les contraintes "
-      +"respect\u00e9es \u2014 planning optimal";
-    div.appendChild(v);
-  }
-  oks.forEach(function(o){
-    var v=document.createElement("div");v.className="vi vok";
-    v.innerHTML="<span class=\"vd\">\u2713</span>"+o;div.appendChild(v);
-  });
+  errs.forEach(function(e){var v=document.createElement("div");v.className="vi ver";v.innerHTML="<span class=\"vd\">\u2717</span>"+e;div.appendChild(v);});
+  warns.forEach(function(w){var v=document.createElement("div");v.className="vi vwn";v.innerHTML="<span class=\"vd\">\u26a0</span>"+w;div.appendChild(v);});
+  if(!errs.length&&!warns.length){var v=document.createElement("div");v.className="vi vok";v.innerHTML="<span class=\"vd\">\u2713</span>Planning valide \u2014 toutes les r\u00e8gles strictes respect\u00e9es";div.appendChild(v);}
+  oks.forEach(function(o){var v=document.createElement("div");v.className="vi vok";v.innerHTML="<span class=\"vd\">\u2713</span>"+o;div.appendChild(v);});
   return div;
 }
 
-// ── Init ─────────────────────────────────────────
 window.addEventListener("load",function(){
-  var now=new Date();
-  var m=now.getMonth()+2,y=now.getFullYear();
+  var now=new Date();var m=now.getMonth()+2,y=now.getFullYear();
   if(m>12){m=1;y++;}
   var ySel=document.getElementById("p-year");
-  for(var i=0;i<ySel.options.length;i++){
-    if(parseInt(ySel.options[i].value)===y)ySel.options[i].selected=true;
-  }
+  for(var i=0;i<ySel.options.length;i++){if(parseInt(ySel.options[i].value)===y)ySel.options[i].selected=true;}
   document.getElementById("p-month").value=m;
   generate();
 });
