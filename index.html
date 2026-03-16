@@ -3,18 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Planning BAC UP — Générateur automatique</title>
+<title>Planning BAC UP</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{--blue:#1a4fa0;--blu:#dce8f7;--green:#0f7a55;--grn:#d3f0e4;--amber:#8a5200;--amb:#faeeda;--red:#c00;--gray:#f0efea;--bdr:#d0d0cc;--txt:#1a1a18;--mut:#6a6a66;--bg:#e8e7e2;--wht:#fff;--shd:0 2px 12px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04);}
+<style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#1a4fa0;--blu:#dce8f7;--green:#0f7a55;--grn:#d3f0e4;
+  --amber:#8a5200;--amb:#faeeda;--red:#c00;--gray:#f0efea;
+  --bdr:#d0d0cc;--txt:#1a1a18;--mut:#6a6a66;--bg:#e8e7e2;
+  --wht:#fff;--shd:0 2px 12px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04);
+}
 body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;padding:18px;}
 .app{max-width:1360px;margin:0 auto;}
 .hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
 .hlogo{display:flex;align-items:center;gap:10px;}
 .htri{width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:24px solid var(--blue);}
-.htit{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;letter-spacing:1px;color:var(--txt);}
-.htit span{color:var(--blue);}
+.htit{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;letter-spacing:1px;color:var(--blue);}
 .hsub{font-size:11px;color:var(--mut);margin-top:3px;}
 .hver{background:var(--blue);color:#fff;font-size:10px;font-family:'IBM Plex Mono',monospace;padding:3px 9px;border-radius:3px;letter-spacing:1px;}
 .cfg{background:var(--wht);border-radius:10px;box-shadow:var(--shd);padding:18px 22px;margin-bottom:14px;}
@@ -39,7 +42,6 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--txt
 .ph-i{font-size:36px;margin-bottom:12px;}
 .ph h3{font-size:16px;font-weight:500;margin-bottom:5px;}
 .ph p{font-size:13px;}
-/* DOC */
 .dtop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
 .dlogo{display:flex;align-items:center;gap:10px;}
 .dtri{width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:20px solid var(--blue);}
@@ -55,7 +57,6 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--txt
 .li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--mut);}
 .lsq{width:11px;height:11px;border-radius:2px;border:1px solid rgba(0,0,0,.12);flex-shrink:0;}
 .ldtip{font-size:10px;color:var(--mut);font-style:italic;margin-left:auto;background:var(--gray);padding:4px 8px;border-radius:4px;}
-/* TABLE */
 .twrap{overflow-x:auto;}
 table.pt{border-collapse:collapse;min-width:840px;width:100%;font-size:9.5px;}
 table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
@@ -80,578 +81,760 @@ table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
 .tctot{background:#e0e0da;font-size:8.5px;font-weight:700;color:var(--txt);padding:2px 0;}
 .tctotl{background:#e0e0da;text-align:left!important;padding:2px 5px!important;font-size:8.5px;color:#555;line-height:1.4;}
 .dft{margin-top:9px;font-size:9px;color:#888;border-top:.5px solid #ccc;padding-top:6px;line-height:1.6;}
-/* STATS */
 .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--bdr);}
 .sb{background:var(--gray);border-radius:7px;padding:9px 12px;}
 .slb{font-size:9.5px;color:var(--mut);margin-bottom:3px;font-weight:500;}
 .sv{font-size:17px;font-weight:600;font-family:'IBM Plex Mono',monospace;}
 .ss{font-size:10px;color:var(--mut);font-weight:400;}
-/* WE MEMORY */
 .wemem{background:var(--blu);border:1px solid rgba(26,79,160,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:#0d3270;margin-top:10px;}
 .wemem strong{font-weight:600;}
-/* VALIDATION */
 .val{display:flex;flex-direction:column;gap:5px;margin-top:10px;}
 .vi{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;padding:6px 12px;border-radius:6px;}
 .vok{background:var(--grn);color:var(--green);}
 .vwn{background:var(--amb);color:var(--amber);}
 .ver{background:#fce8e8;color:#a32d2d;}
 .vd{font-size:12px;flex-shrink:0;margin-top:1px;}
-/* PRINT */
 @media print{
   body{background:#fff;padding:0;}
   .no-print{display:none!important;}
   .outc{box-shadow:none;padding:6px;border-radius:0;}
-  .cc{cursor:default;}
   table.pt td{border-color:#999;}
   .sA{background:#ccd8ee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .sB{background:#bce8d3!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .sX{background:#f0ddb0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .sCG{background:#ddddd8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .tcm,.tcl,.tcdl,.tcdn,.tctot,.tctotl{background:#ddddd8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-}
-</style>
+}</style>
 </head>
 <body>
 <div class="app">
 
-<!-- HEADER -->
 <div class="hdr no-print">
-  <div class="hlogo">
-    <div class="htri"></div>
+  <div class="hlogo"><div class="htri"></div>
     <div>
-      <div class="htit">BAC <span>UP</span> — Planning Générateur automatique</div>
-      <div class="hsub">SSIAP 1 &nbsp;·&nbsp; Vacation J01 &nbsp;·&nbsp; 07h00 – 19h00 (12h)</div>
+      <div class="htit">BAC UP &mdash; Planning G&eacute;n&eacute;rateur automatique</div>
+      <div class="hsub">SSIAP 1 &nbsp;&middot;&nbsp; Vacation J01 &nbsp;&middot;&nbsp; 07h00 &ndash; 19h00 (12h)</div>
     </div>
   </div>
-  <div class="hver">v5.0</div>
+  <div class="hver">v7.0</div>
 </div>
 
-<!-- CONFIG -->
 <div class="cfg no-print">
-  <div class="cttl">Paramètres</div>
+  <div class="cttl">Param&egrave;tres</div>
   <div class="cgrid">
-    <div class="fld">
-      <label>Mois</label>
+    <div class="fld"><label>Mois</label>
       <select id="p-month" onchange="populateDays()">
-        <option value="1">Janvier</option><option value="2">Février</option>
+        <option value="1">Janvier</option><option value="2">F&eacute;vrier</option>
         <option value="3">Mars</option><option value="4">Avril</option>
         <option value="5">Mai</option><option value="6">Juin</option>
-        <option value="7">Juillet</option><option value="8">Août</option>
+        <option value="7">Juillet</option><option value="8">Ao&ucirc;t</option>
         <option value="9">Septembre</option><option value="10">Octobre</option>
-        <option value="11">Novembre</option><option value="12">Décembre</option>
+        <option value="11">Novembre</option><option value="12">D&eacute;cembre</option>
       </select>
     </div>
-    <div class="fld">
-      <label>Année</label>
+    <div class="fld"><label>Ann&eacute;e</label>
       <select id="p-year" onchange="populateDays()">
         <option value="2026">2026</option><option value="2027">2027</option>
         <option value="2028">2028</option><option value="2029">2029</option>
         <option value="2030">2030</option>
       </select>
     </div>
-    <div class="fld">
-      <label>Agent affiché</label>
+    <div class="fld"><label>Agent affich&eacute;</label>
       <select id="p-agent">
-        <option value="ALL">TOUS — Complet</option>
+        <option value="ALL">TOUS &mdash; Complet</option>
         <option value="A">Mostapha LAHOUAOUI</option>
         <option value="B">Roger DE SOUZA</option>
         <option value="X">Agent EXTRA</option>
       </select>
     </div>
-    <div class="fld">
-      <label>Nom du site</label>
+    <div class="fld"><label>Nom du site</label>
       <input type="text" id="p-site" value="RENAISSANCE PARIS NOBEL TOUR EIFFEL" readonly>
     </div>
-    <div class="fld">
-      <label>Réf. document</label>
+    <div class="fld"><label>R&eacute;f. document</label>
       <input type="text" id="p-ref" value="1504">
     </div>
-    <div class="fld">
-      <label>Congé Mostapha — début (7 j.)</label>
+    <div class="fld"><label>Cong&eacute; Mostapha &mdash; d&eacute;but (7 j.)</label>
       <select id="p-rest" onchange="updatePreview()"></select>
       <div class="rprev" id="p-prev"></div>
     </div>
-    <div class="fld">
-      <label>Dernier WE mois précédent</label>
+    <div class="fld"><label>Dernier WE mois pr&eacute;c&eacute;dent</label>
       <select id="p-lastwo">
         <option value="A">Mostapha LAHOUAOUI</option>
         <option value="B">Roger DE SOUZA</option>
       </select>
-      <div class="nte">Qui a travaillé le dernier Samedi-Dimanche ?</div>
+      <div class="nte">Qui a travaill&eacute; le dernier Sam-Dim du mois pass&eacute; ?</div>
     </div>
   </div>
   <div class="brow">
-    <button class="btn bgo" onclick="generate()">▶ Générer le planning</button>
+    <button class="btn bgo" onclick="generate()">&#9654; G&eacute;n&eacute;rer le planning</button>
     <div class="bdv"></div>
-    <button class="btn bpr" onclick="window.print()">🖨 Imprimer / PDF</button>
-    <button class="btn brs" onclick="resetPlan()">↺ Réinitialiser</button>
+    <button class="btn bpr" onclick="window.print()">&#128424; Imprimer / PDF</button>
+    <button class="btn brs" onclick="resetPlan()">&#8635; R&eacute;initialiser</button>
   </div>
 </div>
 
-<!-- OUTPUT -->
 <div class="outc" id="out">
-  <div class="ph"><div class="ph-i">📋</div><h3>Aucun planning généré</h3><p>Configurez les paramètres puis cliquez sur <strong>Générer le planning</strong>.</p></div>
-</div>
+  <div class="ph">
+    <div class="ph-i">&#128203;</div>
+    <h3>Aucun planning g&eacute;n&eacute;r&eacute;</h3>
+    <p>Configurez les param&egrave;tres puis cliquez sur <strong>G&eacute;n&eacute;rer le planning</strong>.</p>
+  </div>
 </div>
 
+</div>
 <script>
-const MN=['','Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-const MS=['','Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'];
-const DL=['D','L','M','M','J','V','S'];
-const DLG=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-const APP={sc:null,y:null,m:null,rs:null,re:null,lastWEOut:null};
-let DRG=null;
+// ── Constantes ──────────────────────────────────────────
+var MNF=["","Janvier","F\u00e9vrier","Mars","Avril","Mai","Juin",
+         "Juillet","Ao\u00fbt","Septembre","Octobre","Novembre","D\u00e9cembre"];
+var DL=["D","L","M","M","J","V","S"];
+var DLG=["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+var APP={sc:null,y:null,m:null,rs:null,re:null,lastWEOut:null};
+var DRG=null;
 
-const dim=(y,m)=>new Date(y,m,0).getDate();
-const dow=(y,m,d)=>new Date(y,m-1,d).getDay();
-const isWE=(y,m,d)=>{const w=dow(y,m,d);return w===0||w===6;};
-const pad=n=>String(n).padStart(2,'0');
-const gv=id=>document.getElementById(id).value.trim();
+// ── Utilitaires ──────────────────────────────────────────
+function dim(y,m){return new Date(y,m,0).getDate();}
+function dow(y,m,d){return new Date(y,m-1,d).getDay();}
+function isWE(y,m,d){var w=dow(y,m,d);return w===0||w===6;}
+function pad(n){return String(n).padStart(2,"0");}
+function gv(id){return document.getElementById(id).value.trim();}
 
-/* ── Week map ── */
 function getWM(y,m){
-  const D=dim(y,m),fd=dow(y,m,1),off=fd===0?6:fd-1,wm={};
-  for(let d=1;d<=D;d++){const wn=Math.ceil((d+off)/7);if(!wm[wn])wm[wn]=[];wm[wn].push(d);}
+  var D=dim(y,m),fd=dow(y,m,1),off=fd===0?6:fd-1,wm={};
+  for(var d=1;d<=D;d++){
+    var wn=Math.ceil((d+off)/7);
+    if(!wm[wn])wm[wn]=[];
+    wm[wn].push(d);
+  }
   return wm;
 }
 
-/* ── Populate rest-day selector ── */
+// ── Selecteur conge ──────────────────────────────────────
 function populateDays(){
-  const month=parseInt(gv('p-month')),year=parseInt(gv('p-year'));
-  const D=dim(year,month);
-  const sel=document.getElementById('p-rest');
-  const cur=parseInt(sel.value)||8;
-  sel.innerHTML='';
-  for(let d=1;d<=D-6;d++){
-    const e=d+6;
-    const o=document.createElement('option');
+  var month=parseInt(gv("p-month")),year=parseInt(gv("p-year"));
+  var D=dim(year,month);
+  var sel=document.getElementById("p-rest");
+  var cur=parseInt(sel.value)||0;
+  sel.innerHTML="";
+  for(var d=1;d<=D-6;d++){
+    var e=d+6;
+    var o=document.createElement("option");
     o.value=d;
-    const ds=DLG[dow(year,month,d)].substring(0,3);
-    const es=DLG[dow(year,month,e)].substring(0,3);
-    o.textContent=pad(d)+' ('+ds+') → '+pad(e)+' ('+es+')';
+    o.textContent=pad(d)+" ("+DLG[dow(year,month,d)].substring(0,3)
+      +") \u2192 "+pad(e)+" ("+DLG[dow(year,month,e)].substring(0,3)+")";
     if(d===cur)o.selected=true;
     sel.appendChild(o);
   }
-  if(!sel.value){
-    for(let d=8;d<=D-6;d++){if(dow(year,month,d)===1){sel.value=d;break;}}
+  // defaut : 1er lundi apres j7
+  if(!sel.value||parseInt(sel.value)===0){
+    var D2=dim(year,month);
+    for(var d2=8;d2<=D2-6;d2++){
+      if(dow(year,month,d2)===1){sel.value=d2;break;}
+    }
+    if(!sel.value)sel.value=1;
   }
   updatePreview();
 }
 
 function updatePreview(){
-  const month=parseInt(gv('p-month')),year=parseInt(gv('p-year'));
-  const rs=parseInt(document.getElementById('p-rest').value);
-  if(!rs){document.getElementById('p-prev').textContent='';return;}
-  const re=rs+6,D=dim(year,month);
-  if(re>D){document.getElementById('p-prev').textContent='⚠ Dépasse fin du mois';return;}
-  document.getElementById('p-prev').textContent=
-    '📅 '+DLG[dow(year,month,rs)]+' '+pad(rs)+' → '+DLG[dow(year,month,re)]+' '+pad(re);
+  var month=parseInt(gv("p-month")),year=parseInt(gv("p-year"));
+  var rs=parseInt(document.getElementById("p-rest").value);
+  var el=document.getElementById("p-prev");
+  if(!rs){el.textContent="";return;}
+  var re=rs+6,D=dim(year,month);
+  if(re>D){el.textContent="D\u00e9passe fin du mois";return;}
+  el.textContent="\uD83D\uDCC5 "
+    +DLG[dow(year,month,rs)]+" "+pad(rs)
+    +" \u2192 "
+    +DLG[dow(year,month,re)]+" "+pad(re);
 }
 
-/* ══════════════════════════════════════════════
-   ALGORITHME PRINCIPAL v5
-══════════════════════════════════════════════ */
+// ════════════════════════════════════════════════════════
+// ALGORITHME PRINCIPAL
+// Contraintes :
+//   - Roger (B)   : 13 jours, pref Mar/Mer/Jeu, max 3 consec, pas isoles
+//   - Mostapha(A) : 13 jours, conge 7j, pref paires, max 2 consec, pas isoles
+//   - Weekends    : alternes A/B (jamais X)
+//   - Personne    : jamais 4 jours successifs
+//   - Reste       : Extra (X)
+// ════════════════════════════════════════════════════════
 function buildSchedule(year,month,restStart,lastWEWorker){
-  const D=dim(year,month);
-  const restEnd=Math.min(restStart+6,D);
-  const restSet=new Set();
-  for(let d=restStart;d<=restEnd;d++)restSet.add(d);
+  var D=dim(year,month);
+  var restEnd=Math.min(restStart+6,D);
+  // jours de conge de Mostapha
+  var REST={};
+  for(var d=restStart;d<=restEnd;d++)REST[d]=true;
 
-  const s=new Array(D+1).fill('');
+  // planning : "" = libre, "A","B","X"
+  var s=new Array(D+2).fill("");
 
-  /* helpers consécutifs */
-  const cbef=(d,c)=>{let n=0,i=d-1;while(i>=1&&s[i]===c){n++;i--;}return n;};
-  const caft=(d,c)=>{let n=0,i=d+1;while(i<=D&&s[i]===c){n++;i++;}return n;};
-  const ctot=(d,c)=>cbef(d,c)+caft(d,c)+1;
-
-  /* ────────────────────────────────────────
-     ÉTAPE 1 — WEEKENDS : alternance A/B
-  ──────────────────────────────────────── */
-  const sats=[];
-  for(let d=1;d<=D;d++) if(dow(year,month,d)===6) sats.push(d);
-
-  // Si le mois commence un Dimanche → c'est la fin du WE précédent
-  if(dow(year,month,1)===0){
-    s[1]= restSet.has(1)
-      ? (lastWEWorker==='A'?'B':'A')   // Mostapha en congé → Roger
-      : lastWEWorker;
+  // ── helpers ──
+  function free(d){return d>=1&&d<=D&&s[d]==="";}
+  function is(d,c){return d>=1&&d<=D&&s[d]===c;}
+  function runBef(d,c){var n=0,i=d-1;while(i>=1&&s[i]===c){n++;i--;}return n;}
+  function runAft(d,c){var n=0,i=d+1;while(i<=D&&s[i]===c){n++;i++;}return n;}
+  function run(d,c){return runBef(d,c)+1+runAft(d,c);}
+  function cnt(c){var n=0;for(var i=1;i<=D;i++)if(s[i]===c)n++;return n;}
+  function wkOf(d){
+    var fd=dow(year,month,1),off=fd===0?6:fd-1;
+    return Math.ceil((d+off)/7);
+  }
+  function wkCnt(d,c){
+    var wm=getWM(year,month),wn=wkOf(d),days=wm[wn]||[],n=0;
+    for(var i=0;i<days.length;i++)if(s[days[i]]===c)n++;
+    return n;
   }
 
-  // Qui prend le 1er WE de ce mois ?
-  let nextWE=lastWEWorker==='A'?'B':'A';
-  let lastWEOut=lastWEWorker;
+  // ── ETAPE 1 : Weekends alternes A/B ──────────────────
+  var sats=[];
+  for(var d=1;d<=D;d++)if(dow(year,month,d)===6)sats.push(d);
 
-  for(const sat of sats){
-    let who=nextWE;
-    // Si Mostapha est en congé ce WE → forcé Roger
-    const satRest=restSet.has(sat);
-    const sunRest=(sat+1<=D)&&restSet.has(sat+1);
-    if(who==='A'&&(satRest||sunRest)) who='B';
+  // si le mois commence un Dim, c'est la suite du WE precedent
+  if(dow(year,month,1)===0&&!REST[1])s[1]=lastWEWorker;
 
+  var nextWE=(lastWEWorker==="A")?"B":"A";
+  var lastWEOut=lastWEWorker;
+
+  for(var si=0;si<sats.length;si++){
+    var sat=sats[si];
+    var who=nextWE;
+    // si Mostapha en conge ce WE, on donne a Roger
+    if(who==="A"&&(REST[sat]||(sat+1<=D&&REST[sat+1])))who="B";
+    // assigner Sam
     s[sat]=who;
-    if(sat+1<=D&&dow(year,month,sat+1)===0) s[sat+1]=who;
-
+    // assigner Dim si meme mois
+    if(sat+1<=D&&dow(year,month,sat+1)===0)s[sat+1]=who;
     lastWEOut=who;
-    nextWE=nextWE==='A'?'B':'A';
+    nextWE=(nextWE==="A")?"B":"A";
   }
 
-  /* ────────────────────────────────────────
-     ÉTAPE 2 — ROGER (B) : groupes Mar+Mer+Jeu
-     Objectif : 13-14 jours, pas isolés, max 3 consécutifs
-  ──────────────────────────────────────── */
-  const wm=getWM(year,month);
+  // ── ETAPE 2 : Roger (B) → 13 jours ──────────────────
+  // Priorite : groupes complets Mar+Mer+Jeu
+  // puis paires, puis jours adjacents a un B existant
+  var TARGET=13;
 
-  // Construire les groupes Mar/Mer/Jeu par semaine
-  const rogerGrps=[];
-  let grp=[];
-  for(let d=1;d<=D;d++){
-    const dw=dow(year,month,d);
-    if(dw===2||dw===3||dw===4){grp.push(d);if(dw===4||d===D){if(grp.length)rogerGrps.push([...grp]);grp=[];}}
-    else if(grp.length){rogerGrps.push([...grp]);grp=[];}
-  }
-
-  let bCnt=s.slice(1).filter(x=>x==='B').length;
-
-  for(const g of rogerGrps){
-    if(bCnt>=14) break;
-    // Garder uniquement les jours disponibles (pas déjà assigné)
-    const avail=g.filter(d=>s[d]==='');
-    if(!avail.length) continue;
-
-    // Calculer les slots restants cette semaine
-    const wn=Math.ceil((avail[0]+( (fd=dow(year,month,1))===0?6:fd-1 ))/7);
-    const bInWk=(wm[wn]||[]).filter(d=>s[d]==='B').length;
-    const slots=4-bInWk;
-    if(slots<=0) continue;
-
-    const take=Math.min(avail.length,slots,14-bCnt);
-
-    if(take>=2){
-      for(let i=0;i<take;i++){s[avail[i]]='B';bCnt++;}
-    }else if(take===1){
-      // N'ajouter que si adjacent à un B existant (évite isolation)
-      const d=avail[0];
-      if((d>1&&s[d-1]==='B')||(d<D&&s[d+1]==='B')){s[d]='B';bCnt++;}
-    }
-  }
-
-  // Compléter si < 13 avec des jours adjacents à des blocs B existants
-  if(bCnt<13){
-    for(let d=1;d<=D&&bCnt<13;d++){
-      if(s[d]!=='') continue;
-      const lb=d>1&&s[d-1]==='B',rb=d<D&&s[d+1]==='B';
-      if((lb||rb)&&ctot(d,'B')<=3&&cbef(d,'B')+caft(d,'B')+1<=3){
-        s[d]='B';bCnt++;
+  function rogerGroups(){
+    // retourne les groupes [Tue,Wed,Thu] disponibles par semaine
+    var wm=getWM(year,month),groups=[];
+    var wns=Object.keys(wm).map(Number).sort(function(a,b){return a-b;});
+    for(var wi=0;wi<wns.length;wi++){
+      var wn=wns[wi],days=wm[wn],grp=[];
+      for(var di=0;di<days.length;di++){
+        var d=days[di],dw=dow(year,month,d);
+        if((dw===2||dw===3||dw===4)&&free(d))grp.push(d);
       }
+      if(grp.length>0)groups.push(grp);
     }
+    return groups;
   }
 
-  /* ────────────────────────────────────────
-     ÉTAPE 3 — MOSTAPHA (A) : paires strictes
-     Objectif : exactement 13 jours, max 2 consécutifs, pas isolés
-  ──────────────────────────────────────── */
-  const canA=d=>{
-    if(d<1||d>D||s[d]!==''||restSet.has(d)) return false;
-    if(cbef(d,'A')>=2||caft(d,'A')>=2) return false;
-    if(cbef(d,'A')+caft(d,'A')+1>=3) return false;
-    return true;
-  };
+  function assignB(){
+    var need=TARGET-cnt("B");
+    if(need<=0)return;
 
-  let aCnt=s.slice(1).filter(x=>x==='A').length;
-
-  // Paires (d, d+1) avec gap de 2 pour éviter les 3 consécutifs
-  let di=1;
-  while(di<=D&&aCnt<13){
-    if(canA(di)&&di+1<=D&&canA(di+1)&&cbef(di,'A')===0){
-      s[di]='A';s[di+1]='A';aCnt+=2;di+=4;
-    }else di++;
-  }
-  // Fallback : jours simples si toujours insuffisant
-  if(aCnt<13){
-    for(let d=1;d<=D&&aCnt<13;d++){if(canA(d)){s[d]='A';aCnt++;}}
-  }
-
-  /* ────────────────────────────────────────
-     ÉTAPE 4 — CORRECTIONS POST-HOC
-  ──────────────────────────────────────── */
-  // 4a. Pas de 4 jours consécutifs pour personne (y compris Extra plus tard)
-  const fixConsec=(code,maxC)=>{
-    let ch=true,sf=0;
-    while(ch&&sf++<30){
-      ch=false;
-      for(let d=1;d<=D;d++){
-        if(s[d]!==code) continue;
-        if(ctot(d,code)>maxC){
-          let e=d;while(e+1<=D&&s[e+1]===code)e++;
-          s[e]='';ch=true;break;
+    // Passe 1 : groupes de 3 (Mar+Mer+Jeu complets)
+    var grps=rogerGroups();
+    for(var gi=0;gi<grps.length&&need>0;gi++){
+      var g=grps[gi];
+      if(g.length>=3&&need>=3){
+        var wOk=(wkCnt(g[0],"B")+3<=4);
+        if(wOk&&run(g[0],"B")<=2&&run(g[2],"B")<=2){
+          s[g[0]]="B";s[g[1]]="B";s[g[2]]="B";need-=3;
         }
       }
     }
-  };
-  fixConsec('B',3);
-  fixConsec('A',2);
-
-  // 4b. Supprimer les jours isolés A et B (→ Extra)
-  const fixIso=(code)=>{
-    let ch=true,sf=0;
-    while(ch&&sf++<10){
-      ch=false;
-      for(let d=1;d<=D;d++){
-        if(s[d]!==code) continue;
-        const lb=d>1&&s[d-1]===code;
-        const rb=d<D&&s[d+1]===code;
-        if(!lb&&!rb){s[d]='';ch=true;}
+    // Passe 2 : groupes de 2
+    grps=rogerGroups();
+    for(var gi=0;gi<grps.length&&need>0;gi++){
+      var g=grps[gi];
+      if(g.length>=2&&need>=2){
+        var wOk=(wkCnt(g[0],"B")+2<=4);
+        if(wOk&&run(g[0],"B")<=2){
+          s[g[0]]="B";s[g[1]]="B";need-=2;
+        }
       }
     }
-  };
-  fixIso('A');
-  fixIso('B');
+    // Passe 3 : groupes de 1 adjacents a un B (evite isolation)
+    grps=rogerGroups();
+    for(var gi=0;gi<grps.length&&need>0;gi++){
+      var g=grps[gi];
+      for(var j=0;j<g.length&&need>0;j++){
+        var d=g[j];
+        var adj=(is(d-1,"B")||is(d+1,"B"));
+        if(adj&&run(d,"B")<=3&&wkCnt(d,"B")<4){s[d]="B";need--;}
+      }
+    }
+    // Passe 4 : paires libres hors WE sur n'importe quel jour
+    for(var d=1;d<=D&&need>0;d++){
+      if(!free(d)||isWE(year,month,d))continue;
+      if(d+1<=D&&free(d+1)&&!isWE(year,month,d+1)&&need>=2){
+        if(run(d,"B")<=2&&wkCnt(d,"B")+2<=4){
+          s[d]="B";s[d+1]="B";need-=2;d++;
+        }
+      }
+    }
+    // Passe 5 : jours seuls libres (dernier recours)
+    for(var d=1;d<=D&&need>0;d++){
+      if(!free(d)||isWE(year,month,d))continue;
+      if(run(d,"B")<=3&&wkCnt(d,"B")<4){s[d]="B";need--;}
+    }
+  }
+  assignB();
 
-  // 4c. Reconstruire si des jours ont été retirés pour atteindre 13 A
-  aCnt=s.slice(1).filter(x=>x==='A').length;
-  if(aCnt<13){
-    di=1;
-    while(di<=D&&aCnt<13){
-      if(canA(di)&&di+1<=D&&canA(di+1)&&cbef(di,'A')===0){
-        s[di]='A';s[di+1]='A';aCnt+=2;di+=4;
-      }else di++;
+  // ── ETAPE 3 : Mostapha (A) → 13 jours ───────────────
+  // Disponible = libre ET pas en conge
+  function canA(d){
+    if(!free(d)||REST[d])return false;
+    if(runBef(d,"A")>=2||runAft(d,"A")>=2)return false;
+    if(runBef(d,"A")+runAft(d,"A")+1>2)return false;
+    if(wkCnt(d,"A")>=4)return false;
+    return true;
+  }
+
+  function assignA(){
+    var need=TARGET-cnt("A");
+    if(need<=0)return;
+    // Passe 1 : paires (d, d+1) avec gap >=2 apres
+    var di=1;
+    while(di<=D&&need>0){
+      if(need>=2&&canA(di)&&di+1<=D&&canA(di+1)
+         &&runBef(di,"A")===0&&runAft(di+1,"A")===0){
+        s[di]="A";s[di+1]="A";need-=2;
+        di+=4; // saute 2 jours de repos apres la paire
+      }else{
+        di++;
+      }
+    }
+    // Passe 2 : jours simples si encore insuffisant
+    for(var d=1;d<=D&&need>0;d++){
+      if(canA(d)){s[d]="A";need--;}
+    }
+  }
+  assignA();
+
+  // ── ETAPE 4 : Corrections iteratives ─────────────────
+
+  // 4a. Supprimer blocs trop longs (A max 2, B max 3)
+  function trimLong(code,maxC){
+    var changed=true;
+    while(changed){
+      changed=false;
+      for(var d=1;d<=D;d++){
+        if(s[d]!==code)continue;
+        if(run(d,code)>maxC){
+          // supprimer la fin du bloc
+          var e=d;while(e+1<=D&&s[e+1]===code)e++;
+          s[e]="";changed=true;break;
+        }
+      }
     }
   }
 
-  /* ────────────────────────────────────────
-     ÉTAPE 5 — EXTRA : tout le reste
-  ──────────────────────────────────────── */
-  for(let d=1;d<=D;d++) if(s[d]==='') s[d]='X';
+  // 4b. Supprimer jours isoles A et B
+  function removeIso(code){
+    var changed=true;
+    while(changed){
+      changed=false;
+      for(var d=1;d<=D;d++){
+        if(s[d]!==code)continue;
+        var lb=is(d-1,code),rb=is(d+1,code);
+        if(!lb&&!rb){s[d]="";changed=true;}
+      }
+    }
+  }
 
-  // 5a. Vérifier pas de 4 consécutifs pour Extra aussi
-  fixConsec('X',3);
+  // Cycle de corrections + reassignation
+  for(var iter=0;iter<4;iter++){
+    trimLong("A",2);
+    trimLong("B",3);
+    removeIso("A");
+    removeIso("B");
+    // Reassigner ce qui manque
+    if(cnt("B")<TARGET)assignB();
+    if(cnt("A")<TARGET)assignA();
+  }
+  // Corrections finales
+  trimLong("A",2);
+  trimLong("B",3);
 
-  return{sc:s,re:restEnd,lastWEOut};
+  // ── ETAPE 5 : Extra = tout le reste ──────────────────
+  for(var d=1;d<=D;d++)if(s[d]==="")s[d]="X";
+  // Pas de 4 successifs pour Extra non plus
+  trimLong("X",3);
+
+  return{sc:s,re:restEnd,lastWEOut:lastWEOut};
 }
 
-/* ══════════════════════════════════════════════
-   GENERATE
-══════════════════════════════════════════════ */
+// ── Generate ─────────────────────────────────────────────
 function generate(){
-  const month=parseInt(gv('p-month')),year=parseInt(gv('p-year'));
-  const restStart=parseInt(document.getElementById('p-rest').value);
-  const lastWE=gv('p-lastwo');
-  const res=buildSchedule(year,month,restStart,lastWE);
+  var month=parseInt(gv("p-month")),year=parseInt(gv("p-year"));
+  var restStart=parseInt(document.getElementById("p-rest").value);
+  var lastWE=gv("p-lastwo");
+  if(!restStart){alert("Choisissez le d\u00e9but du cong\u00e9 de Mostapha.");return;}
+  var res=buildSchedule(year,month,restStart,lastWE);
   APP.sc=res.sc;APP.y=year;APP.m=month;
   APP.rs=restStart;APP.re=res.re;APP.lastWEOut=res.lastWEOut;
   render();
 }
 function resetPlan(){if(APP.y)generate();}
 
-/* ══════════════════════════════════════════════
-   DRAG & DROP
-══════════════════════════════════════════════ */
-function dStart(e,d,r){DRG={d,r};e.dataTransfer.effectAllowed='move';requestAnimationFrame(()=>{const el=document.querySelector('[data-d="'+d+'"][data-r="'+r+'"]');if(el)el.classList.add('dgh');});}
-function dEnd(){document.querySelectorAll('.dgh,.dhl').forEach(el=>el.classList.remove('dgh','dhl'));DRG=null;}
-function dOver(e,d,r){if(!DRG)return;e.preventDefault();const el=document.querySelector('[data-d="'+d+'"][data-r="'+r+'"]');if(el)el.classList.add('dhl');}
-function dLeave(e,d,r){const el=document.querySelector('[data-d="'+d+'"][data-r="'+r+'"]');if(el)el.classList.remove('dhl');}
-function dDrop(e,td,tr){
-  e.preventDefault();
-  document.querySelectorAll('.dgh,.dhl').forEach(el=>el.classList.remove('dgh','dhl'));
+// ── Drag & Drop ──────────────────────────────────────────
+function dStart(e,d,r){
+  DRG={d:d,r:r};
+  e.dataTransfer.effectAllowed="move";
+  requestAnimationFrame(function(){
+    var el=document.querySelector("[data-d='"+d+"'][data-r='"+r+"']");
+    if(el)el.classList.add("dgh");
+  });
+}
+function dEnd(){
+  document.querySelectorAll(".dgh,.dhl").forEach(function(el){
+    el.classList.remove("dgh","dhl");
+  });
+  DRG=null;
+}
+function dOver(e,d,r){
   if(!DRG)return;
-  const{d:sd,r:sr}=DRG;DRG=null;
-  if(sd===td&&sr===tr)return;
-  if(sr===tr){const tmp=APP.sc[td];APP.sc[td]=APP.sc[sd];APP.sc[sd]=tmp;}
-  else{APP.sc[sd]='X';APP.sc[td]=tr;}
+  e.preventDefault();
+  var el=document.querySelector("[data-d='"+d+"'][data-r='"+r+"']");
+  if(el)el.classList.add("dhl");
+}
+function dLeave(e,d,r){
+  var el=document.querySelector("[data-d='"+d+"'][data-r='"+r+"']");
+  if(el)el.classList.remove("dhl");
+}
+function dDrop(e,td2,tr2){
+  e.preventDefault();
+  document.querySelectorAll(".dgh,.dhl").forEach(function(el){
+    el.classList.remove("dgh","dhl");
+  });
+  if(!DRG)return;
+  var sd=DRG.d,sr=DRG.r;
+  DRG=null;
+  if(sd===td2&&sr===tr2)return;
+  if(sr===tr2){
+    // horizontal : echange
+    var tmp=APP.sc[td2];APP.sc[td2]=APP.sc[sd];APP.sc[sd]=tmp;
+  }else{
+    // vertical : source -> X, cible -> couleur ligne destination
+    APP.sc[sd]="X";
+    APP.sc[td2]=tr2;
+  }
   render();
 }
 
-/* ══════════════════════════════════════════════
-   RENDER
-══════════════════════════════════════════════ */
-function render(){
-  const{sc:s,y:year,m:month,rs:restStart,re:restEnd,lastWEOut}=APP;
-  const D=dim(year,month);
-  const agent=gv('p-agent');
-  const site=gv('p-site')||'RENAISSANCE PARIS NOBEL TOUR EIFFEL';
-  const ref=gv('p-ref')||'1504';
-  const rDays=new Set();for(let d=restStart;d<=restEnd;d++)rDays.add(d);
-  const names={A:'LAHOUAOUI Mostapha',B:'DE SOUZA Roger',X:'AGENT EXTRA'};
-  const short={A:'LAHOUAOUI',B:'DE SOUZA',X:'EXTRA'};
-  const tc={A:'#1a4fa0',B:'#0f7a55',X:'#8a5200'};
-  const cc={A:'sA',B:'sB',X:'sX'};
-  const docN=agent==='A'?names.A:agent==='B'?names.B:agent==='X'?names.X:names.A;
-  const now=new Date();
-  const ed=pad(now.getDate())+'/'+pad(now.getMonth()+1)+'/'+now.getFullYear()+' à '+pad(now.getHours())+':'+pad(now.getMinutes());
-  const rows=[];
-  if(agent==='ALL'||agent==='A') rows.push({c:'A',l:site+'<br><span style="color:'+tc.A+';font-weight:700;">'+short.A+' M.</span>'});
-  if(agent==='ALL'||agent==='B') rows.push({c:'B',l:site+'<br><span style="color:'+tc.B+';font-weight:700;">'+short.B+' R.</span>'});
-  if(agent==='ALL'||agent==='X') rows.push({c:'X',l:site+'<br><span style="color:'+tc.X+';font-weight:700;">EXTRA</span>'});
-  const cnt={A:0,B:0,X:0};
-  s.slice(1).forEach(v=>{if(v&&cnt[v]!==undefined)cnt[v]++;});
-
-  // Last weekend of this month
-  const lsats=[];for(let d=1;d<=D;d++)if(dow(year,month,d)===6)lsats.push(d);
-  const lsat=lsats.length?lsats[lsats.length-1]:null;
-  const lsun=lsat&&lsat+1<=D&&dow(year,month,lsat+1)===0?lsat+1:null;
-  const lastWEName=lastWEOut==='A'?names.A:names.B;
-
-  let h='<div>';
-
-  /* En-tête document */
-  h+='<div class="dtop"><div class="dlogo"><div class="dtri"></div><div class="dwm">BAC <span>UP</span></div></div><div class="dref">'+ref+'</div></div>';
-  h+='<div class="dadr"><strong>'+docN+'</strong><br>21 RUE CLEMENT &mdash; 94110 ARCUEIL</div>';
-  h+='<div class="dplb">Planning '+docN+' par SITES</div>';
-  h+='<div class="dpsb">Édition du '+ed+'</div>';
-  h+='<div class="datn">ATTENTION : ce planning est susceptible d\'être modifié</div>';
-
-  /* Légende */
-  h+='<div class="leg no-print">';
-  if(agent==='ALL'||agent==='A') h+='<div class="li"><div class="lsq" style="background:#dce8f7;"></div>'+names.A+'</div>';
-  if(agent==='ALL'||agent==='B') h+='<div class="li"><div class="lsq" style="background:#d3f0e4;"></div>'+names.B+' (Mar·Mer·Jeu)</div>';
-  if(agent==='ALL'||agent==='X') h+='<div class="li"><div class="lsq" style="background:#faeeda;"></div>Agent Extra</div>';
-  if(agent==='ALL'||agent==='A') h+='<div class="li"><div class="lsq" style="background:#eaeae4;border-color:#bbb;"></div>Congé Mostapha</div>';
-  h+='<span class="ldtip no-print">↔ horizontal = garde couleur &nbsp;|&nbsp; ↕ vertical = prend couleur ligne</span>';
-  h+='</div>';
-
-  /* Tableau */
-  h+='<div class="twrap"><table class="pt"><tbody>';
-  h+='<tr><td class="tcm" rowspan="2">'+MN[month]+'<br>'+year+'</td>';
-  for(let d=1;d<=D;d++) h+='<td class="tcdl'+(isWE(year,month,d)?' we':'')+'">'+DL[dow(year,month,d)]+'</td>';
-  h+='</tr><tr>';
-  for(let d=1;d<=D;d++) h+='<td class="tcdn'+(isWE(year,month,d)?' we':'')+'">'+pad(d)+'</td>';
-  h+='</tr>';
-
-  for(const{c:code,l:lbl}of rows){
-    h+='<tr><td class="tcl">'+lbl+'</td>';
-    for(let d=1;d<=D;d++){
-      const val=s[d]||'';
-      let cls,inn,drg='false';
-      if(val===code){
-        cls='cc '+cc[code];drg='true';
-        inn='<div class="ci"><span class="bge">J01</span><span class="hrs">07:00</span><span class="hrs">19:00</span></div>';
-      }else if(code==='A'&&rDays.has(d)&&val!=='A'){
-        cls='cc sCG';inn='<div class="ci"><span>CONGÉ</span></div>';
-      }else{
-        cls='cc sR';inn='<div class="ci"></div>';
-      }
-      h+='<td class="'+cls+'" draggable="'+drg+'" data-d="'+d+'" data-r="'+code+'"'+
-        ' ondragstart="dStart(event,'+d+',\''+code+'\')"'+
-        ' ondragend="dEnd()"'+
-        ' ondragover="dOver(event,'+d+',\''+code+'\')"'+
-        ' ondragleave="dLeave(event,'+d+',\''+code+'\')"'+
-        ' ondrop="dDrop(event,'+d+',\''+code+'\')">'+inn+'</td>';
-    }
-    h+='</tr>';
-  }
-
-  h+='<tr><td class="tctotl">Total quotidien<br>attribué :</td>';
-  for(let d=1;d<=D;d++){const iv=rows.some(r=>s[d]===r.c);h+='<td class="tctot">'+(iv?12:'')+'</td>';}
-  h+='</tr></tbody></table></div>';
-
-  /* Pied de page */
-  h+='<div class="dft">Site : '+site+' &mdash; 55-57 Avenue Raymond POINCARÉ &mdash; 75116 PARIS &mdash; Tél : 01 44 05 66 66<br>J01 : AGENT DE SÉCURITÉ JOUR (SSIAP 1) de 07h00 à 19h00</div>';
-
-  /* Stats */
-  const noncov=s.slice(1).filter(x=>!x).length;
-  h+='<div class="stats no-print">';
-  h+='<div class="sb"><div class="slb">'+short.A+'</div><div class="sv" style="color:#1a4fa0">'+cnt.A+'<span class="ss"> j.</span></div></div>';
-  h+='<div class="sb"><div class="slb">'+short.B+'</div><div class="sv" style="color:var(--green)">'+cnt.B+'<span class="ss"> j.</span></div></div>';
-  h+='<div class="sb"><div class="slb">Extra</div><div class="sv" style="color:var(--amber)">'+cnt.X+'<span class="ss"> j.</span></div></div>';
-  h+='<div class="sb"><div class="slb">Congé Mostapha</div><div class="sv" style="color:#888">7<span class="ss"> j. ('+pad(restStart)+'→'+pad(restEnd)+')</span></div></div>';
-  h+='</div>';
-
-  /* Mémoire WE mois prochain */
-  if(lsat){
-    const weTxt=lsun?pad(lsat)+'–'+pad(lsun)+' '+MN[month]:pad(lsat)+' '+MN[month];
-    h+='<div class="wemem no-print">📅 <strong>Mois prochain :</strong> noter que <strong>'+lastWEName+'</strong> a travaillé le dernier weekend ('+weTxt+'). Sélectionnez <em>'+lastWEName+'</em> dans "Dernier WE mois précédent" pour le mois suivant.</div>';
-  }
-
-  /* Validation */
-  h+=renderVal(s,D,year,month,restStart);
-  h+='</div>';
-  document.getElementById('out').innerHTML=h;
+// ── Render ───────────────────────────────────────────────
+function mkCell(cls2,draggable,d,code,inn){
+  var td=document.createElement("td");
+  td.className=cls2;
+  td.draggable=draggable;
+  td.setAttribute("data-d",String(d));
+  td.setAttribute("data-r",code);
+  td.addEventListener("dragstart",function(e){dStart(e,d,code);});
+  td.addEventListener("dragend",dEnd);
+  td.addEventListener("dragover",function(e){dOver(e,d,code);});
+  td.addEventListener("dragleave",function(e){dLeave(e,d,code);});
+  td.addEventListener("drop",function(e){dDrop(e,d,code);});
+  td.innerHTML=inn;
+  return td;
 }
 
-/* ══════════════════════════════════════════════
-   VALIDATION
-══════════════════════════════════════════════ */
-function renderVal(s,D,year,month,restStart){
-  const errs=[],warns=[],oks=[];
-  const wm=getWM(year,month);
+function render(){
+  var s=APP.sc,year=APP.y,month=APP.m;
+  var rs=APP.rs,re=APP.re,lwo=APP.lastWEOut;
+  var D=dim(year,month);
+  var agent=gv("p-agent");
+  var site=gv("p-site")||"RENAISSANCE PARIS NOBEL TOUR EIFFEL";
+  var ref=gv("p-ref")||"1504";
+  var REST2={};for(var d=rs;d<=re;d++)REST2[d]=true;
+  var names={A:"LAHOUAOUI Mostapha",B:"DE SOUZA Roger",X:"AGENT EXTRA"};
+  var short={A:"LAHOUAOUI",B:"DE SOUZA",X:"EXTRA"};
+  var tcol={A:"#1a4fa0",B:"#0f7a55",X:"#8a5200"};
+  var ccc={A:"sA",B:"sB",X:"sX"};
+  var docN=(agent==="A")?names.A:(agent==="B")?names.B:(agent==="X")?names.X:names.A;
+  var now=new Date();
+  var ed=pad(now.getDate())+"/"+pad(now.getMonth()+1)+"/"+now.getFullYear()
+        +" \u00e0 "+pad(now.getHours())+":"+pad(now.getMinutes());
+  var rows=[];
+  if(agent==="ALL"||agent==="A")
+    rows.push({c:"A",l:site+"<br><span style=\"color:"+tcol.A+";font-weight:700;\">"+short.A+" M.</span>"});
+  if(agent==="ALL"||agent==="B")
+    rows.push({c:"B",l:site+"<br><span style=\"color:"+tcol.B+";font-weight:700;\">"+short.B+" R.</span>"});
+  if(agent==="ALL"||agent==="X")
+    rows.push({c:"X",l:site+"<br><span style=\"color:"+tcol.X+";font-weight:700;\">EXTRA</span>"});
 
-  // Max consécutifs
-  function chkC(code,max,name){
-    let st=0,mx=0;
-    for(let d=1;d<=D;d++){if(s[d]===code){st++;mx=Math.max(mx,st);}else st=0;}
-    if(mx>max) errs.push(name+' : bloc de '+mx+' jours consécutifs (max '+max+')');
-    else oks.push(name+' : consécutifs OK (max '+mx+'/'+max+') ✓');
+  var cntA=0,cntB=0,cntX=0;
+  for(var i=1;i<=D;i++){
+    if(s[i]==="A")cntA++;
+    else if(s[i]==="B")cntB++;
+    else if(s[i]==="X")cntX++;
   }
-  chkC('A',2,'Mostapha');chkC('B',3,'Roger');chkC('X',3,'Extra');
 
-  // Jours isolés
-  function chkI(code,name){
-    const iso=[];
-    for(let d=1;d<=D;d++){
-      if(s[d]!==code) continue;
-      const lb=d>1&&s[d-1]===code,rb=d<D&&s[d+1]===code;
-      if(!lb&&!rb) iso.push(d);
+  var lsats=[];for(var d=1;d<=D;d++)if(dow(year,month,d)===6)lsats.push(d);
+  var lsat=lsats.length?lsats[lsats.length-1]:null;
+  var lsun=(lsat&&lsat+1<=D&&dow(year,month,lsat+1)===0)?lsat+1:null;
+  var lastWEName=(lwo==="A")?names.A:names.B;
+
+  var out=document.getElementById("out");
+  out.innerHTML="";
+  var wrap=document.createElement("div");
+
+  // En-tete document
+  var header=document.createElement("div");
+  header.innerHTML=
+    "<div class=\"dtop\">"
+      +"<div class=\"dlogo\"><div class=\"dtri\"></div>"
+      +"<div class=\"dwm\">BAC <span>UP</span></div></div>"
+      +"<div class=\"dref\">"+ref+"</div>"
+    +"</div>"
+    +"<div class=\"dadr\"><strong>"+docN+"</strong><br>"
+    +"21 RUE CLEMENT &mdash; 94110 ARCUEIL</div>"
+    +"<div class=\"dplb\">Planning "+docN+" par SITES</div>"
+    +"<div class=\"dpsb\">Edition du "+ed+"</div>"
+    +"<div class=\"datn\">ATTENTION : ce planning est susceptible "
+    +"d&#39;\u00eatre modifi\u00e9</div>";
+  wrap.appendChild(header);
+
+  // Legende
+  var leg=document.createElement("div");leg.className="leg no-print";
+  if(agent==="ALL"||agent==="A")
+    leg.innerHTML+="<div class=\"li\"><div class=\"lsq\" style=\"background:#dce8f7;\"></div>"
+      +names.A+"</div>";
+  if(agent==="ALL"||agent==="B")
+    leg.innerHTML+="<div class=\"li\"><div class=\"lsq\" style=\"background:#d3f0e4;\"></div>"
+      +names.B+" (Mar\u00b7Mer\u00b7Jeu)</div>";
+  if(agent==="ALL"||agent==="X")
+    leg.innerHTML+="<div class=\"li\"><div class=\"lsq\" style=\"background:#faeeda;\"></div>"
+      +"Agent Extra</div>";
+  if(agent==="ALL"||agent==="A")
+    leg.innerHTML+="<div class=\"li\"><div class=\"lsq\" style=\"background:#eaeae4;"
+      +"border-color:#bbb;\"></div>Cong\u00e9 Mostapha ("+pad(rs)
+      +"\u2192"+pad(re)+")</div>";
+  leg.innerHTML+="<span class=\"ldtip\">\u2194 horizontal = garde couleur "
+    +"&nbsp;|&nbsp; \u2195 vertical = prend couleur ligne</span>";
+  wrap.appendChild(leg);
+
+  // Tableau
+  var twrap=document.createElement("div");twrap.className="twrap";
+  var tbl=document.createElement("table");tbl.className="pt";
+  var tbody=document.createElement("tbody");
+
+  // Ligne 1 : mois + lettres
+  var tr1=document.createElement("tr");
+  var tdm=document.createElement("td");
+  tdm.className="tcm";tdm.rowSpan=2;
+  tdm.innerHTML=MNF[month]+"<br>"+year;
+  tr1.appendChild(tdm);
+  for(var d=1;d<=D;d++){
+    var td=document.createElement("td");
+    td.className="tcdl"+(isWE(year,month,d)?" we":"");
+    td.textContent=DL[dow(year,month,d)];
+    tr1.appendChild(td);
+  }
+  tbody.appendChild(tr1);
+
+  // Ligne 2 : numeros
+  var tr2=document.createElement("tr");
+  for(var d=1;d<=D;d++){
+    var td=document.createElement("td");
+    td.className="tcdn"+(isWE(year,month,d)?" we":"");
+    td.textContent=pad(d);
+    tr2.appendChild(td);
+  }
+  tbody.appendChild(tr2);
+
+  // Lignes agents
+  for(var ri=0;ri<rows.length;ri++){
+    var row=rows[ri],code=row.c;
+    var tr=document.createElement("tr");
+    var tdl=document.createElement("td");
+    tdl.className="tcl";tdl.innerHTML=row.l;
+    tr.appendChild(tdl);
+    for(var d=1;d<=D;d++){
+      var val=s[d]||"";
+      var cls2,inn,isDrag=false;
+      if(val===code){
+        cls2="cc "+ccc[code];isDrag=true;
+        inn="<div class=\"ci\"><span class=\"bge\">J01</span>"
+          +"<span class=\"hrs\">07:00</span>"
+          +"<span class=\"hrs\">19:00</span></div>";
+      }else if(code==="A"&&REST2[d]&&val!=="A"){
+        cls2="cc sCG";
+        inn="<div class=\"ci\"><span>CONG\u00c9</span></div>";
+      }else{
+        cls2="cc sR";
+        inn="<div class=\"ci\"></div>";
+      }
+      tr.appendChild(mkCell(cls2,isDrag,d,code,inn));
     }
-    if(iso.length) warns.push(name+' : '+iso.length+' jour(s) isolé(s) — jours '+iso.join(', '));
-    else oks.push(name+' : aucun jour isolé ✓');
+    tbody.appendChild(tr);
   }
-  chkI('A','Mostapha');chkI('B','Roger');
+
+  // Ligne totaux
+  var trt=document.createElement("tr");
+  var ttl=document.createElement("td");
+  ttl.className="tctotl";
+  ttl.innerHTML="Total quotidien<br>attribu\u00e9 :";
+  trt.appendChild(ttl);
+  for(var d=1;d<=D;d++){
+    var iv=false;
+    for(var ri2=0;ri2<rows.length;ri2++)if(s[d]===rows[ri2].c)iv=true;
+    var tdt=document.createElement("td");
+    tdt.className="tctot";tdt.textContent=iv?"12":"";
+    trt.appendChild(tdt);
+  }
+  tbody.appendChild(trt);
+  tbl.appendChild(tbody);twrap.appendChild(tbl);wrap.appendChild(twrap);
+
+  // Pied de page
+  var ft=document.createElement("div");ft.className="dft";
+  ft.innerHTML="Site : "+site+" &mdash; 55-57 Avenue Raymond POINCAR\u00c9"
+    +" &mdash; 75116 PARIS &mdash; T\u00e9l : 01 44 05 66 66<br>"
+    +"J01 : AGENT DE S\u00c9CURIT\u00c9 JOUR (SSIAP 1) de 07h00 \u00e0 19h00";
+  wrap.appendChild(ft);
+
+  // Stats
+  var stats=document.createElement("div");stats.className="stats no-print";
+  stats.innerHTML=
+    "<div class=\"sb\"><div class=\"slb\">"+short.A+" (cible 13)</div>"
+      +"<div class=\"sv\" style=\"color:#1a4fa0\">"+cntA
+      +"<span class=\"ss\"> j.</span></div></div>"
+    +"<div class=\"sb\"><div class=\"slb\">"+short.B+" (cible 13)</div>"
+      +"<div class=\"sv\" style=\"color:var(--green)\">"+cntB
+      +"<span class=\"ss\"> j.</span></div></div>"
+    +"<div class=\"sb\"><div class=\"slb\">Extra</div>"
+      +"<div class=\"sv\" style=\"color:var(--amber)\">"+cntX
+      +"<span class=\"ss\"> j.</span></div></div>"
+    +"<div class=\"sb\"><div class=\"slb\">Cong\u00e9 Mostapha</div>"
+      +"<div class=\"sv\" style=\"color:#888\">7"
+      +"<span class=\"ss\"> j. ("+pad(rs)+"\u2192"+pad(re)+")</span></div></div>";
+  wrap.appendChild(stats);
+
+  // Memoire WE prochain mois
+  if(lsat){
+    var weTxt=lsun?pad(lsat)+"\u2013"+pad(lsun)+" "+MNF[month]:pad(lsat)+" "+MNF[month];
+    var wem=document.createElement("div");wem.className="wemem no-print";
+    wem.innerHTML="\uD83D\uDCC5 <strong>Mois prochain :</strong> "
+      +"<strong>"+lastWEName+"</strong> a travaill\u00e9 le dernier weekend ("
+      +weTxt+"). S\u00e9lectionnez-le dans &laquo;&nbsp;Dernier WE mois "
+      +"pr\u00e9c\u00e9dent&nbsp;&raquo; pour le mois suivant.";
+    wrap.appendChild(wem);
+  }
+
+  // Validation
+  wrap.appendChild(buildVal(s,D,year,month,rs,cntA,cntB,cntX));
+  out.appendChild(wrap);
+}
+
+// ── Validation ───────────────────────────────────────────
+function buildVal(s,D,year,month,rs,cntA,cntB,cntX){
+  var errs=[],warns=[],oks=[];
+  var wm=getWM(year,month);
+
+  function run2(d,c){
+    var n=1,i=d-1;while(i>=1&&s[i]===c){n++;i--;}
+    i=d+1;while(i<=D&&s[i]===c){n++;i++;}
+    return n;
+  }
+
+  // Consecutifs max
+  function chkC(code,maxC,name){
+    var st=0,mx=0;
+    for(var d=1;d<=D;d++){if(s[d]===code){st++;if(st>mx)mx=st;}else st=0;}
+    if(mx>maxC)errs.push(name+" : "+mx+" jours cons\u00e9cutifs (max "+maxC+")");
+    else oks.push(name+" : max cons\u00e9cutifs OK ("+mx+"/"+maxC+") \u2713");
+  }
+  chkC("A",2,"Mostapha");chkC("B",3,"Roger");chkC("X",3,"Extra");
+
+  // Jours isoles
+  function chkI(code,name){
+    var iso=[];
+    for(var d=1;d<=D;d++){
+      if(s[d]!==code)continue;
+      var lb=(d>1&&s[d-1]===code),rb=(d<D&&s[d+1]===code);
+      if(!lb&&!rb)iso.push(d);
+    }
+    if(iso.length)warns.push(name+" : "+iso.length+" jour(s) isol\u00e9(s) "
+      +"\u2014 jours "+iso.join(", "));
+    else oks.push(name+" : aucun jour isol\u00e9 \u2713");
+  }
+  chkI("A","Mostapha");chkI("B","Roger");
 
   // Max 4j/semaine
-  ['A','B'].forEach(code=>{
-    const name=code==='A'?'Mostapha':'Roger';let bad=false;
-    for(const[wn,days]of Object.entries(wm)){
-      const c=days.filter(d=>s[d]===code).length;
-      if(c>4){errs.push(name+' : semaine '+wn+' = '+c+' jours (max 4)');bad=true;}
+  ["A","B"].forEach(function(code){
+    var name=(code==="A")?"Mostapha":"Roger",bad=false;
+    for(var wn in wm){
+      var days=wm[wn],c=0;
+      for(var i=0;i<days.length;i++)if(s[days[i]]===code)c++;
+      if(c>4){errs.push(name+" : semaine "+wn+" = "+c+"j (max 4)");bad=true;}
     }
-    if(!bad) oks.push(name+' : max 4j/semaine ✓');
+    if(!bad)oks.push(name+" : max 4j/semaine \u2713");
   });
 
   // Roger Mar/Mer/Jeu
-  let rp=0,rt=s.slice(1).filter(x=>x==='B').length;
-  for(let d=1;d<=D;d++){if(s[d]==='B'){const dw=dow(year,month,d);if(dw===2||dw===3||dw===4)rp++;}}
-  const pct=rt>0?Math.round(rp/rt*100):0;
-  if(pct>=80) oks.push('Roger : '+rp+'/'+rt+' jours Mar·Mer·Jeu ('+pct+'%) ✓');
-  else warns.push('Roger : '+rp+'/'+rt+' jours Mar·Mer·Jeu ('+pct+'%)');
+  var rp=0;
+  for(var d=1;d<=D;d++){
+    if(s[d]==="B"){var dw=dow(year,month,d);if(dw===2||dw===3||dw===4)rp++;}
+  }
+  var pct=(cntB>0)?Math.round(rp/cntB*100):0;
+  if(pct>=75)oks.push("Roger : "+rp+"/"+cntB+" jours Mar\u00b7Mer\u00b7Jeu ("+pct+"%) \u2713");
+  else warns.push("Roger : "+rp+"/"+cntB+" jours Mar\u00b7Mer\u00b7Jeu ("+pct+"%)");
 
-  // Comptes
-  const cA=s.slice(1).filter(x=>x==='A').length;
-  const cB=s.slice(1).filter(x=>x==='B').length;
-  if(cA!==13) warns.push('Mostapha : '+cA+' jours (cible exacte : 13)');
-  else oks.push('Mostapha : 13 jours ✓');
-  if(cB<13||cB>14) warns.push('Roger : '+cB+' jours (cible 13-14)');
-  else oks.push('Roger : '+cB+' jours ✓');
+  // Decomptes
+  if(cntA===13)oks.push("Mostapha : exactement 13 jours \u2713");
+  else if(cntA>=12&&cntA<=14)warns.push("Mostapha : "+cntA+" jours (\u00e9cart acceptable, cible 13)");
+  else warns.push("Mostapha : "+cntA+" jours (cible 13 \u2014 ajustez par glisser-d\u00e9poser)");
+
+  if(cntB===13)oks.push("Roger : exactement 13 jours \u2713");
+  else if(cntB>=12&&cntB<=14)warns.push("Roger : "+cntB+" jours (\u00e9cart acceptable, cible 13)");
+  else warns.push("Roger : "+cntB+" jours (cible 13 \u2014 ajustez par glisser-d\u00e9poser)");
+
+  oks.push("Extra : "+cntX+" jours");
 
   // Alternance WE
-  const sats=[];for(let d=1;d<=D;d++)if(dow(year,month,d)===6)sats.push(d);
-  let weOk=true;
-  for(let i=1;i<sats.length;i++){
-    const prev=s[sats[i-1]],cur=s[sats[i]];
-    if(prev==='X'||cur==='X') continue;
-    if(prev===cur){weOk=false;break;}
+  var sats2=[];for(var d=1;d<=D;d++)if(dow(year,month,d)===6)sats2.push(d);
+  var weOk=true;
+  for(var si2=1;si2<sats2.length;si2++){
+    var p=s[sats2[si2-1]],c2=s[sats2[si2]];
+    if(p==="X"||c2==="X")continue;
+    if(p===c2){weOk=false;break;}
   }
-  if(weOk) oks.push('Alternance weekends A/B ✓');
-  else warns.push('Alternance weekends : vérifier manuellement');
+  if(weOk)oks.push("Alternance weekends A/B \u2713");
+  else warns.push("Alternance weekends : v\u00e9rifier manuellement");
 
-  let h='<div class="val no-print">';
-  for(const e of errs) h+='<div class="vi ver"><span class="vd">✗</span>'+e+'</div>';
-  for(const w of warns) h+='<div class="vi vwn"><span class="vd">⚠</span>'+w+'</div>';
-  if(!errs.length&&!warns.length) h+='<div class="vi vok"><span class="vd">✓</span>Toutes les contraintes respectées — planning optimal</div>';
-  for(const o of oks) h+='<div class="vi vok"><span class="vd">✓</span>'+o+'</div>';
-  h+='</div>';return h;
+  var div=document.createElement("div");div.className="val no-print";
+  errs.forEach(function(e){
+    var v=document.createElement("div");v.className="vi ver";
+    v.innerHTML="<span class=\"vd\">\u2717</span>"+e;div.appendChild(v);
+  });
+  warns.forEach(function(w){
+    var v=document.createElement("div");v.className="vi vwn";
+    v.innerHTML="<span class=\"vd\">\u26a0</span>"+w;div.appendChild(v);
+  });
+  if(!errs.length&&!warns.length){
+    var v=document.createElement("div");v.className="vi vok";
+    v.innerHTML="<span class=\"vd\">\u2713</span>Toutes les contraintes "
+      +"respect\u00e9es \u2014 planning optimal";
+    div.appendChild(v);
+  }
+  oks.forEach(function(o){
+    var v=document.createElement("div");v.className="vi vok";
+    v.innerHTML="<span class=\"vd\">\u2713</span>"+o;div.appendChild(v);
+  });
+  return div;
 }
 
-/* ══════════════════════════════════════════════
-   INIT
-══════════════════════════════════════════════ */
-window.addEventListener('load',()=>{
-  const now=new Date();
-  let m=now.getMonth()+2,y=now.getFullYear();
+// ── Init ─────────────────────────────────────────────────
+window.addEventListener("load",function(){
+  var now=new Date();
+  var m=now.getMonth()+2,y=now.getFullYear();
   if(m>12){m=1;y++;}
-  const ySel=document.getElementById('p-year');
-  [...ySel.options].forEach(o=>{if(parseInt(o.value)===y)o.selected=true;});
-  document.getElementById('p-month').value=m;
-  populateDays();generate();
+  var ySel=document.getElementById("p-year");
+  for(var i=0;i<ySel.options.length;i++){
+    if(parseInt(ySel.options[i].value)===y)ySel.options[i].selected=true;
+  }
+  document.getElementById("p-month").value=m;
+  populateDays();
+  generate();
 });
 </script>
 </body>
