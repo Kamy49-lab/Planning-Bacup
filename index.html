@@ -116,7 +116,7 @@ table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
       <div class="hsub">SSIAP 1 &nbsp;&middot;&nbsp; Vacation J01 &nbsp;&middot;&nbsp; 07h00 &ndash; 19h00 (12h)</div>
     </div>
   </div>
-  <div class="hver">v7.0</div>
+  <div class="hver">v8.0</div>
 </div>
 
 <div class="cfg no-print">
@@ -153,7 +153,7 @@ table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
     <div class="fld"><label>R&eacute;f. document</label>
       <input type="text" id="p-ref" value="1504">
     </div>
-    <div class="fld"><label>Cong&eacute; Mostapha &mdash; d&eacute;but (7 j.)</label>
+    <div class="fld"><label>Cong&eacute; Mostapha &mdash; d&eacute;but (5-7 j.)</label>
       <select id="p-rest" onchange="updatePreview()"></select>
       <div class="rprev" id="p-prev"></div>
     </div>
@@ -180,18 +180,15 @@ table.pt td{border:.5px solid #bbb;text-align:center;padding:0;}
     <p>Configurez les param&egrave;tres puis cliquez sur <strong>G&eacute;n&eacute;rer le planning</strong>.</p>
   </div>
 </div>
-
 </div>
 <script>
-// ── Constantes ──────────────────────────────────────────
 var MNF=["","Janvier","F\u00e9vrier","Mars","Avril","Mai","Juin",
-         "Juillet","Ao\u00fbt","Septembre","Octobre","Novembre","D\u00e9cembre"];
+  "Juillet","Ao\u00fbt","Septembre","Octobre","Novembre","D\u00e9cembre"];
 var DL=["D","L","M","M","J","V","S"];
 var DLG=["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
-var APP={sc:null,y:null,m:null,rs:null,re:null,lastWEOut:null};
+var APP={sc:null,y:null,m:null,rs:null,re:null,actualRe:null,lastWEOut:null};
 var DRG=null;
 
-// ── Utilitaires ──────────────────────────────────────────
 function dim(y,m){return new Date(y,m,0).getDate();}
 function dow(y,m,d){return new Date(y,m-1,d).getDay();}
 function isWE(y,m,d){var w=dow(y,m,d);return w===0||w===6;}
@@ -208,15 +205,14 @@ function getWM(y,m){
   return wm;
 }
 
-// ── Selecteur conge ──────────────────────────────────────
 function populateDays(){
   var month=parseInt(gv("p-month")),year=parseInt(gv("p-year"));
   var D=dim(year,month);
   var sel=document.getElementById("p-rest");
   var cur=parseInt(sel.value)||0;
   sel.innerHTML="";
-  for(var d=1;d<=D-6;d++){
-    var e=d+6;
+  for(var d=1;d<=D-4;d++){
+    var e=d+6<=D?d+6:D;
     var o=document.createElement("option");
     o.value=d;
     o.textContent=pad(d)+" ("+DLG[dow(year,month,d)].substring(0,3)
@@ -224,13 +220,11 @@ function populateDays(){
     if(d===cur)o.selected=true;
     sel.appendChild(o);
   }
-  // defaut : 1er lundi apres j7
   if(!sel.value||parseInt(sel.value)===0){
-    var D2=dim(year,month);
-    for(var d2=8;d2<=D2-6;d2++){
+    for(var d2=8;d2<=D-4;d2++){
       if(dow(year,month,d2)===1){sel.value=d2;break;}
     }
-    if(!sel.value)sel.value=1;
+    if(!sel.value&&sel.options.length)sel.value=sel.options[0].value;
   }
   updatePreview();
 }
@@ -240,188 +234,192 @@ function updatePreview(){
   var rs=parseInt(document.getElementById("p-rest").value);
   var el=document.getElementById("p-prev");
   if(!rs){el.textContent="";return;}
-  var re=rs+6,D=dim(year,month);
-  if(re>D){el.textContent="D\u00e9passe fin du mois";return;}
+  var re=Math.min(rs+6,dim(year,month));
   el.textContent="\uD83D\uDCC5 "
     +DLG[dow(year,month,rs)]+" "+pad(rs)
     +" \u2192 "
-    +DLG[dow(year,month,re)]+" "+pad(re);
+    +DLG[dow(year,month,re)]+" "+pad(re)
+    +" (pr\u00e9f\u00e9rence, non obligatoire)";
 }
 
-// ════════════════════════════════════════════════════════
-// ALGORITHME PRINCIPAL
-// Contraintes :
-//   - Roger (B)   : 13 jours, pref Mar/Mer/Jeu, max 3 consec, pas isoles
-//   - Mostapha(A) : 13 jours, conge 7j, pref paires, max 2 consec, pas isoles
-//   - Weekends    : alternes A/B (jamais X)
-//   - Personne    : jamais 4 jours successifs
-//   - Reste       : Extra (X)
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// ALGORITHME v8
+// Priorites dans l'ordre :
+//  1. 13j chacun pour A et B — STRICT
+//  2. Roger : preference Mar/Mer/Jeu
+//  3. Mostapha : preference paires, conge soft (5-7j)
+//  4. Weekends alternes A/B
+//  5. Pas de 4 consecutifs
+//  6. Pas de jours isoles pour A et B
+// ═══════════════════════════════════════════════════════════
 function buildSchedule(year,month,restStart,lastWEWorker){
   var D=dim(year,month);
-  var restEnd=Math.min(restStart+6,D);
-  // jours de conge de Mostapha
-  var REST={};
-  for(var d=restStart;d<=restEnd;d++)REST[d]=true;
+  var TARGET=13;
 
-  // planning : "" = libre, "A","B","X"
+  // Conge Mostapha = preference (pas obligatoire)
+  // On essaie de respecter les 7j mais on cede si necessaire
+  var congePref={};
+  var congeEnd=Math.min(restStart+6,D);
+  for(var d=restStart;d<=congeEnd;d++)congePref[d]=true;
+
+  // s[d] = "" | "A" | "B" | "X"
   var s=new Array(D+2).fill("");
 
-  // ── helpers ──
+  // ── helpers ──────────────────────────────────────────────
   function free(d){return d>=1&&d<=D&&s[d]==="";}
   function is(d,c){return d>=1&&d<=D&&s[d]===c;}
   function runBef(d,c){var n=0,i=d-1;while(i>=1&&s[i]===c){n++;i--;}return n;}
   function runAft(d,c){var n=0,i=d+1;while(i<=D&&s[i]===c){n++;i++;}return n;}
-  function run(d,c){return runBef(d,c)+1+runAft(d,c);}
-  function cnt(c){var n=0;for(var i=1;i<=D;i++)if(s[i]===c)n++;return n;}
+  function runTot(d,c){return runBef(d,c)+1+runAft(d,c);}
+  function countC(c){var n=0;for(var i=1;i<=D;i++)if(s[i]===c)n++;return n;}
   function wkOf(d){
     var fd=dow(year,month,1),off=fd===0?6:fd-1;
     return Math.ceil((d+off)/7);
   }
-  function wkCnt(d,c){
+  function wkCount(d,c){
     var wm=getWM(year,month),wn=wkOf(d),days=wm[wn]||[],n=0;
     for(var i=0;i<days.length;i++)if(s[days[i]]===c)n++;
     return n;
   }
+  // peut-on placer c en d sans depasser 3 consecutifs ?
+  function wouldExceed(d,c,maxC){
+    return runBef(d,c)+1+runAft(d,c)>maxC;
+  }
 
-  // ── ETAPE 1 : Weekends alternes A/B ──────────────────
+  // ── ETAPE 1 : Weekends alternes A/B ──────────────────────
   var sats=[];
   for(var d=1;d<=D;d++)if(dow(year,month,d)===6)sats.push(d);
 
-  // si le mois commence un Dim, c'est la suite du WE precedent
-  if(dow(year,month,1)===0&&!REST[1])s[1]=lastWEWorker;
+  // Dimanche 1er = tail du WE precedent
+  if(dow(year,month,1)===0)s[1]=lastWEWorker;
 
   var nextWE=(lastWEWorker==="A")?"B":"A";
   var lastWEOut=lastWEWorker;
 
   for(var si=0;si<sats.length;si++){
-    var sat=sats[si];
-    var who=nextWE;
-    // si Mostapha en conge ce WE, on donne a Roger
-    if(who==="A"&&(REST[sat]||(sat+1<=D&&REST[sat+1])))who="B";
-    // assigner Sam
+    var sat=sats[si],who=nextWE;
+    // si Mostapha en conge ET c'est son tour, passer a Roger
+    if(who==="A"&&(congePref[sat]||(sat+1<=D&&congePref[sat+1])))who="B";
     s[sat]=who;
-    // assigner Dim si meme mois
     if(sat+1<=D&&dow(year,month,sat+1)===0)s[sat+1]=who;
     lastWEOut=who;
     nextWE=(nextWE==="A")?"B":"A";
   }
 
-  // ── ETAPE 2 : Roger (B) → 13 jours ──────────────────
-  // Priorite : groupes complets Mar+Mer+Jeu
-  // puis paires, puis jours adjacents a un B existant
-  var TARGET=13;
+  // ── ETAPE 2 : Roger (B) — 13 jours ──────────────────────
+  // Priorite 1 : Mar+Mer+Jeu par semaine (groupes complets)
+  // Priorite 2 : paires Mar+Mer ou Mer+Jeu
+  // Priorite 3 : adjacents a B existant
+  // Priorite 4 : paires libres hors WE
+  // Priorite 5 : jours libres quelconques
 
-  function rogerGroups(){
-    // retourne les groupes [Tue,Wed,Thu] disponibles par semaine
-    var wm=getWM(year,month),groups=[];
-    var wns=Object.keys(wm).map(Number).sort(function(a,b){return a-b;});
-    for(var wi=0;wi<wns.length;wi++){
-      var wn=wns[wi],days=wm[wn],grp=[];
-      for(var di=0;di<days.length;di++){
-        var d=days[di],dw=dow(year,month,d);
-        if((dw===2||dw===3||dw===4)&&free(d))grp.push(d);
-      }
-      if(grp.length>0)groups.push(grp);
-    }
-    return groups;
-  }
-
-  function assignB(){
-    var need=TARGET-cnt("B");
-    if(need<=0)return;
-
-    // Passe 1 : groupes de 3 (Mar+Mer+Jeu complets)
-    var grps=rogerGroups();
-    for(var gi=0;gi<grps.length&&need>0;gi++){
-      var g=grps[gi];
-      if(g.length>=3&&need>=3){
-        var wOk=(wkCnt(g[0],"B")+3<=4);
-        if(wOk&&run(g[0],"B")<=2&&run(g[2],"B")<=2){
-          s[g[0]]="B";s[g[1]]="B";s[g[2]]="B";need-=3;
-        }
-      }
-    }
-    // Passe 2 : groupes de 2
-    grps=rogerGroups();
-    for(var gi=0;gi<grps.length&&need>0;gi++){
-      var g=grps[gi];
-      if(g.length>=2&&need>=2){
-        var wOk=(wkCnt(g[0],"B")+2<=4);
-        if(wOk&&run(g[0],"B")<=2){
-          s[g[0]]="B";s[g[1]]="B";need-=2;
-        }
-      }
-    }
-    // Passe 3 : groupes de 1 adjacents a un B (evite isolation)
-    grps=rogerGroups();
-    for(var gi=0;gi<grps.length&&need>0;gi++){
-      var g=grps[gi];
-      for(var j=0;j<g.length&&need>0;j++){
-        var d=g[j];
-        var adj=(is(d-1,"B")||is(d+1,"B"));
-        if(adj&&run(d,"B")<=3&&wkCnt(d,"B")<4){s[d]="B";need--;}
-      }
-    }
-    // Passe 4 : paires libres hors WE sur n'importe quel jour
-    for(var d=1;d<=D&&need>0;d++){
-      if(!free(d)||isWE(year,month,d))continue;
-      if(d+1<=D&&free(d+1)&&!isWE(year,month,d+1)&&need>=2){
-        if(run(d,"B")<=2&&wkCnt(d,"B")+2<=4){
-          s[d]="B";s[d+1]="B";need-=2;d++;
-        }
-      }
-    }
-    // Passe 5 : jours seuls libres (dernier recours)
-    for(var d=1;d<=D&&need>0;d++){
-      if(!free(d)||isWE(year,month,d))continue;
-      if(run(d,"B")<=3&&wkCnt(d,"B")<4){s[d]="B";need--;}
-    }
-  }
-  assignB();
-
-  // ── ETAPE 3 : Mostapha (A) → 13 jours ───────────────
-  // Disponible = libre ET pas en conge
-  function canA(d){
-    if(!free(d)||REST[d])return false;
-    if(runBef(d,"A")>=2||runAft(d,"A")>=2)return false;
-    if(runBef(d,"A")+runAft(d,"A")+1>2)return false;
-    if(wkCnt(d,"A")>=4)return false;
+  function trySetB(d){
+    if(!free(d))return false;
+    if(wkCount(d,"B")>=4)return false;
+    if(wouldExceed(d,"B",3))return false;
+    s[d]="B";
     return true;
   }
 
-  function assignA(){
-    var need=TARGET-cnt("A");
-    if(need<=0)return;
-    // Passe 1 : paires (d, d+1) avec gap >=2 apres
-    var di=1;
-    while(di<=D&&need>0){
-      if(need>=2&&canA(di)&&di+1<=D&&canA(di+1)
-         &&runBef(di,"A")===0&&runAft(di+1,"A")===0){
-        s[di]="A";s[di+1]="A";need-=2;
-        di+=4; // saute 2 jours de repos apres la paire
-      }else{
-        di++;
+  function fillRoger(){
+    var wm=getWM(year,month);
+    var wns=Object.keys(wm).map(Number).sort(function(a,b){return a-b;});
+
+    // P1 : triplets Mar/Mer/Jeu
+    for(var wi=0;wi<wns.length&&countC("B")<TARGET;wi++){
+      var days=wm[wns[wi]],tmj=[];
+      for(var di=0;di<days.length;di++){
+        var dw=dow(year,month,days[di]);
+        if((dw===2||dw===3||dw===4)&&free(days[di]))tmj.push(days[di]);
+      }
+      if(tmj.length>=3&&countC("B")+3<=TARGET
+         &&wkCount(tmj[0],"B")+3<=4
+         &&!wouldExceed(tmj[0],"B",3)
+         &&!wouldExceed(tmj[2],"B",3)){
+        s[tmj[0]]="B";s[tmj[1]]="B";s[tmj[2]]="B";
       }
     }
-    // Passe 2 : jours simples si encore insuffisant
-    for(var d=1;d<=D&&need>0;d++){
-      if(canA(d)){s[d]="A";need--;}
+    // P2 : paires Mar/Mer ou Mer/Jeu
+    for(var wi=0;wi<wns.length&&countC("B")<TARGET;wi++){
+      var days=wm[wns[wi]],tmj=[];
+      for(var di=0;di<days.length;di++){
+        var dw=dow(year,month,days[di]);
+        if((dw===2||dw===3||dw===4)&&free(days[di]))tmj.push(days[di]);
+      }
+      if(tmj.length>=2&&countC("B")+2<=TARGET&&wkCount(tmj[0],"B")+2<=4){
+        if(!wouldExceed(tmj[0],"B",3)&&!wouldExceed(tmj[1],"B",3)){
+          s[tmj[0]]="B";s[tmj[1]]="B";
+        }
+      }
+    }
+    // P3 : jours Mar/Mer/Jeu adjacents a un B
+    for(var d=1;d<=D&&countC("B")<TARGET;d++){
+      var dw=dow(year,month,d);
+      if((dw===2||dw===3||dw===4)&&free(d)){
+        if((is(d-1,"B")||is(d+1,"B"))&&!wouldExceed(d,"B",3)&&wkCount(d,"B")<4){
+          s[d]="B";
+        }
+      }
+    }
+    // P4 : paires libres hors WE
+    for(var d=1;d<=D&&countC("B")<TARGET;d++){
+      if(!free(d)||isWE(year,month,d))continue;
+      if(d+1<=D&&free(d+1)&&!isWE(year,month,d+1)&&countC("B")+2<=TARGET){
+        if(!wouldExceed(d,"B",3)&&wkCount(d,"B")+2<=4){
+          s[d]="B";s[d+1]="B";d++;
+        }
+      }
+    }
+    // P5 : n'importe quel jour libre
+    for(var d=1;d<=D&&countC("B")<TARGET;d++){
+      if(free(d)&&!wouldExceed(d,"B",3)&&wkCount(d,"B")<4){
+        s[d]="B";
+      }
     }
   }
-  assignA();
+  fillRoger();
 
-  // ── ETAPE 4 : Corrections iteratives ─────────────────
+  // ── ETAPE 3 : Mostapha (A) — 13 jours ───────────────────
+  // On essaie D'ABORD hors conge, puis si manque on prend dans le conge
+  // Preference : paires (d,d+1), max 2 consecutifs
 
-  // 4a. Supprimer blocs trop longs (A max 2, B max 3)
+  function canSetA(d, respectConge){
+    if(!free(d))return false;
+    if(respectConge&&congePref[d])return false;
+    if(wouldExceed(d,"A",2))return false;
+    if(wkCount(d,"A")>=4)return false;
+    return true;
+  }
+
+  function fillMostapha(respectConge){
+    // Passe 1 : paires (d, d+1)
+    for(var d=1;d<=D&&countC("A")<TARGET;d++){
+      if(canSetA(d,respectConge)&&d+1<=D&&canSetA(d+1,respectConge)
+         &&runBef(d,"A")===0&&runAft(d+1,"A")===0){
+        s[d]="A";s[d+1]="A";d++; // skip d+1
+      }
+    }
+    // Passe 2 : jours seuls si encore manquant
+    for(var d=1;d<=D&&countC("A")<TARGET;d++){
+      if(canSetA(d,respectConge))s[d]="A";
+    }
+  }
+
+  // Essai 1 : en respectant le conge
+  fillMostapha(true);
+  // Si on n'a pas 13 jours, on relache le conge
+  if(countC("A")<TARGET)fillMostapha(false);
+
+  // ── ETAPE 4 : Corrections iteratives ─────────────────────
+
+  // 4a. Supprimer blocs > max (A:2, B:3)
   function trimLong(code,maxC){
     var changed=true;
     while(changed){
       changed=false;
       for(var d=1;d<=D;d++){
         if(s[d]!==code)continue;
-        if(run(d,code)>maxC){
-          // supprimer la fin du bloc
+        if(runTot(d,code)>maxC){
           var e=d;while(e+1<=D&&s[e+1]===code)e++;
           s[e]="";changed=true;break;
         }
@@ -429,115 +427,111 @@ function buildSchedule(year,month,restStart,lastWEWorker){
     }
   }
 
-  // 4b. Supprimer jours isoles A et B
+  // 4b. Supprimer jours isoles pour A et B
   function removeIso(code){
     var changed=true;
     while(changed){
       changed=false;
       for(var d=1;d<=D;d++){
         if(s[d]!==code)continue;
-        var lb=is(d-1,code),rb=is(d+1,code);
-        if(!lb&&!rb){s[d]="";changed=true;}
+        if(!is(d-1,code)&&!is(d+1,code)){s[d]="";changed=true;}
       }
     }
   }
 
-  // Cycle de corrections + reassignation
-  for(var iter=0;iter<4;iter++){
-    trimLong("A",2);
-    trimLong("B",3);
-    removeIso("A");
-    removeIso("B");
-    // Reassigner ce qui manque
-    if(cnt("B")<TARGET)assignB();
-    if(cnt("A")<TARGET)assignA();
+  // 4c. Reassignation pour recuperer les 13 jours perdus
+  function reassign(){
+    trimLong("A",2);trimLong("B",3);
+    removeIso("A");removeIso("B");
+    if(countC("B")<TARGET)fillRoger();
+    if(countC("A")<TARGET){
+      fillMostapha(true);
+      if(countC("A")<TARGET)fillMostapha(false);
+    }
   }
-  // Corrections finales
-  trimLong("A",2);
-  trimLong("B",3);
 
-  // ── ETAPE 5 : Extra = tout le reste ──────────────────
+  // 3 cycles de correction
+  reassign();reassign();reassign();
+  // Corrections finales sans reassignation
+  trimLong("A",2);trimLong("B",3);
+
+  // ── ETAPE 5 : Extra = reste ───────────────────────────────
   for(var d=1;d<=D;d++)if(s[d]==="")s[d]="X";
-  // Pas de 4 successifs pour Extra non plus
   trimLong("X",3);
 
-  return{sc:s,re:restEnd,lastWEOut:lastWEOut};
+  // Calculer le vrai conge de Mostapha (jours prefs non travailles)
+  var actualConge=0;
+  for(var d=restStart;d<=congeEnd;d++)if(s[d]!=="A")actualConge++;
+
+  return{sc:s,re:congeEnd,actualConge:actualConge,lastWEOut:lastWEOut};
 }
 
-// ── Generate ─────────────────────────────────────────────
+// ── Generate ──────────────────────────────────────────────
 function generate(){
   var month=parseInt(gv("p-month")),year=parseInt(gv("p-year"));
   var restStart=parseInt(document.getElementById("p-rest").value);
   var lastWE=gv("p-lastwo");
-  if(!restStart){alert("Choisissez le d\u00e9but du cong\u00e9 de Mostapha.");return;}
+  if(!restStart){alert("Choisissez le d\u00e9but du cong\u00e9.");return;}
   var res=buildSchedule(year,month,restStart,lastWE);
   APP.sc=res.sc;APP.y=year;APP.m=month;
-  APP.rs=restStart;APP.re=res.re;APP.lastWEOut=res.lastWEOut;
+  APP.rs=restStart;APP.re=res.re;
+  APP.actualConge=res.actualConge;
+  APP.lastWEOut=res.lastWEOut;
   render();
 }
 function resetPlan(){if(APP.y)generate();}
 
-// ── Drag & Drop ──────────────────────────────────────────
-function dStart(e,d,r){
-  DRG={d:d,r:r};
-  e.dataTransfer.effectAllowed="move";
-  requestAnimationFrame(function(){
-    var el=document.querySelector("[data-d='"+d+"'][data-r='"+r+"']");
-    if(el)el.classList.add("dgh");
-  });
-}
-function dEnd(){
-  document.querySelectorAll(".dgh,.dhl").forEach(function(el){
-    el.classList.remove("dgh","dhl");
-  });
-  DRG=null;
-}
-function dOver(e,d,r){
-  if(!DRG)return;
-  e.preventDefault();
-  var el=document.querySelector("[data-d='"+d+"'][data-r='"+r+"']");
-  if(el)el.classList.add("dhl");
-}
-function dLeave(e,d,r){
-  var el=document.querySelector("[data-d='"+d+"'][data-r='"+r+"']");
-  if(el)el.classList.remove("dhl");
-}
-function dDrop(e,td2,tr2){
-  e.preventDefault();
-  document.querySelectorAll(".dgh,.dhl").forEach(function(el){
-    el.classList.remove("dgh","dhl");
-  });
-  if(!DRG)return;
-  var sd=DRG.d,sr=DRG.r;
-  DRG=null;
-  if(sd===td2&&sr===tr2)return;
-  if(sr===tr2){
-    // horizontal : echange
-    var tmp=APP.sc[td2];APP.sc[td2]=APP.sc[sd];APP.sc[sd]=tmp;
-  }else{
-    // vertical : source -> X, cible -> couleur ligne destination
-    APP.sc[sd]="X";
-    APP.sc[td2]=tr2;
-  }
-  render();
-}
-
-// ── Render ───────────────────────────────────────────────
+// ── Drag & Drop ───────────────────────────────────────────
 function mkCell(cls2,draggable,d,code,inn){
   var td=document.createElement("td");
   td.className=cls2;
   td.draggable=draggable;
   td.setAttribute("data-d",String(d));
   td.setAttribute("data-r",code);
-  td.addEventListener("dragstart",function(e){dStart(e,d,code);});
-  td.addEventListener("dragend",dEnd);
-  td.addEventListener("dragover",function(e){dOver(e,d,code);});
-  td.addEventListener("dragleave",function(e){dLeave(e,d,code);});
-  td.addEventListener("drop",function(e){dDrop(e,d,code);});
+  td.addEventListener("dragstart",function(e){
+    DRG={d:d,r:code};
+    e.dataTransfer.effectAllowed="move";
+    requestAnimationFrame(function(){
+      var el=document.querySelector("[data-d='"+d+"'][data-r='"+code+"']");
+      if(el)el.classList.add("dgh");
+    });
+  });
+  td.addEventListener("dragend",function(){
+    document.querySelectorAll(".dgh,.dhl").forEach(function(el){
+      el.classList.remove("dgh","dhl");
+    });
+    DRG=null;
+  });
+  td.addEventListener("dragover",function(e){
+    if(!DRG)return;
+    e.preventDefault();
+    var el=document.querySelector("[data-d='"+d+"'][data-r='"+code+"']");
+    if(el)el.classList.add("dhl");
+  });
+  td.addEventListener("dragleave",function(){
+    var el=document.querySelector("[data-d='"+d+"'][data-r='"+code+"']");
+    if(el)el.classList.remove("dhl");
+  });
+  td.addEventListener("drop",function(e){
+    e.preventDefault();
+    document.querySelectorAll(".dgh,.dhl").forEach(function(el){
+      el.classList.remove("dgh","dhl");
+    });
+    if(!DRG)return;
+    var sd=DRG.d,sr=DRG.r;DRG=null;
+    if(sd===d&&sr===code)return;
+    if(sr===code){
+      var tmp=APP.sc[d];APP.sc[d]=APP.sc[sd];APP.sc[sd]=tmp;
+    }else{
+      APP.sc[sd]="X";APP.sc[d]=code;
+    }
+    render();
+  });
   td.innerHTML=inn;
   return td;
 }
 
+// ── Render ────────────────────────────────────────────────
 function render(){
   var s=APP.sc,year=APP.y,month=APP.m;
   var rs=APP.rs,re=APP.re,lwo=APP.lastWEOut;
@@ -545,31 +539,36 @@ function render(){
   var agent=gv("p-agent");
   var site=gv("p-site")||"RENAISSANCE PARIS NOBEL TOUR EIFFEL";
   var ref=gv("p-ref")||"1504";
-  var REST2={};for(var d=rs;d<=re;d++)REST2[d]=true;
+  var conge={};for(var d=rs;d<=re;d++)conge[d]=true;
+
   var names={A:"LAHOUAOUI Mostapha",B:"DE SOUZA Roger",X:"AGENT EXTRA"};
   var short={A:"LAHOUAOUI",B:"DE SOUZA",X:"EXTRA"};
   var tcol={A:"#1a4fa0",B:"#0f7a55",X:"#8a5200"};
   var ccc={A:"sA",B:"sB",X:"sX"};
   var docN=(agent==="A")?names.A:(agent==="B")?names.B:(agent==="X")?names.X:names.A;
+
   var now=new Date();
   var ed=pad(now.getDate())+"/"+pad(now.getMonth()+1)+"/"+now.getFullYear()
-        +" \u00e0 "+pad(now.getHours())+":"+pad(now.getMinutes());
+    +" \u00e0 "+pad(now.getHours())+":"+pad(now.getMinutes());
+
   var rows=[];
   if(agent==="ALL"||agent==="A")
-    rows.push({c:"A",l:site+"<br><span style=\"color:"+tcol.A+";font-weight:700;\">"+short.A+" M.</span>"});
+    rows.push({c:"A",l:site+"<br><span style=\"color:"+tcol.A+
+      ";font-weight:700;\">"+short.A+" M.</span>"});
   if(agent==="ALL"||agent==="B")
-    rows.push({c:"B",l:site+"<br><span style=\"color:"+tcol.B+";font-weight:700;\">"+short.B+" R.</span>"});
+    rows.push({c:"B",l:site+"<br><span style=\"color:"+tcol.B+
+      ";font-weight:700;\">"+short.B+" R.</span>"});
   if(agent==="ALL"||agent==="X")
-    rows.push({c:"X",l:site+"<br><span style=\"color:"+tcol.X+";font-weight:700;\">EXTRA</span>"});
+    rows.push({c:"X",l:site+"<br><span style=\"color:"+tcol.X+
+      ";font-weight:700;\">EXTRA</span>"});
 
-  var cntA=0,cntB=0,cntX=0;
+  var cA=0,cB=0,cX=0;
   for(var i=1;i<=D;i++){
-    if(s[i]==="A")cntA++;
-    else if(s[i]==="B")cntB++;
-    else if(s[i]==="X")cntX++;
+    if(s[i]==="A")cA++;else if(s[i]==="B")cB++;else if(s[i]==="X")cX++;
   }
 
-  var lsats=[];for(var d=1;d<=D;d++)if(dow(year,month,d)===6)lsats.push(d);
+  var lsats=[];
+  for(var d=1;d<=D;d++)if(dow(year,month,d)===6)lsats.push(d);
   var lsat=lsats.length?lsats[lsats.length-1]:null;
   var lsun=(lsat&&lsat+1<=D&&dow(year,month,lsat+1)===0)?lsat+1:null;
   var lastWEName=(lwo==="A")?names.A:names.B;
@@ -578,21 +577,19 @@ function render(){
   out.innerHTML="";
   var wrap=document.createElement("div");
 
-  // En-tete document
-  var header=document.createElement("div");
-  header.innerHTML=
-    "<div class=\"dtop\">"
-      +"<div class=\"dlogo\"><div class=\"dtri\"></div>"
-      +"<div class=\"dwm\">BAC <span>UP</span></div></div>"
-      +"<div class=\"dref\">"+ref+"</div>"
-    +"</div>"
+  // En-tete
+  var hdr=document.createElement("div");
+  hdr.innerHTML=
+    "<div class=\"dtop\"><div class=\"dlogo\"><div class=\"dtri\"></div>"
+    +"<div class=\"dwm\">BAC <span>UP</span></div></div>"
+    +"<div class=\"dref\">"+ref+"</div></div>"
     +"<div class=\"dadr\"><strong>"+docN+"</strong><br>"
     +"21 RUE CLEMENT &mdash; 94110 ARCUEIL</div>"
     +"<div class=\"dplb\">Planning "+docN+" par SITES</div>"
     +"<div class=\"dpsb\">Edition du "+ed+"</div>"
     +"<div class=\"datn\">ATTENTION : ce planning est susceptible "
     +"d&#39;\u00eatre modifi\u00e9</div>";
-  wrap.appendChild(header);
+  wrap.appendChild(hdr);
 
   // Legende
   var leg=document.createElement("div");leg.className="leg no-print";
@@ -604,21 +601,19 @@ function render(){
       +names.B+" (Mar\u00b7Mer\u00b7Jeu)</div>";
   if(agent==="ALL"||agent==="X")
     leg.innerHTML+="<div class=\"li\"><div class=\"lsq\" style=\"background:#faeeda;\"></div>"
-      +"Agent Extra</div>";
+      +"Extra</div>";
   if(agent==="ALL"||agent==="A")
     leg.innerHTML+="<div class=\"li\"><div class=\"lsq\" style=\"background:#eaeae4;"
-      +"border-color:#bbb;\"></div>Cong\u00e9 Mostapha ("+pad(rs)
-      +"\u2192"+pad(re)+")</div>";
-  leg.innerHTML+="<span class=\"ldtip\">\u2194 horizontal = garde couleur "
-    +"&nbsp;|&nbsp; \u2195 vertical = prend couleur ligne</span>";
+      +"border-color:#bbb;\"></div>Cong\u00e9 Mostapha (pref.)</div>";
+  leg.innerHTML+="<span class=\"ldtip\">\u2194 horiz = garde couleur &nbsp;"
+    +"| \u2195 vert = prend couleur ligne</span>";
   wrap.appendChild(leg);
 
   // Tableau
-  var twrap=document.createElement("div");twrap.className="twrap";
+  var tw=document.createElement("div");tw.className="twrap";
   var tbl=document.createElement("table");tbl.className="pt";
-  var tbody=document.createElement("tbody");
+  var tb=document.createElement("tbody");
 
-  // Ligne 1 : mois + lettres
   var tr1=document.createElement("tr");
   var tdm=document.createElement("td");
   tdm.className="tcm";tdm.rowSpan=2;
@@ -630,9 +625,8 @@ function render(){
     td.textContent=DL[dow(year,month,d)];
     tr1.appendChild(td);
   }
-  tbody.appendChild(tr1);
+  tb.appendChild(tr1);
 
-  // Ligne 2 : numeros
   var tr2=document.createElement("tr");
   for(var d=1;d<=D;d++){
     var td=document.createElement("td");
@@ -640,36 +634,32 @@ function render(){
     td.textContent=pad(d);
     tr2.appendChild(td);
   }
-  tbody.appendChild(tr2);
+  tb.appendChild(tr2);
 
-  // Lignes agents
   for(var ri=0;ri<rows.length;ri++){
     var row=rows[ri],code=row.c;
     var tr=document.createElement("tr");
-    var tdl=document.createElement("td");
-    tdl.className="tcl";tdl.innerHTML=row.l;
-    tr.appendChild(tdl);
+    var tl=document.createElement("td");
+    tl.className="tcl";tl.innerHTML=row.l;
+    tr.appendChild(tl);
     for(var d=1;d<=D;d++){
       var val=s[d]||"";
-      var cls2,inn,isDrag=false;
+      var cls2,inn,isDrg=false;
       if(val===code){
-        cls2="cc "+ccc[code];isDrag=true;
+        cls2="cc "+ccc[code];isDrg=true;
         inn="<div class=\"ci\"><span class=\"bge\">J01</span>"
-          +"<span class=\"hrs\">07:00</span>"
-          +"<span class=\"hrs\">19:00</span></div>";
-      }else if(code==="A"&&REST2[d]&&val!=="A"){
+          +"<span class=\"hrs\">07:00</span><span class=\"hrs\">19:00</span></div>";
+      }else if(code==="A"&&conge[d]&&val!=="A"){
         cls2="cc sCG";
         inn="<div class=\"ci\"><span>CONG\u00c9</span></div>";
       }else{
-        cls2="cc sR";
-        inn="<div class=\"ci\"></div>";
+        cls2="cc sR";inn="<div class=\"ci\"></div>";
       }
-      tr.appendChild(mkCell(cls2,isDrag,d,code,inn));
+      tr.appendChild(mkCell(cls2,isDrg,d,code,inn));
     }
-    tbody.appendChild(tr);
+    tb.appendChild(tr);
   }
 
-  // Ligne totaux
   var trt=document.createElement("tr");
   var ttl=document.createElement("td");
   ttl.className="tctotl";
@@ -682,82 +672,83 @@ function render(){
     tdt.className="tctot";tdt.textContent=iv?"12":"";
     trt.appendChild(tdt);
   }
-  tbody.appendChild(trt);
-  tbl.appendChild(tbody);twrap.appendChild(tbl);wrap.appendChild(twrap);
+  tb.appendChild(trt);
+  tbl.appendChild(tb);tw.appendChild(tbl);wrap.appendChild(tw);
 
-  // Pied de page
   var ft=document.createElement("div");ft.className="dft";
   ft.innerHTML="Site : "+site+" &mdash; 55-57 Avenue Raymond POINCAR\u00c9"
     +" &mdash; 75116 PARIS &mdash; T\u00e9l : 01 44 05 66 66<br>"
     +"J01 : AGENT DE S\u00c9CURIT\u00c9 JOUR (SSIAP 1) de 07h00 \u00e0 19h00";
   wrap.appendChild(ft);
 
-  // Stats
-  var stats=document.createElement("div");stats.className="stats no-print";
-  stats.innerHTML=
+  var st=document.createElement("div");st.className="stats no-print";
+  var ac=APP.actualConge||0;
+  st.innerHTML=
     "<div class=\"sb\"><div class=\"slb\">"+short.A+" (cible 13)</div>"
-      +"<div class=\"sv\" style=\"color:#1a4fa0\">"+cntA
-      +"<span class=\"ss\"> j.</span></div></div>"
+    +"<div class=\"sv\" style=\"color:#1a4fa0\">"+cA
+    +"<span class=\"ss\"> j.</span></div></div>"
     +"<div class=\"sb\"><div class=\"slb\">"+short.B+" (cible 13)</div>"
-      +"<div class=\"sv\" style=\"color:var(--green)\">"+cntB
-      +"<span class=\"ss\"> j.</span></div></div>"
+    +"<div class=\"sv\" style=\"color:var(--green)\">"+cB
+    +"<span class=\"ss\"> j.</span></div></div>"
     +"<div class=\"sb\"><div class=\"slb\">Extra</div>"
-      +"<div class=\"sv\" style=\"color:var(--amber)\">"+cntX
-      +"<span class=\"ss\"> j.</span></div></div>"
-    +"<div class=\"sb\"><div class=\"slb\">Cong\u00e9 Mostapha</div>"
-      +"<div class=\"sv\" style=\"color:#888\">7"
-      +"<span class=\"ss\"> j. ("+pad(rs)+"\u2192"+pad(re)+")</span></div></div>";
-  wrap.appendChild(stats);
+    +"<div class=\"sv\" style=\"color:var(--amber)\">"+cX
+    +"<span class=\"ss\"> j.</span></div></div>"
+    +"<div class=\"sb\"><div class=\"slb\">Cong\u00e9 effectif (Mostapha)</div>"
+    +"<div class=\"sv\" style=\"color:#888\">"+ac
+    +"<span class=\"ss\"> j.</span></div></div>";
+  wrap.appendChild(st);
 
-  // Memoire WE prochain mois
   if(lsat){
     var weTxt=lsun?pad(lsat)+"\u2013"+pad(lsun)+" "+MNF[month]:pad(lsat)+" "+MNF[month];
     var wem=document.createElement("div");wem.className="wemem no-print";
     wem.innerHTML="\uD83D\uDCC5 <strong>Mois prochain :</strong> "
       +"<strong>"+lastWEName+"</strong> a travaill\u00e9 le dernier weekend ("
       +weTxt+"). S\u00e9lectionnez-le dans &laquo;&nbsp;Dernier WE mois "
-      +"pr\u00e9c\u00e9dent&nbsp;&raquo; pour le mois suivant.";
+      +"pr\u00e9c\u00e9dent&nbsp;&raquo;.";
     wrap.appendChild(wem);
   }
 
-  // Validation
-  wrap.appendChild(buildVal(s,D,year,month,rs,cntA,cntB,cntX));
+  wrap.appendChild(buildVal(s,D,year,month,cA,cB,cX));
   out.appendChild(wrap);
 }
 
-// ── Validation ───────────────────────────────────────────
-function buildVal(s,D,year,month,rs,cntA,cntB,cntX){
+// ── Validation ────────────────────────────────────────────
+function buildVal(s,D,year,month,cA,cB,cX){
   var errs=[],warns=[],oks=[];
   var wm=getWM(year,month);
 
-  function run2(d,c){
-    var n=1,i=d-1;while(i>=1&&s[i]===c){n++;i--;}
-    i=d+1;while(i<=D&&s[i]===c){n++;i++;}
-    return n;
-  }
-
-  // Consecutifs max
-  function chkC(code,maxC,name){
+  function maxRun(code){
     var st=0,mx=0;
     for(var d=1;d<=D;d++){if(s[d]===code){st++;if(st>mx)mx=st;}else st=0;}
-    if(mx>maxC)errs.push(name+" : "+mx+" jours cons\u00e9cutifs (max "+maxC+")");
-    else oks.push(name+" : max cons\u00e9cutifs OK ("+mx+"/"+maxC+") \u2713");
+    return mx;
   }
-  chkC("A",2,"Mostapha");chkC("B",3,"Roger");chkC("X",3,"Extra");
-
-  // Jours isoles
-  function chkI(code,name){
+  function isoList(code){
     var iso=[];
     for(var d=1;d<=D;d++){
       if(s[d]!==code)continue;
       var lb=(d>1&&s[d-1]===code),rb=(d<D&&s[d+1]===code);
       if(!lb&&!rb)iso.push(d);
     }
-    if(iso.length)warns.push(name+" : "+iso.length+" jour(s) isol\u00e9(s) "
-      +"\u2014 jours "+iso.join(", "));
-    else oks.push(name+" : aucun jour isol\u00e9 \u2713");
+    return iso;
   }
-  chkI("A","Mostapha");chkI("B","Roger");
+
+  // Consecutifs
+  var mxA=maxRun("A"),mxB=maxRun("B"),mxX=maxRun("X");
+  if(mxA>2)errs.push("Mostapha : "+mxA+" jours cons\u00e9cutifs (max 2)");
+  else oks.push("Mostapha : max cons\u00e9cutifs OK ("+mxA+"/2) \u2713");
+  if(mxB>3)errs.push("Roger : "+mxB+" jours cons\u00e9cutifs (max 3)");
+  else oks.push("Roger : max cons\u00e9cutifs OK ("+mxB+"/3) \u2713");
+  if(mxX>3)warns.push("Extra : "+mxX+" jours cons\u00e9cutifs");
+  else oks.push("Extra : cons\u00e9cutifs OK ("+mxX+") \u2713");
+
+  // Jours isoles
+  var isoA=isoList("A"),isoB=isoList("B");
+  if(isoA.length)warns.push("Mostapha : "+isoA.length+" jour(s) isol\u00e9(s) \u2014 "
+    +"jours "+isoA.join(", "));
+  else oks.push("Mostapha : aucun jour isol\u00e9 \u2713");
+  if(isoB.length)warns.push("Roger : "+isoB.length+" jour(s) isol\u00e9(s) \u2014 "
+    +"jours "+isoB.join(", "));
+  else oks.push("Roger : aucun jour isol\u00e9 \u2713");
 
   // Max 4j/semaine
   ["A","B"].forEach(function(code){
@@ -775,26 +766,26 @@ function buildVal(s,D,year,month,rs,cntA,cntB,cntX){
   for(var d=1;d<=D;d++){
     if(s[d]==="B"){var dw=dow(year,month,d);if(dw===2||dw===3||dw===4)rp++;}
   }
-  var pct=(cntB>0)?Math.round(rp/cntB*100):0;
-  if(pct>=75)oks.push("Roger : "+rp+"/"+cntB+" jours Mar\u00b7Mer\u00b7Jeu ("+pct+"%) \u2713");
-  else warns.push("Roger : "+rp+"/"+cntB+" jours Mar\u00b7Mer\u00b7Jeu ("+pct+"%)");
+  var pct=(cB>0)?Math.round(rp/cB*100):0;
+  if(pct>=75)oks.push("Roger : "+rp+"/"+cB+" jours Mar\u00b7Mer\u00b7Jeu ("+pct+"%) \u2713");
+  else warns.push("Roger : "+rp+"/"+cB+" jours Mar\u00b7Mer\u00b7Jeu ("+pct+"%)");
 
-  // Decomptes
-  if(cntA===13)oks.push("Mostapha : exactement 13 jours \u2713");
-  else if(cntA>=12&&cntA<=14)warns.push("Mostapha : "+cntA+" jours (\u00e9cart acceptable, cible 13)");
-  else warns.push("Mostapha : "+cntA+" jours (cible 13 \u2014 ajustez par glisser-d\u00e9poser)");
+  // Comptages
+  if(cA===13)oks.push("Mostapha : exactement 13 jours \u2713");
+  else if(cA>=12&&cA<=14)warns.push("Mostapha : "+cA+" jours (cible 13)");
+  else warns.push("Mostapha : "+cA+" jours (cible 13 \u2014 ajustez par glisser-d\u00e9poser)");
 
-  if(cntB===13)oks.push("Roger : exactement 13 jours \u2713");
-  else if(cntB>=12&&cntB<=14)warns.push("Roger : "+cntB+" jours (\u00e9cart acceptable, cible 13)");
-  else warns.push("Roger : "+cntB+" jours (cible 13 \u2014 ajustez par glisser-d\u00e9poser)");
+  if(cB===13)oks.push("Roger : exactement 13 jours \u2713");
+  else if(cB>=12&&cB<=14)warns.push("Roger : "+cB+" jours (cible 13)");
+  else warns.push("Roger : "+cB+" jours (cible 13 \u2014 ajustez par glisser-d\u00e9poser)");
 
-  oks.push("Extra : "+cntX+" jours");
+  oks.push("Extra : "+cX+" jours");
 
   // Alternance WE
   var sats2=[];for(var d=1;d<=D;d++)if(dow(year,month,d)===6)sats2.push(d);
   var weOk=true;
-  for(var si2=1;si2<sats2.length;si2++){
-    var p=s[sats2[si2-1]],c2=s[sats2[si2]];
+  for(var si=1;si<sats2.length;si++){
+    var p=s[sats2[si-1]],c2=s[sats2[si]];
     if(p==="X"||c2==="X")continue;
     if(p===c2){weOk=false;break;}
   }
@@ -812,8 +803,7 @@ function buildVal(s,D,year,month,rs,cntA,cntB,cntX){
   });
   if(!errs.length&&!warns.length){
     var v=document.createElement("div");v.className="vi vok";
-    v.innerHTML="<span class=\"vd\">\u2713</span>Toutes les contraintes "
-      +"respect\u00e9es \u2014 planning optimal";
+    v.innerHTML="<span class=\"vd\">\u2713</span>Toutes les contraintes respect\u00e9es \u2014 planning optimal";
     div.appendChild(v);
   }
   oks.forEach(function(o){
@@ -823,7 +813,7 @@ function buildVal(s,D,year,month,rs,cntA,cntB,cntX){
   return div;
 }
 
-// ── Init ─────────────────────────────────────────────────
+// ── Init ──────────────────────────────────────────────────
 window.addEventListener("load",function(){
   var now=new Date();
   var m=now.getMonth()+2,y=now.getFullYear();
